@@ -5,15 +5,15 @@ import MockWallet from "./utils/mock-wallet";
 const mockWallet = new MockWallet();
 mockWallet.init();
 
-const InscribeText = "Collaboration with Zentoshi and Chainwave"
+const InscribeText = "Text Inscription Chainwave"
 
-const ReceiveAddress = "tb1qay4hgutchlhx30xgzzzxhmrrupyq88qv7pratp"
+const ReceiveAddress = "tb1pxq9c7c6ktugqw7t436vld9z26ghhlelnh8kjcqgwge8txs3x5k5sp29tdn"
 
 export const textInscribe = async (receiveAddress: string, content: string): Promise<any> => {
   try {
     const marker = Buff.encode("ord");
     const mimetype = Buff.encode("text/plain");
-    const data = Buff.encode(content);
+    const data = Buff.encode(InscribeText);
 
     const script = [
       mockWallet.pubkey,
@@ -27,7 +27,7 @@ export const textInscribe = async (receiveAddress: string, content: string): Pro
       data,
       "OP_ENDIF",
     ];
-    const tx = await inscribe(script, receiveAddress);
+    const tx = await inscribe(script, ReceiveAddress);
     
     return tx;
   } catch (error) {

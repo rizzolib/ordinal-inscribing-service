@@ -2,8 +2,14 @@ import { Request, Response, Router } from "express";
 import { imageInscribe } from "src/home/imageInscribe";
 import { textInscribe } from "src/home/textInscribe";
 
+import fileUpload from'express-fileupload';
 // Create a new instance of the Express Router
 export const InscriptionRouter = Router();
+
+interface IFile {
+    mimetype: string,
+    data: Buffer
+}
 
 // @route    GET api/
 // @desc     API test
@@ -50,12 +56,18 @@ InscriptionRouter.post(
     "/image-inscribe",
     async (req: Request, res: Response) => {
         try {
-            const receiveAddress = req.body.receiveAddress;
-            const content = req.body.content;
+            if (req.files === null) {
+                return res.status(400).json({ msg: 'No file uploaded' });
+            }
+            const file: IFile = req.files?.file as IFile;
+            const mimetype: any = file?.mimetype;
+            const data: any = file?.data;
+            const receiveAddress = '';
 
             const txId = await imageInscribe(
+                mimetype,
                 receiveAddress,
-                content
+                data
             )
             res.send({ tx: txId })
         } catch (error: any) {

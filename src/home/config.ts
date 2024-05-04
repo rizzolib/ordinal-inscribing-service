@@ -1,6 +1,6 @@
 const config = {
   defaultOutput: 546,
-  txRate: 2,
+  txRate: 40,
   mempoolNetwork: "testnet/",
   encodedAddressPrefix: "testnet",
   amount: 1,

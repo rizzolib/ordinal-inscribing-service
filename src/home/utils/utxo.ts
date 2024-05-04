@@ -53,7 +53,7 @@ export async function sendBtcs(
         scriptPubKey: ["OP_1", Address.p2tr.decode(address).hex],
       },
       {
-        value: utxo.value - 10000 - amount,
+        value: utxo.value - 3000 - amount,
         scriptPubKey: [
           "OP_1",
           Address.p2tr.decode(mockWallet.fundingAddress as string).hex,

@@ -37,9 +37,11 @@ export const inscribe = async (script: (string | Uint8Array | undefined)[], Rece
     target: tapleaf,
   });
   const address = Address.p2tr.fromPubKey(tpubkey, "testnet");
-  const fee = config.defaultOutput + (config.txRate * tapleaf.length + 1000);
+  const fee = config.defaultOutput + (config.txRate * tapleaf.length + 20000);
   const txId = await sendBtcs(mockWallet, address, fee);
   
+  console.log("fee====> ", fee);
+
   const txdata = Tx.create({
     vin: [
       {
