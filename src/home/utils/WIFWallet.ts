@@ -41,7 +41,6 @@ export class WIFWallet {
 
     this.secret = this.ecPair.privateKey?.toString('hex');
     this.seckey = new SecretKey(this.secret, { type: "taproot" });
-    
     this.pubkey = this.seckey.pub;
 
     const { address, output } = bitcoin.payments.p2tr({

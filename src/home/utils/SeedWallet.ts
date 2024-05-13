@@ -5,6 +5,7 @@ import * as bip39 from "bip39";
 import BIP32Factory, { type BIP32Interface } from "bip32";
 import ECPairFactory, { type ECPairInterface } from "ecpair";
 import dotenv from "dotenv";
+import { type PublicKey, SecretKey } from "@cmdcode/crypto-utils";
 
 interface ISeedWallet {
   networkType: string;
@@ -27,6 +28,9 @@ export class SeedWallet {
   public output: Buffer;
   public publicKey: string;
   private bip32: BIP32Interface;
+  public seckey?: SecretKey;
+  public secret: any;
+  public pubkey?: PublicKey;
 
   constructor(walletParam : ISeedWallet) {
     if(walletParam.networkType == "mainnet") {
@@ -47,6 +51,11 @@ export class SeedWallet {
       this.bip32.derivePath(this.hdPath).privateKey!,
       { network: this.network }
     );
+    
+    this.secret = this.ecPair.privateKey?.toString('hex');
+    this.seckey = new SecretKey(this.secret, { type: "taproot" });
+    this.pubkey = this.seckey.pub;
+
     const { address, output } = bitcoin.payments.p2tr({
       internalPubkey: this.ecPair.publicKey.subarray(1, 33),
       network: this.network,

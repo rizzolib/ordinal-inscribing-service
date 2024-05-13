@@ -182,16 +182,16 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
   const txId = await sendUTXO(address, feeRate, fee);
   console.log(`Sent_UTXO_TxId=======> ${txId}`)
 
-  console.log('address', address)
-
   const utxos: any = await getUtxos(address, networkType);
+  const sentUtxo = utxos.filter((item: { value: number; }) => item.value == fee)[0];
+
   const txdata = Tx.create({
     vin: [
       {
-        txid: utxos[0].txid,
-        vout: utxos[0].vout,
+        txid: sentUtxo.txid,
+        vout: sentUtxo.vout,
         prevout: {
-          value: utxos[0].value,
+          value: sentUtxo.value,
           scriptPubKey: ["OP_1", tpubkey],
         },
       },
