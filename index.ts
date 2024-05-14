@@ -6,7 +6,7 @@ import fileUpload from 'express-fileupload';
 import swaggerUi from 'swagger-ui-express';
 import YAML from "yamljs";
 import bodyParser = require("body-parser");
-import { InscriptionRouter } from "./routes/inscription.route";
+import { InscriptionRouter } from "./src/routes/inscription.route";
 import http from "http";
 
 
