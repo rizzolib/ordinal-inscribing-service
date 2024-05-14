@@ -34,9 +34,8 @@ app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use((0, cors_1.default)());
-app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { explorer: true }));
 app.use('/api', inscription_route_1.InscriptionRouter);
-app.get('/', (req, res) => res.send("Backend is running..."));
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { explorer: true }));
 /* Start the Express app and listen
  for incoming requests on the specified port */
 server.listen(port, () => {
