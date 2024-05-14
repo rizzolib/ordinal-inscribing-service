@@ -11,7 +11,7 @@ const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const bodyParser = require("body-parser");
-const inscription_route_1 = require("./routes/inscription.route");
+const inscription_route_1 = require("./src/routes/inscription.route");
 const http_1 = __importDefault(require("http"));
 const swaggerDocument = yamljs_1.default.load('swagger.yaml');
 /*
