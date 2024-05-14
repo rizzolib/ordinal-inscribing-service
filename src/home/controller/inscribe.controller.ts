@@ -10,16 +10,16 @@ import {
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
 import axios, { AxiosResponse } from "axios";
-import { sendUTXO } from "./UTXO_send";
-import networkConfig from "../config/network.config";
-import { SeedWallet } from "./utils/SeedWallet";
-import { WIFWallet } from './utils/WIFWallet';
-import { getUtxos } from "./utils/mempool";
+import { sendUTXO } from "./utxo.send.controller";
+import networkConfig from "../../config/network.config";
+import { SeedWallet } from "../utils/wallet/SeedWallet";
+import { WIFWallet } from '../utils/wallet/WIFWallet';
+import { getUtxos } from "../utils/mempool";
 
 import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx } from "@cmdcode/tapscript";
 import { Buff } from "@cmdcode/buff-utils";
-import { pushBTCpmt } from "./utils/mempool";
+import { pushBTCpmt } from "../utils/mempool";
 import { buffer } from "stream/consumers";
 
 initEccLib(ecc as any);

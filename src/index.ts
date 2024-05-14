@@ -2,10 +2,15 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
-import fileUpload from'express-fileupload';
-
+import fileUpload from 'express-fileupload';
+import swaggerUi from 'swagger-ui-express';
+import YAML from "yamljs";
 import bodyParser = require("body-parser");
-import { InscriptionRouter } from "./routes/inscriptionRouter";
+import { InscriptionRouter } from "./routes/inscription.route";
+import http from "http";
+
+
+const swaggerDocument = YAML.load('swagger.yaml');
 
 /*
  * Load up and parse configuration details from
@@ -20,6 +25,9 @@ dotenv.config();
  * from the `process.env`
  */
 const app: Express = express();
+
+const server = http.createServer(app);
+
 const port = process.env.PORT || 8081;
 app.use(fileUpload());
 app.use(express.json({ limit: '50mb' }));
@@ -30,17 +38,14 @@ app.use(cors())
 
 app.use('/api', InscriptionRouter)
 
-// Upload Endpoint
-app.post('/upload', (req: Request, res: Response) => {
-  if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
-  }
-  const file = req.files?.file;
-  console.log(file)
-});
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, { explorer: true })
+);
 
 /* Start the Express app and listen
  for incoming requests on the specified port */
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es2015",                          
-    "module": "commonjs",                    
-    "lib": ["es6"],                     
+    "target": "ES6",                          
+    "module": "CommonJS",                    
+    "lib": ["es6"],    
+    "rootDir": ".",                 
     "allowJs": true,
-    "outDir": "build",
+    "outDir": "./build",
     "strict": true,         
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "baseUrl": "."
+    "baseUrl": ".",
   }
 }

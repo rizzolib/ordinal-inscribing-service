@@ -1,0 +1,97 @@
+openapi: 3.0.0
+
+info:
+  title: Bitmap Community
+  description: "Bitmap Community File Inscription Service"
+  version: 0.0.1
+
+servers:
+  - url: "http://localhost:8081/api"
+  - url: "https://bitmap.community.vercel.com/api"
+
+tags:
+  - name: Inscription
+
+paths:
+  /text-inscribe:
+    post:
+      summary: Create new text inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextInscription"
+      responses:
+        "200":
+          description: Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /file-inscribe:
+    post:
+      summary: Create new file inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FileInscription"
+      responses:
+        "200":
+          description: File Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: File Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+components:
+  schemas:
+    TextInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: tb1pfxctmhhk4wcrtrdll02ddtleahzvp7t2xf8887k8k649f8nxpxyqp4fp0j
+        content:
+          type: string
+          example: 350.364807.bitmap
+        feeRate:
+          type: number
+          example: 50
+      required:
+        - receiveAddress
+        - content
+        - feeRate
+    FileInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: tb1pfxctmhhk4wcrtrdll02ddtleahzvp7t2xf8887k8k649f8nxpxyqp4fp0j
+        feeRate:
+          type: number
+          example: 50
+        file: 
+          type: string
+          format: binary
+      required:
+        - receiveAddress
+        - feeRate
+        - file

@@ -1,12 +1,12 @@
 {
-  "name": "cbrc20",
+  "name": "bitmap.community.inscription.service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node build/index.js",
-    "dev": "npx tsx src/index.ts",
+    "build": "npx tsc --skipLibCheck",
+    "start": "pm2 start build/src/index.js --name bitmap.community",
+    "dev": "npx ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "@cmdcode/buff-utils": "^1.7.6",
     "@cmdcode/crypto-utils": "^1.9.8",
     "@cmdcode/tapscript": "^1.4.4",
+    "@noble/curves": "^1.4.0",
     "@types/express": "^4.17.21",
     "axios": "^1.6.5",
     "bip32": "^4.0.0",
@@ -29,13 +30,23 @@
     "express": "^4.18.2",
     "express-fileupload": "^1.5.0",
     "nodemon": "^3.0.3",
-    "tiny-secp256k1": "^2.2.2"
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-dist": "^5.17.9",
+    "swagger-ui-express": "^5.0.0",
+    "tiny-secp256k1": "^2.2.2",
+    "tsc-watch": "^6.2.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express-fileupload": "^1.5.0",
     "@types/node": "^20.11.5",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-dist": "^3.30.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/yamljs": "^0.2.34",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   }
 }
