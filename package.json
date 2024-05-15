@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc --skipLibCheck",
-    "start": "npx tsx index.ts --omit=dev",
+    "start": "node dist/index.js",
     "dev": "npx ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -48,5 +48,6 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
-  }
+  },
+  "engines": { "node": "21.7.1" }
 }
