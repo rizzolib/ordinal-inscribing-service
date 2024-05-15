@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc --skipLibCheck",
-    "start": "npx tsx index.ts",
+    "start": "npx tsx index.ts --omit=dev",
     "dev": "npx ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
