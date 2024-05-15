@@ -12,6 +12,8 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const bodyParser = require("body-parser");
 const inscription_route_1 = require("./src/routes/inscription.route");
+const fee_estimate_route_1 = require("./src/routes/fee.estimate.route");
+const status_network_route_1 = require("./src/routes/status.network.route");
 const http_1 = __importDefault(require("http"));
 const swaggerDocument = yamljs_1.default.load('swagger.yaml');
 /*
@@ -34,7 +36,9 @@ app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use((0, cors_1.default)());
-app.use('/api', inscription_route_1.InscriptionRouter);
+app.use('/api/inscribe', inscription_route_1.InscriptionRouter);
+app.use('/api/estimate', fee_estimate_route_1.FeeEstimateRoute);
+app.use('/api/status', status_network_route_1.StatusNetworkRoute);
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { explorer: true }));
 /* Start the Express app and listen
  for incoming requests on the specified port */

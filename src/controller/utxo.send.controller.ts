@@ -11,13 +11,17 @@ const SEND_UTXO_LIMIT = 1000;
 
 dotenv.config();
 Bitcoin.initEccLib(ecc);
+
 const networkType: string = networkConfig.networkType;
+let wallet: any;
 
-// const seed: string = process.env.MNEMONIC as string;
-// const wallet = new SeedWallet({ networkType: networkType, seed: seed });
-
-const privateKey: string = process.env.PRIVATE_KEY as string;
-const wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
+if (networkConfig.walletType == 'WIF') {
+  const privateKey: string = process.env.PRIVATE_KEY as string;
+  const wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
+} else if (networkConfig.walletType == 'WIF') {
+  const seed: string = process.env.MNEMONIC as string;
+  const wallet = new SeedWallet({ networkType: networkType, seed: seed });
+}
 
 export const sendUTXO = async (address: string, feeRate: number, amount: number) => {
   const utxos = await getUtxos(wallet.address, networkType);

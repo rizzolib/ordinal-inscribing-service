@@ -20,17 +20,22 @@ import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx } from "@cmdcode/tapscript";
 import { Buff } from "@cmdcode/buff-utils";
 import { pushBTCpmt } from "../utils/mempool";
-import { buffer } from "stream/consumers";
 
 initEccLib(ecc as any);
-const network = networks.testnet;
+
 const networkType: string = networkConfig.networkType;
+let wallet: any;
 
-// const seed: string = process.env.MNEMONIC as string;
-// const wallet = new SeedWallet({ networkType: networkType, seed: seed });
+const network = networkConfig.networkType == "testnet" ? networks.testnet : networks.bitcoin;
 
-const privateKey: string = process.env.PRIVATE_KEY as string;
-const wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
+if (networkConfig.walletType == 'WIF') {
+  const privateKey: string = process.env.PRIVATE_KEY as string;
+  const wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
+} else if (networkConfig.walletType == 'WIF') {
+  const seed: string = process.env.MNEMONIC as string;
+  const wallet = new SeedWallet({ networkType: networkType, seed: seed });
+}
+
 
 const keyPair = wallet.ecPair;
 
@@ -41,7 +46,7 @@ export const inscribe = async (type: string, mimetype: string, receiveAddress: s
   } else {
     bufferContent = content;
   };
-  
+
   const ordinalStacks = [
     keyPair.publicKey.subarray(1, 33),
     opcodes.OP_CHECKSIG,
