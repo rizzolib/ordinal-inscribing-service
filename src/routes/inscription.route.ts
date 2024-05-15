@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { inscribe } from "../home/controller/inscribe.controller";
+import { inscribe } from "../controller/inscribe.controller";
 
 // Create a new instance of the Express Router
 export const InscriptionRouter = Router();
@@ -25,11 +25,11 @@ InscriptionRouter.get(
     }
 );
 
-// @route    POST api/text-inscribe
+// @route    POST api/inscribe/text
 // @desc     Text Inscription
 // @access   Private
 InscriptionRouter.post(
-    "/text-inscribe",
+    "/text",
     async (req: Request, res: Response) => {
         try {
             if (!(req.body.receiveAddress && req.body.content && req.body.feeRate)) {
@@ -59,32 +59,40 @@ InscriptionRouter.post(
     }
 );
 
-// @route    POST api/file-inscription
+// @route    POST api/inscribe/file
 // @desc     File Inscription
 // @access   Private
 InscriptionRouter.post(
-    "/file-inscribe",
+    "/file",
     async (req: Request, res: Response) => {
         try {
             if (req.files === null) {
                 return res.status(400).json({ msg: 'No file uploaded' });
             }
 
-            const receiveAddress = req.body.receiveAddress;
-            const feeRate = req.body.feeRate;
+            if (!(req.body.receiveAddress && req.body.feeRate)) {
+                let error = [];
+                if (!req.body.receiveAddress) { error.push({ receiveAddress: 'Receive Address is required' }) }
+                if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
 
-            const file: IFile = req.files?.file as IFile;
-            const mimetype: string = file?.mimetype;
-            const content: Buffer = file?.data;
+                res.status(400).send(error)
+            } else {
+                const receiveAddress = req.body.receiveAddress;
+                const feeRate = req.body.feeRate;
 
-            const txId = await inscribe(
-                'text',
-                'text/plain',
-                receiveAddress,
-                content,
-                feeRate
-            );
-            res.send({ tx: txId })
+                const file: IFile = req.files?.file as IFile;
+                const mimetype: string = file?.mimetype;
+                const content: Buffer = file?.data;
+
+                const txId = await inscribe(
+                    'file',
+                    mimetype,
+                    receiveAddress,
+                    content,
+                    feeRate
+                );
+                res.send({ tx: txId })
+            }
         } catch (error: any) {
             console.error(error);
             return res.status(400).send({ error });

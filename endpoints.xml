@@ -1,0 +1,53 @@
+- GET /api/feeRate/
+    Request: networkType: testnet | mainnet
+    Response: 
+        [{ 
+            time: time,
+            feeRate: number
+        }]
+
+- GET /api/price/
+    Request: void
+    Response: number
+        
+- POST /api/text-estimate-fee/
+    Request:
+        content: [string](in bulk case, will be array)
+        padding: number (330 ~ 546)
+        feeRate: number
+    
+    Response:
+        networkFee: number,
+        serviceFee: number,
+        feeBySize: number
+        total: number
+
+- POST /api/file-estimate-fee/
+    Request:
+        content: buffer
+        padding: number (330 ~ 546)
+        feeRate: number
+    Response:
+        networkFee: number,
+        serviceFee: number,
+        feeBySize: number
+        total: number
+
+
+- POST /api/text-inscribe/
+    Request: 
+        addressList: [string]
+        feeRate: number
+        padding: number (330 ~ 546)
+        content: [string](in bulk case, will be array)
+    Response:
+        txid: string
+
+- POST /api/file-inscribe/
+    Request:
+        addressList: [string]
+        feeRate: number
+        padding: number (330 ~ 546)
+        content: buffer
+    Response:
+        txid: string

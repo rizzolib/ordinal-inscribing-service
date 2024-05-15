@@ -11,7 +11,7 @@ import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
 import axios, { AxiosResponse } from "axios";
 import { sendUTXO } from "./utxo.send.controller";
-import networkConfig from "../../config/network.config";
+import networkConfig from "../config/network.config";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet';
 import { getUtxos } from "../utils/mempool";

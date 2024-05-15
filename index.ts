@@ -7,6 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from "yamljs";
 import bodyParser = require("body-parser");
 import { InscriptionRouter } from "./src/routes/inscription.route";
+import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
+import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import http from "http";
 
 
@@ -36,7 +38,9 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
 
-app.use('/api', InscriptionRouter)
+app.use('/api/inscribe', InscriptionRouter)
+app.use('/api/estimate', FeeEstimateRoute)
+app.use('/api/status', StatusNetworkRoute)
 
 app.use(
   "/api-docs",

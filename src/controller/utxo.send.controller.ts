@@ -1,4 +1,4 @@
-import networkConfig from "../../config/network.config";
+import networkConfig from "../config/network.config";
 import { getUtxos, pushBTCpmt } from "../utils/mempool";
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
