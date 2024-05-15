@@ -17,11 +17,12 @@ let wallet: any;
 
 if (networkConfig.walletType == 'WIF') {
   const privateKey: string = process.env.PRIVATE_KEY as string;
-  const wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
-} else if (networkConfig.walletType == 'WIF') {
+  wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
+} else if (networkConfig.walletType == 'SEED') {
   const seed: string = process.env.MNEMONIC as string;
-  const wallet = new SeedWallet({ networkType: networkType, seed: seed });
+  wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }
+
 
 export const sendUTXO = async (address: string, feeRate: number, amount: number) => {
   const utxos = await getUtxos(wallet.address, networkType);
