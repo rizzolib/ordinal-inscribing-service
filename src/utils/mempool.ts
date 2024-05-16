@@ -1,4 +1,5 @@
 import axios, { type AxiosError } from "axios";
+import { AnyRecordWithTtl } from "dns";
 
 interface IUtxo {
   txid: string;
@@ -51,38 +52,29 @@ const postData = async (
         headers,
       });
       return res.data as string;
-    } catch (err) {
-      const axiosErr = err as AxiosError;
-      console.log("axiosErr.response?.data", axiosErr.response?.data);
-      if (
-        !(axiosErr.response?.data as string).includes(
-          'sendrawtransaction RPC error: {"code":-26,"message":"too-long-mempool-chain,'
-        )
-      )
-        throw new Error("Got an err when push tx");
+    } catch (err: any) {
+      throw new Error(err)
     }
   }
 }
 
 export const getPrice = async (networkType: string) => {
   const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/prices`;
-  const res = await axios.get(url);
-
-  return res;
+  const res: any = await axios.get(url);
+  return res.data;
 }
 
 export const getBlockHeight = async (networkType: string) => {
   const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}/api/blocks/tip/height`;
   const res = await axios.get(url);
-
-  return res;
+  return res.data;
 }
 
 export const getFeeRate = async (networkType: string) => {
   const height = await getBlockHeight(networkType);
   const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/blocks/${height}`;
   const blockData: any = await axios.get(url);
-  const feeRateData = blockData.map((item: any) => {
+  const feeRateData = blockData.data.map((item: any) => {
     return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate }
   })
   return feeRateData;
