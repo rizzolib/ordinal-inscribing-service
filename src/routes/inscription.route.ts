@@ -9,7 +9,7 @@ interface IFile {
     data: Buffer
 }
 
-// @route    GET api/
+// @route    GET api/inscribe
 // @desc     API test
 // @access   Public
 InscriptionRouter.get(

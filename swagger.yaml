@@ -11,6 +11,7 @@ servers:
 
 tags:
   - name: Inscription
+  - name: Status
 
 paths:
   /inscribe/text:
@@ -61,6 +62,42 @@ paths:
             application/json:
               schema:
                 type: string
+  /status/price:
+    get:
+      summary: Get Current bitcoin price
+      tags:
+        - Status
+      responses:
+        "200":
+          description: Current Bitcoin Price
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Get Bitcoin Price Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /status/avgFeeRate:
+    get:
+      summary: Get last 15 blocks average feeRate
+      tags:
+        - Status
+      responses:
+        "200":
+          description: Last 15 blocks average feeRate
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Get average feeRate failed!
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   schemas:
     TextInscription:
@@ -88,7 +125,7 @@ components:
         feeRate:
           type: number
           example: 50
-        file: 
+        file:
           type: string
           format: binary
       required:

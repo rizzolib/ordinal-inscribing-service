@@ -7,17 +7,17 @@ interface IUtxo {
 }
 
 export const getScriptPubkey = async (tx: string, address: string, networkType: string): Promise<string> => {
-  const url = `https://mempool.space/${networkType}/api/tx/${tx}`;
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/tx/${tx}`;
   const res = await axios.get(url);
   const output = res.data.vout.find((output: any) => output.scriptpubkey_address === address)
   return output.scriptpubkey;
 };
 
 export const getUtxos = async (address: string, networkType: string): Promise<IUtxo[]> => {
-  const url = `https://mempool.space/${networkType}/api/address/${address}/utxo`;
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/address/${address}/utxo`;
   const res = await axios.get(url);
   const utxos: IUtxo[] = [];
-  
+
   res.data.forEach((utxoData: any) => {
     utxos.push({
       txid: utxoData.txid,
@@ -28,9 +28,9 @@ export const getUtxos = async (address: string, networkType: string): Promise<IU
   return utxos;
 };
 
-export const pushBTCpmt = async (rawtx: any,  networkType: string) => {
+export const pushBTCpmt = async (rawtx: any, networkType: string) => {
   const txid = await postData(
-    `https://mempool.space/${networkType}/api/tx`,
+    `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/tx`,
     rawtx
   );
   return txid;
@@ -62,4 +62,28 @@ const postData = async (
         throw new Error("Got an err when push tx");
     }
   }
+}
+
+export const getPrice = async (networkType: string) => {
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/prices`;
+  const res = await axios.get(url);
+
+  return res;
+}
+
+export const getBlockHeight = async (networkType: string) => {
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}/api/blocks/tip/height`;
+  const res = await axios.get(url);
+
+  return res;
+}
+
+export const getFeeRate = async (networkType: string) => {
+  const height = await getBlockHeight(networkType);
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/blocks/${height}`;
+  const blockData: any = await axios.get(url);
+  const feeRateData = blockData.map((item: any) => {
+    return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate }
+  })
+  return feeRateData;
 }
