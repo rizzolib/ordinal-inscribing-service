@@ -147,6 +147,24 @@ paths:
             application/json:
               schema:
                 type: string
+  /status/recomFeeRate:
+    get:
+      summary: Get recommended block feeRate
+      tags:
+        - Status
+      responses:
+        "200":
+          description: Recommended block feeRate Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Recommended block feeRate Failed!
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   schemas:
     TextInscription:

@@ -79,3 +79,10 @@ export const getFeeRate = async (networkType: string) => {
   })
   return feeRateData;
 }
+
+export const getRecommendedFeeRate = async (networkType: string) => {
+  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet4/' : ''}api/v1/fees/recommended`;
+  const response: any = await axios.get(url);
+  
+  return response.data;
+}
