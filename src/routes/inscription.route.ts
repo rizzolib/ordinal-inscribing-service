@@ -37,20 +37,24 @@ InscriptionRouter.post(
                 if (!req.body.receiveAddress) { error.push({ receiveAddress: 'Receive Address is required' }) }
                 if (!req.body.content) { error.push({ content: 'Content is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
-
-                res.status(400).send(error)
+                res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const receiveAddress = req.body.receiveAddress;
                 const content = req.body.content;
                 const feeRate = req.body.feeRate;
-                const txId = await inscribe(
+
+                const response = await inscribe(
                     'text',
                     'text/plain',
                     receiveAddress,
                     content,
                     feeRate
                 );
-                res.send({ tx: txId })
+                if (response.isSuccess) {
+                    res.status(200).send({ tx: response.data })
+                } else {
+                    res.status(400).send({ error: { type: 1, data: response.data } })
+                }
             }
         } catch (error: any) {
             console.error(error);
@@ -69,29 +73,30 @@ InscriptionRouter.post(
             if (req.files === null) {
                 return res.status(400).json({ msg: 'No file uploaded' });
             }
-
             if (!(req.body.receiveAddress && req.body.feeRate)) {
                 let error = [];
                 if (!req.body.receiveAddress) { error.push({ receiveAddress: 'Receive Address is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
-
-                res.status(400).send(error)
+                res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const receiveAddress = req.body.receiveAddress;
                 const feeRate = req.body.feeRate;
-
                 const file: IFile = req.files?.file as IFile;
                 const mimetype: string = file?.mimetype;
                 const content: Buffer = file?.data;
 
-                const txId = await inscribe(
+                const response = await inscribe(
                     'file',
                     mimetype,
                     receiveAddress,
                     content,
                     feeRate
                 );
-                res.send({ tx: txId })
+                if (response.isSuccess) {
+                    res.status(200).send({ tx: response.data })
+                } else {
+                    res.status(400).send({ error: { type: 1, data: response.data } })
+                }
             }
         } catch (error: any) {
             console.error(error);

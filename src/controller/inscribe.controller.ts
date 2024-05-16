@@ -39,14 +39,13 @@ if (networkConfig.walletType == 'WIF') {
 
 const keyPair = wallet.ecPair;
 
-export const inscribe = async (type: string, mimetype: string, receiveAddress: string, content: any, feeRate: number): Promise<string> => {
+export const inscribe = async (type: string, mimetype: string, receiveAddress: string, content: any, feeRate: number): Promise<any> => {
   let bufferContent: any;
   if (type == 'text') {
     bufferContent = Buffer.from(content)
   } else {
     bufferContent = content;
   };
-
   const ordinalStacks = [
     keyPair.publicKey.subarray(1, 33),
     opcodes.OP_CHECKSIG,
@@ -108,9 +107,9 @@ export const inscribe = async (type: string, mimetype: string, receiveAddress: s
   } else {
     bufferContent = content;
   };
-  const txid: any = await tapRootInscribe(Buff.encode(mimetype), receiveAddress, bufferContent, feeRate, redeemFee + 546);
 
-  return txid;
+  const response = await tapRootInscribe(Buff.encode(mimetype), receiveAddress, bufferContent, feeRate, redeemFee + 546);
+  return response;
 }
 
 const blockstream = new axios.Axios({
@@ -184,8 +183,13 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
   });
   const address = Address.p2tr.fromPubKey(tpubkey, "testnet");
 
-  const txId = await sendUTXO(address, feeRate, fee);
-  console.log(`Sent_UTXO_TxId=======> ${txId}`)
+  const response = await sendUTXO(address, feeRate, fee);
+
+  if (response.isSuccess) {
+    console.log(`Sent_UTXO_TxId=======> ${response.data}`)
+  } else {
+    return response;
+  }
 
   const utxos: any = await getUtxos(address, networkType);
   const sentUtxo = utxos.filter((item: { value: number; }) => item.value == fee)[0];
@@ -216,5 +220,6 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
 
   const rawTx = Tx.encode(txdata).hex;
   const tx = await pushBTCpmt(rawTx, networkType);
-  return tx;
+  return { isSuccess: true, data: tx }
+
 };

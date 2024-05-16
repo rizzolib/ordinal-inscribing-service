@@ -68,7 +68,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1pfxctmhhk4wcrtrdll02ddtleahzvp7t2xf8887k8k649f8nxpxyqp4fp0j
+          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         content:
           type: string
           example: 350.364807.bitmap
@@ -84,7 +84,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1pfxctmhhk4wcrtrdll02ddtleahzvp7t2xf8887k8k649f8nxpxyqp4fp0j
+          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         feeRate:
           type: number
           example: 50
