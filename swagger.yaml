@@ -112,10 +112,14 @@ components:
         feeRate:
           type: number
           example: 50
+        padding:
+          type: number
+          example: 546
       required:
         - receiveAddress
         - content
         - feeRate
+        - padding
     FileInscription:
       type: object
       properties:
@@ -128,7 +132,11 @@ components:
         file:
           type: string
           format: binary
+        padding:
+          type: string
+          example: 546
       required:
         - receiveAddress
         - feeRate
         - file
+        - padding

@@ -32,23 +32,26 @@ InscriptionRouter.post(
     "/text",
     async (req: Request, res: Response) => {
         try {
-            if (!(req.body.receiveAddress && req.body.content && req.body.feeRate)) {
+            if (!(req.body.receiveAddress && req.body.content && req.body.feeRate && req.body.padding)) {
                 let error = [];
                 if (!req.body.receiveAddress) { error.push({ receiveAddress: 'Receive Address is required' }) }
                 if (!req.body.content) { error.push({ content: 'Content is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
+                if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const receiveAddress = req.body.receiveAddress;
                 const content = req.body.content;
                 const feeRate = req.body.feeRate;
+                const padding = req.body.padding;
 
                 const response = await inscribe(
                     'text',
                     'text/plain',
                     receiveAddress,
                     content,
-                    feeRate
+                    feeRate,
+                    padding
                 );
                 if (response.isSuccess) {
                     res.status(200).send({ tx: response.data })
@@ -73,14 +76,16 @@ InscriptionRouter.post(
             if (req.files === null) {
                 return res.status(400).json({ msg: 'No file uploaded' });
             }
-            if (!(req.body.receiveAddress && req.body.feeRate)) {
+            if (!(req.body.receiveAddress && req.body.feeRate && req.body.padding)) {
                 let error = [];
                 if (!req.body.receiveAddress) { error.push({ receiveAddress: 'Receive Address is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
+                if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const receiveAddress = req.body.receiveAddress;
                 const feeRate = req.body.feeRate;
+                const padding = req.body.padding;
                 const file: IFile = req.files?.file as IFile;
                 const mimetype: string = file?.mimetype;
                 const content: Buffer = file?.data;
@@ -90,7 +95,8 @@ InscriptionRouter.post(
                     mimetype,
                     receiveAddress,
                     content,
-                    feeRate
+                    feeRate,
+                    padding
                 );
                 if (response.isSuccess) {
                     res.status(200).send({ tx: response.data })

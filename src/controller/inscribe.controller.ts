@@ -39,7 +39,7 @@ if (networkConfig.walletType == 'WIF') {
 
 const keyPair = wallet.ecPair;
 
-export const inscribe = async (type: string, mimetype: string, receiveAddress: string, content: any, feeRate: number): Promise<any> => {
+export const inscribe = async (type: string, mimetype: string, receiveAddress: string, content: any, feeRate: number, padding: number): Promise<any> => {
   let bufferContent: any;
   if (type == 'text') {
     bufferContent = Buffer.from(content)
@@ -97,7 +97,7 @@ export const inscribe = async (type: string, mimetype: string, receiveAddress: s
   });
   redeemPsbt.addOutput({
     address: receiveAddress,
-    value: 546,
+    value: padding,
   });
   redeemPsbt.setMaximumFeeRate(100000);
   const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
@@ -108,7 +108,7 @@ export const inscribe = async (type: string, mimetype: string, receiveAddress: s
     bufferContent = content;
   };
 
-  const response = await tapRootInscribe(Buff.encode(mimetype), receiveAddress, bufferContent, feeRate, redeemFee + 546);
+  const response = await tapRootInscribe(Buff.encode(mimetype), receiveAddress, bufferContent, feeRate, redeemFee + padding, padding);
   return response;
 }
 
@@ -163,7 +163,7 @@ export async function signAndSend(
 }
 
 
-export const tapRootInscribe = async (mimetype: any, receiveAddress: string, content: any, feeRate: number, fee: number) => {
+export const tapRootInscribe = async (mimetype: any, receiveAddress: string, content: any, feeRate: number, fee: number, padding: number) => {
 
   const script = [
     wallet.pubkey,
@@ -207,7 +207,7 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
     ],
     vout: [
       {
-        value: 546,
+        value: padding,
         scriptPubKey: Address.toScriptPubKey(receiveAddress),
       },
     ],
