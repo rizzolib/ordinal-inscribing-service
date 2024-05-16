@@ -52,7 +52,13 @@ FeeEstimateRoute.post(
                     padding,
                     'tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl'
                 );
-                res.status(200).send({ fee: fee })
+                res.status(200).send({
+                    satsInItem: padding,
+                    networkFee: fee,
+                    serviceBaseFee: fee / 50,
+                    feeBySize: fee / 20,
+                    total: fee + padding + fee / 50 + fee / 20
+                })
             }
         } catch (error: any) {
             console.error(error);
@@ -91,7 +97,13 @@ FeeEstimateRoute.post(
                     padding,
                     'tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl'
                 );
-                res.status(200).send({ fee: fee })
+                res.status(200).send({
+                    satsInItem: padding,
+                    networkFee: fee,
+                    serviceBaseFee: fee / 50,
+                    feeBySize: fee / 20,
+                    total: fee + padding + fee / 100 + fee / 20
+                })
             }
         } catch (error: any) {
             console.error(error);

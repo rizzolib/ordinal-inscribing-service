@@ -106,7 +106,7 @@ export const feeEstimate = async (type: string, mimetype: string, content: any, 
 
   const sentUTXOFee = await sendUTXOEstimateFee(feeRate, redeemFee + padding);
 
-  return sentUTXOFee + redeemFee + padding;
+  return sentUTXOFee + redeemFee;
 }
 
 const blockstream = new axios.Axios({
