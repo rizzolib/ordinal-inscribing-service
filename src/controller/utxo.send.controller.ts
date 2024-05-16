@@ -27,7 +27,7 @@ if (networkConfig.walletType == 'WIF') {
 export const sendUTXO = async (address: string, feeRate: number, amount: number) => {
   const utxos = await getUtxos(wallet.address, networkType);
   const utxo = utxos.find((utxo) => utxo.value > amount + SEND_UTXO_LIMIT);
-  
+
   if (utxo === undefined) return { isSuccess: false, data: 'No enough balance on admin wallet.' };
 
   let redeemPsbt: Bitcoin.Psbt = redeemSendUTXOPsbt(wallet, utxo, networkType, amount);
@@ -46,4 +46,18 @@ export const sendUTXO = async (address: string, feeRate: number, amount: number)
   const txId = await pushBTCpmt(txHex, networkType);
 
   return { isSuccess: true, data: txId };;
+}
+
+
+export const sendUTXOEstimateFee = async (feeRate: number, amount: number) => {
+  const utxo = {
+    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
+    vout: 0,
+    value: 10 * 10 ** 8
+  }
+  let redeemPsbt: Bitcoin.Psbt = redeemSendUTXOPsbt(wallet, utxo, networkType, amount);
+  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+
+  return redeemFee;
 }

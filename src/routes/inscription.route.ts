@@ -84,8 +84,8 @@ InscriptionRouter.post(
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const receiveAddress = req.body.receiveAddress;
-                const feeRate = req.body.feeRate;
-                const padding = req.body.padding;
+                const feeRate: number = +req.body.feeRate;
+                const padding: number = +req.body.padding;
                 const file: IFile = req.files?.file as IFile;
                 const mimetype: string = file?.mimetype;
                 const content: Buffer = file?.data;

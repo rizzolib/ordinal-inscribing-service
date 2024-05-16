@@ -12,6 +12,7 @@ servers:
 tags:
   - name: Inscription
   - name: Status
+  - name: Fee-Estimate
 
 paths:
   /inscribe/text:
@@ -58,6 +59,54 @@ paths:
                 type: string
         "400":
           description: File Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /estimate/text-estimate-fee:
+    post:
+      summary: Text Fee Estimate.
+      tags:
+        - Fee-Estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextEstimateFee"
+      responses:
+        "200":
+          description: Text Fee Estimage Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Text Fee Estimage Success!
+          content:
+            application/json:
+              schema:
+                type: string
+  /estimate/file-estimate-fee:
+    post:
+      summary: File Inscription Fee Estimate
+      tags:
+        - Fee-Estimate
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FileEstimateFee"
+      responses:
+        "200":
+          description: File Fee Estimate Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: File Fee Estimate Failed!
           content:
             application/json:
               schema:
@@ -137,6 +186,38 @@ components:
           example: 546
       required:
         - receiveAddress
+        - feeRate
+        - file
+        - padding
+    TextEstimateFee:
+        type: object
+        properties:
+          content:
+            type: string
+            example: 350.364807.bitmap
+          feeRate:
+            type: number
+            example: 50
+          padding:
+            type: number
+            example: 546
+        required:
+          - content
+          - feeRate
+          - padding
+    FileEstimateFee:
+      type: object
+      properties:
+        feeRate:
+          type: number
+          example: 50
+        file:
+          type: string
+          format: binary
+        padding:
+          type: string
+          example: 546
+      required:
         - feeRate
         - file
         - padding
