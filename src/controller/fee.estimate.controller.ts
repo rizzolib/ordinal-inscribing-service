@@ -9,17 +9,10 @@ import {
 } from "bitcoinjs-lib";
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
-import axios, { AxiosResponse } from "axios";
-import { sendUTXOEstimateFee } from "./utxo.send.controller";
+import { sendUTXOEstimateFee, sendBulkTextUTXOEstimateFee } from "./utxo.send.controller";
 import networkConfig from "../config/network.config";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet';
-import { getUtxos } from "../utils/mempool";
-
-import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
-import { Address, Signer, Tap, Tx } from "@cmdcode/tapscript";
-import { Buff } from "@cmdcode/buff-utils";
-import { pushBTCpmt } from "../utils/mempool";
 
 initEccLib(ecc as any);
 
@@ -109,9 +102,79 @@ export const feeEstimate = async (type: string, mimetype: string, content: any, 
   return sentUTXOFee + redeemFee;
 }
 
-const blockstream = new axios.Axios({
-  baseURL: `https://mempool.space/testnet/api`,
-});
+
+export const bulkTextFeeEstimate = async (mimetype: string, contents: Array<string>, feeRate: number, padding: number, receiveAddress: string): Promise<any> => {
+  let feeArray: Array<number> = [];
+  let totalFeeSumInscription: number = 0;
+
+  contents.forEach((content, index) => {
+    const ordinalStacks = [
+      keyPair.publicKey.subarray(1, 33),
+      opcodes.OP_CHECKSIG,
+      opcodes.OP_FALSE,
+      opcodes.OP_IF,
+      Buffer.from("ord"),
+      opcodes.OP_1,
+      Buffer.from(mimetype),
+      opcodes.OP_0,
+      Buffer.from(content),
+      opcodes.OP_ENDIF,
+    ];
+    const ordinalScript = script.compile(ordinalStacks);
+
+    const scriptTree: Taptree = {
+      output: ordinalScript,
+    };
+
+    const script_p2tr = payments.p2tr({
+      internalPubkey: toXOnly(keyPair.publicKey),
+      scriptTree,
+      network,
+    });
+
+    const ordinlas_redeem = {
+      output: ordinalScript,
+      redeemVersion: 192,
+    };
+
+    const ordinals_p2tr = payments.p2tr({
+      internalPubkey: toXOnly(keyPair.publicKey),
+      scriptTree,
+      redeem: ordinlas_redeem,
+      network,
+    });
+
+    const redeemPsbt = new Psbt({ network });
+
+    redeemPsbt.addInput({
+      hash: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
+      index: 0,
+      witnessUtxo: { value: 10 ** 6, script: script_p2tr.output! },
+      tapLeafScript: [
+        {
+          leafVersion: ordinlas_redeem.redeemVersion,
+          script: ordinlas_redeem.output,
+          controlBlock: ordinals_p2tr.witness![ordinals_p2tr.witness!.length - 1],
+        },
+      ],
+    });
+
+    redeemPsbt.addOutput({
+      address: receiveAddress,
+      value: padding,
+    });
+
+    redeemPsbt.setMaximumFeeRate(100000);
+    const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
+
+    feeArray.push(redeemFee + padding);
+    totalFeeSumInscription += redeemFee + padding;
+  })
+  
+  const sendUTXOFee = await sendBulkTextUTXOEstimateFee(feeRate, feeArray);
+  
+  return sendUTXOFee + totalFeeSumInscription;
+}
 
 export function calculateTransactionFee(
   keyPair: BTCSigner,
@@ -121,11 +184,6 @@ export function calculateTransactionFee(
   psbt.signInput(0, keyPair);
   psbt.finalizeAllInputs();
   return psbt.extractTransaction().virtualSize() * feeRate;
-}
-
-export async function broadcast(txHex: string) {
-  const response: AxiosResponse<string> = await blockstream.post("/tx", txHex);
-  return response.data;
 }
 
 function toXOnly(pubkey: Buffer): Buffer {
@@ -142,19 +200,4 @@ interface IUTXO {
     block_time: number;
   };
   value: number;
-}
-
-export async function signAndSend(
-  keyPair: BTCSigner,
-  psbt: Psbt
-): Promise<string> {
-  psbt.signInput(0, keyPair);
-  psbt.finalizeAllInputs();
-
-  const tx = psbt.extractTransaction();
-  console.log(`Broadcasting Transaction Hex: ${tx.toHex()}`);
-  const txid = await broadcast(tx.toHex());
-  console.log(`Success! Txid is ${txid}`);
-
-  return txid;
 }

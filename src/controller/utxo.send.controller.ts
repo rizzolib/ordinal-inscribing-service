@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { redeemSendUTXOPsbt, sendUTXOPsbt } from "../utils/utxo/utxo.send";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet'
+import { redeemMultipleSendUTXOPsbt } from "../utils/utxo/utxo.multiplesend";
 
 const SEND_UTXO_LIMIT = 1000;
 
@@ -48,7 +49,6 @@ export const sendUTXO = async (address: string, feeRate: number, amount: number)
   return { isSuccess: true, data: txId };;
 }
 
-
 export const sendUTXOEstimateFee = async (feeRate: number, amount: number) => {
   const utxo = {
     txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
@@ -56,6 +56,20 @@ export const sendUTXOEstimateFee = async (feeRate: number, amount: number) => {
     value: 10 * 10 ** 8
   }
   let redeemPsbt: Bitcoin.Psbt = redeemSendUTXOPsbt(wallet, utxo, networkType, amount);
+  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+
+  return redeemFee;
+}
+
+export const sendBulkTextUTXOEstimateFee = async (feeRate: number, feeArray: Array<number>) => {
+  const utxo = {
+    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
+    vout: 0,
+    value: 10 * 10 ** 8
+  }
+
+  let redeemPsbt: Bitcoin.Psbt = redeemMultipleSendUTXOPsbt(wallet, utxo, networkType, feeArray);
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
   let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
