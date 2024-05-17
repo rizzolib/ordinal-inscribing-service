@@ -39,6 +39,30 @@ paths:
             application/json:
               schema:
                 type: string
+  /inscribe/bulk-text:
+    post:
+      summary: Create new bulk text inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkTextInscription"
+      responses:
+        "200":
+          description: Bulk Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Bulk Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
   /inscribe/file:
     post:
       summary: Create new file inscription.
@@ -176,6 +200,26 @@ components:
         content:
           type: string
           example: 350.364807.bitmap
+        feeRate:
+          type: number
+          example: 50
+        padding:
+          type: number
+          example: 546
+      required:
+        - receiveAddress
+        - content
+        - feeRate
+        - padding
+    BulkTextInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+        contents:
+          type: string
+          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
         feeRate:
           type: number
           example: 50
