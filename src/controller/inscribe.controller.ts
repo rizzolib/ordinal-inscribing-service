@@ -181,7 +181,7 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
   const [tpubkey, cblock] = Tap.getPubKey(wallet.pubkey as PublicKey, {
     target: tapleaf,
   });
-  const address = Address.p2tr.fromPubKey(tpubkey, "testnet");
+  const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == "testnet" ? "testnet" : "main");
 
   const response = await sendUTXO(address, feeRate, fee);
 
