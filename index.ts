@@ -9,6 +9,7 @@ import bodyParser = require("body-parser");
 import { InscriptionRouter } from "./src/routes/inscription.route";
 import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
+import { MultiInscriptionRouter } from "./src/routes/multi.inscription.route";
 import http from "http";
 
 
@@ -41,6 +42,7 @@ app.use(cors())
 app.use('/api/inscribe', InscriptionRouter)
 app.use('/api/estimate', FeeEstimateRoute)
 app.use('/api/status', StatusNetworkRoute)
+app.use('/api/multi-inscribe', MultiInscriptionRouter)
 
 app.use(
   "/api-docs",

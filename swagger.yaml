@@ -87,6 +87,78 @@ paths:
             application/json:
               schema:
                 type: string
+  /multi-inscribe/text:
+    post:
+      summary: Create new text inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MultiTextInscription"
+      responses:
+        "200":
+          description: Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /multi-inscribe/bulk-text:
+    post:
+      summary: Create new bulk text inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MultiBulkTextInscription"
+      responses:
+        "200":
+          description: Bulk Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Bulk Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /multi-inscribe/file:
+    post:
+      summary: Create new file inscription.
+      tags:
+        - Inscription
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/MultiFileInscription"
+      responses:
+        "200":
+          description: File Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: File Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
   /estimate/text-estimate-fee:
     post:
       summary: Text Fee Estimate.
@@ -251,22 +323,82 @@ components:
         - feeRate
         - file
         - padding
+    MultiTextInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
+        content:
+          type: string
+          example: 350.364807.bitmap
+        feeRate:
+          type: number
+          example: 50
+        padding:
+          type: number
+          example: 546
+      required:
+        - receiveAddress
+        - content
+        - feeRate
+        - padding
+    MultiBulkTextInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
+        contents:
+          type: string
+          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
+        feeRate:
+          type: number
+          example: 50
+        padding:
+          type: number
+          example: 546
+      required:
+        - receiveAddress
+        - content
+        - feeRate
+        - padding
+    MultiFileInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
+        feeRate:
+          type: number
+          example: 50
+        file:
+          type: string
+          format: binary
+        padding:
+          type: string
+          example: 546
+      required:
+        - receiveAddress
+        - feeRate
+        - file
+        - padding
     TextEstimateFee:
-        type: object
-        properties:
-          content:
-            type: string
-            example: 350.364807.bitmap
-          feeRate:
-            type: number
-            example: 50
-          padding:
-            type: number
-            example: 546
-        required:
-          - content
-          - feeRate
-          - padding
+      type: object
+      properties:
+        content:
+          type: string
+          example: 350.364807.bitmap
+        feeRate:
+          type: number
+          example: 50
+        padding:
+          type: number
+          example: 546
+      required:
+        - content
+        - feeRate
+        - padding
     FileEstimateFee:
       type: object
       properties:
