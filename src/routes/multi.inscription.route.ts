@@ -10,22 +10,6 @@ interface IFile {
     data: Buffer
 }
 
-// @route    GET api/inscribe
-// @desc     API test
-// @access   Public
-MultiInscriptionRouter.get(
-    "/",
-    async (req: Request, res: Response) => {
-        try {
-            console.log('Inscription router is running')
-            return res.json({ msg: 'success' });
-        } catch (error: any) {
-            console.error(error);
-            return res.status(500).send({ error });
-        }
-    }
-);
-
 // @route    POST api/inscribe/text
 // @desc     Text Inscription
 // @access   Private
@@ -71,7 +55,6 @@ MultiInscriptionRouter.post(
     }
 );
 
-
 // @route    POST api/inscribe/bulk-text
 // @desc     Text Inscription
 // @access   Private
@@ -113,7 +96,6 @@ MultiInscriptionRouter.post(
         }
     }
 );
-
 
 // @route    POST api/inscribe/file
 // @desc     File Inscription

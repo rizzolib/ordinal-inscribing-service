@@ -9,22 +9,6 @@ interface IFile {
     data: Buffer
 }
 
-// @route    GET api/inscribe
-// @desc     API test
-// @access   Public
-FeeEstimateRoute.get(
-    "/",
-    async (req: Request, res: Response) => {
-        try {
-            console.log('Inscription router is running')
-            return res.json({ msg: 'success' });
-        } catch (error: any) {
-            console.error(error);
-            return res.status(500).send({ error });
-        }
-    }
-);
-
 // @route    POST api/estimate/text-estimate-fee
 // @desc     Text Inscription
 // @access   Private
@@ -110,8 +94,6 @@ FeeEstimateRoute.post(
         }
     }
 );
-
-
 
 // @route    POST api/estimate/bulk-text-estimate-fee
 // @desc     Text Inscription

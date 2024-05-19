@@ -5,17 +5,14 @@ import {
   networks,
   Signer as BTCSigner,
   opcodes,
-  payments,
-  address,
+  payments
 } from "bitcoinjs-lib";
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
-import axios, { AxiosResponse } from "axios";
-import { sendMultipleUTXO } from "./utxo.multiplesend.controller";
+import { multiSendUTXO } from "../utils/utxo/utxo.multiSend";
 import networkConfig from "../config/network.config";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet';
-import { getUtxos } from "../utils/mempool";
 
 import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx, TxTemplate } from "@cmdcode/tapscript";
@@ -36,7 +33,6 @@ if (networkConfig.walletType == 'WIF') {
   const seed: string = process.env.MNEMONIC as string;
   wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }
-
 
 const keyPair = wallet.ecPair;
 
@@ -105,58 +101,6 @@ export const inscribeBulkText = async (receiveAddress: string, contentArray: Arr
   const response = await tapRootInscribeBulkText(Buff.encode(mimetype), receiveAddress, contentArray, feeRate, feeArray, padding);
   return response;
 }
-
-const blockstream = new axios.Axios({
-  baseURL: `https://mempool.space/testnet/api`,
-});
-
-export function calculateTransactionFee(
-  keyPair: BTCSigner,
-  psbt: Psbt,
-  feeRate: number
-): number {
-  psbt.signInput(0, keyPair);
-  psbt.finalizeAllInputs();
-  return psbt.extractTransaction().virtualSize() * feeRate;
-}
-
-export async function broadcast(txHex: string) {
-  const response: AxiosResponse<string> = await blockstream.post("/tx", txHex);
-  return response.data;
-}
-
-function toXOnly(pubkey: Buffer): Buffer {
-  return pubkey.subarray(1, 33);
-}
-
-interface IUTXO {
-  txid: string;
-  vout: number;
-  status: {
-    confirmed: boolean;
-    block_height: number;
-    block_hash: string;
-    block_time: number;
-  };
-  value: number;
-}
-
-export async function signAndSend(
-  keyPair: BTCSigner,
-  psbt: Psbt
-): Promise<string> {
-  psbt.signInput(0, keyPair);
-  psbt.finalizeAllInputs();
-
-  const tx = psbt.extractTransaction();
-  console.log(`Broadcasting Transaction Hex: ${tx.toHex()}`);
-  const txid = await broadcast(tx.toHex());
-  console.log(`Success! Txid is ${txid}`);
-
-  return txid;
-}
-
-
 export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: string, contentArray: any, feeRate: number, feeArray: Array<number>, padding: number) => {
   let tpubkeyArray: Array<string> = [];
   let tapleafArray: Array<any> = [];
@@ -191,7 +135,7 @@ export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: str
     return address;
   });
 
-  const response = await sendMultipleUTXO(addressArray, feeRate, feeArray);
+  const response = await multiSendUTXO(addressArray, feeRate, feeArray);
 
   if (response.isSuccess) {
     console.log(`Sent_UTXO_TxId =======> ${response.data}`)
@@ -237,3 +181,19 @@ export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: str
 
   return { isSuccess: true, data: inscriptionTxArray }
 };
+
+export function calculateTransactionFee(
+  keyPair: BTCSigner,
+  psbt: Psbt,
+  feeRate: number
+): number {
+  for(let i = 0; i < psbt.inputCount; i ++) {
+    psbt.signInput(0, keyPair);
+  }
+  psbt.finalizeAllInputs();
+  return psbt.extractTransaction().virtualSize() * feeRate;
+}
+
+function toXOnly(pubkey: Buffer): Buffer {
+  return pubkey.subarray(1, 33);
+}

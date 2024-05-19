@@ -5,7 +5,6 @@ import networkConfig from "../config/network.config";
 // Create a new instance of the Express Router
 export const StatusNetworkRoute = Router();
 
-
 // @route    GET api/status/price
 // @desc     Get Bitcoin price
 // @access   Public
@@ -37,7 +36,6 @@ StatusNetworkRoute.get(
         }
     }
 );
-
 
 // @route    GET api/status/recomFeeRate
 // @desc     Get Recommended Fee Rate

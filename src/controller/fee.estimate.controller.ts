@@ -9,10 +9,12 @@ import {
 } from "bitcoinjs-lib";
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
-import { sendUTXOEstimateFee, sendBulkTextUTXOEstimateFee } from "./utxo.send.controller";
 import networkConfig from "../config/network.config";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet';
+import * as Bitcoin from "bitcoinjs-lib";
+import { redeemMultiSendPsbt } from "../utils/utxo/utxo.multiSendPsbt";
+import { redeemSingleSendUTXOPsbt } from "../utils/utxo/utxo.singleSendPsbt";
 
 initEccLib(ecc as any);
 
@@ -102,7 +104,6 @@ export const feeEstimate = async (type: string, mimetype: string, content: any, 
   return sentUTXOFee + redeemFee;
 }
 
-
 export const bulkTextFeeEstimate = async (mimetype: string, contents: Array<string>, feeRate: number, padding: number, receiveAddress: string): Promise<any> => {
   let feeArray: Array<number> = [];
   let totalFeeSumInscription: number = 0;
@@ -176,28 +177,45 @@ export const bulkTextFeeEstimate = async (mimetype: string, contents: Array<stri
   return sendUTXOFee + totalFeeSumInscription;
 }
 
+export const sendUTXOEstimateFee = async (feeRate: number, amount: number) => {
+  const utxo = {
+    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
+    vout: 0,
+    value: 10 * 10 ** 8
+  }
+  let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, [utxo], networkType, amount);
+  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+
+  return redeemFee;
+}
+
+export const sendBulkTextUTXOEstimateFee = async (feeRate: number, feeArray: Array<number>) => {
+  const utxo = {
+    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
+    vout: 0,
+    value: 10 * 10 ** 8
+  }
+
+  let redeemPsbt: Bitcoin.Psbt = redeemMultiSendPsbt(wallet, [utxo], networkType, feeArray);
+  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+
+  return redeemFee;
+}
+
 export function calculateTransactionFee(
   keyPair: BTCSigner,
   psbt: Psbt,
   feeRate: number
 ): number {
-  psbt.signInput(0, keyPair);
+  for(let i = 0; i < psbt.inputCount; i ++) {
+    psbt.signInput(0, keyPair);
+  }
   psbt.finalizeAllInputs();
   return psbt.extractTransaction().virtualSize() * feeRate;
 }
 
-function toXOnly(pubkey: Buffer): Buffer {
+const toXOnly = (pubkey: Buffer): Buffer => {
   return pubkey.subarray(1, 33);
-}
-
-interface IUTXO {
-  txid: string;
-  vout: number;
-  status: {
-    confirmed: boolean;
-    block_height: number;
-    block_hash: string;
-    block_time: number;
-  };
-  value: number;
 }

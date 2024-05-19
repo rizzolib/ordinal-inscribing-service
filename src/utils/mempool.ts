@@ -1,5 +1,4 @@
 import axios, { type AxiosError } from "axios";
-import { AnyRecordWithTtl } from "dns";
 
 interface IUtxo {
   txid: string;
