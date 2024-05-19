@@ -15,8 +15,13 @@ import { WIFWallet } from '../utils/wallet/WIFWallet';
 import * as Bitcoin from "bitcoinjs-lib";
 import { redeemMultiSendPsbt } from "../utils/utxo/utxo.multiSendPsbt";
 import { redeemSingleSendUTXOPsbt } from "../utils/utxo/utxo.singleSendPsbt";
+import { getUtxos } from "../utils/mempool";
+import { getSendBTCUTXOArray } from "../utils/utxo/utxo.management";
 
 initEccLib(ecc as any);
+
+const MAXIMUMFEERATE = 100000;
+const SEND_UTXO_FEE_LIMIT = 100000;
 
 const networkType: string = networkConfig.networkType;
 let wallet: any;
@@ -96,12 +101,16 @@ export const feeEstimate = async (type: string, mimetype: string, content: any, 
     value: padding,
   });
 
-  redeemPsbt.setMaximumFeeRate(100000);
+  redeemPsbt.setMaximumFeeRate(MAXIMUMFEERATE);
   const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
 
-  const sentUTXOFee = await sendUTXOEstimateFee(feeRate, redeemFee + padding);
+  const sentUTXOFeeData:any = await sendUTXOEstimateFee(feeRate, redeemFee + padding);
 
-  return sentUTXOFee + redeemFee;
+  if(sentUTXOFeeData.isSuccess) {
+    return {isSuccess: true, data: sentUTXOFeeData.data + redeemFee}
+  } else {
+    return {isSuccess: false, data: sentUTXOFeeData.data}
+  }
 }
 
 export const bulkTextFeeEstimate = async (mimetype: string, contents: Array<string>, feeRate: number, padding: number, receiveAddress: string): Promise<any> => {
@@ -165,43 +174,49 @@ export const bulkTextFeeEstimate = async (mimetype: string, contents: Array<stri
       value: padding,
     });
 
-    redeemPsbt.setMaximumFeeRate(100000);
+    redeemPsbt.setMaximumFeeRate(MAXIMUMFEERATE);
     const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
 
     feeArray.push(redeemFee + padding);
     totalFeeSumInscription += redeemFee + padding;
   })
-  
-  const sendUTXOFee = await sendBulkTextUTXOEstimateFee(feeRate, feeArray);
-  
-  return sendUTXOFee + totalFeeSumInscription;
+
+  const sentUTXOFeeData: any = await sendBulkTextUTXOEstimateFee(feeRate, feeArray);
+
+  if(sentUTXOFeeData.isSuccess) {
+    return {isSuccess: true, data: sentUTXOFeeData.data + totalFeeSumInscription}
+  } else {
+    return {isSuccess: false, data: sentUTXOFeeData.data}
+  }
 }
 
 export const sendUTXOEstimateFee = async (feeRate: number, amount: number) => {
-  const utxo = {
-    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
-    vout: 0,
-    value: 10 * 10 ** 8
+  const utxos = await getUtxos(wallet.address, networkType);
+  let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
+
+  if (!response.isSuccess) {
+    return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
-  let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, [utxo], networkType, amount);
+  let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, response.data, networkType, amount);
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
   let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
-  return redeemFee;
+  return { isSuccess: true, data: redeemFee };
 }
 
 export const sendBulkTextUTXOEstimateFee = async (feeRate: number, feeArray: Array<number>) => {
-  const utxo = {
-    txid: 'e2aa2f0e1b49567e3c5e2f5985898657930e9f3ec1580b38429499e318c62b64',
-    vout: 0,
-    value: 10 * 10 ** 8
-  }
+  const totalAmount = feeArray.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
-  let redeemPsbt: Bitcoin.Psbt = redeemMultiSendPsbt(wallet, [utxo], networkType, feeArray);
+  const utxos = await getUtxos(wallet.address, networkType);
+  let response = getSendBTCUTXOArray(utxos, totalAmount + SEND_UTXO_FEE_LIMIT);
+  if (!response.isSuccess) {
+    return { isSuccess: false, data: 'No enough balance on admin wallet.' };
+  }
+  let redeemPsbt: Bitcoin.Psbt = redeemMultiSendPsbt(wallet, response.data, networkType, feeArray);
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
   let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
-  return redeemFee;
+  return { isSuccess: true, data: redeemFee };
 }
 
 export function calculateTransactionFee(
@@ -209,7 +224,7 @@ export function calculateTransactionFee(
   psbt: Psbt,
   feeRate: number
 ): number {
-  for(let i = 0; i < psbt.inputCount; i ++) {
+  for (let i = 0; i < psbt.inputCount; i++) {
     psbt.signInput(0, keyPair);
   }
   psbt.finalizeAllInputs();

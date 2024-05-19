@@ -27,7 +27,7 @@ FeeEstimateRoute.post(
                 const feeRate = req.body.feeRate;
                 const padding = req.body.padding;
 
-                const fee = await feeEstimate(
+                const feeData = await feeEstimate(
                     'text',
                     'text/plain',
                     content,
@@ -35,13 +35,22 @@ FeeEstimateRoute.post(
                     padding,
                     'tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl'
                 );
-                res.status(200).send({
-                    satsInItem: padding,
-                    networkFee: fee,
-                    serviceBaseFee: fee / 50,
-                    feeBySize: fee / 20,
-                    total: fee + padding + fee / 50 + fee / 20
-                })
+                let fee: number = 0;
+                if(feeData.isSuccess) {
+                    fee = feeData.data;
+                    res.status(200).send({
+                        satsInItem: padding,
+                        networkFee: fee,
+                        serviceBaseFee: fee / 50,
+                        feeBySize: fee / 20,
+                        total: fee + padding + fee / 50 + fee / 20
+                    })
+                } else {
+                    res.status(400).send({
+                        isSuccess: feeData.isSuccess,
+                        data: feeData.data
+                    })
+                }
             }
         } catch (error: any) {
             console.error(error);
@@ -72,7 +81,7 @@ FeeEstimateRoute.post(
                 const mimetype: string = file?.mimetype;
                 const content: Buffer = file?.data;
 
-                const fee = await feeEstimate(
+                const feeData = await feeEstimate(
                     'file',
                     mimetype,
                     content,
@@ -80,13 +89,22 @@ FeeEstimateRoute.post(
                     padding,
                     'tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl'
                 );
-                res.status(200).send({
-                    satsInItem: padding,
-                    networkFee: fee,
-                    serviceBaseFee: fee / 50,
-                    feeBySize: fee / 20,
-                    total: fee + padding + fee / 100 + fee / 20
-                })
+                let fee: number = 0;
+                if(feeData.isSuccess) {
+                    fee = feeData.data;
+                    res.status(200).send({
+                        satsInItem: padding,
+                        networkFee: fee,
+                        serviceBaseFee: fee / 50,
+                        feeBySize: fee / 20,
+                        total: fee + padding + fee / 50 + fee / 20
+                    })
+                } else {
+                    res.status(400).send({
+                        isSuccess: feeData.isSuccess,
+                        data: feeData.data
+                    })
+                }
             }
         } catch (error: any) {
             console.error(error);
@@ -113,20 +131,29 @@ FeeEstimateRoute.post(
                 const feeRate = req.body.feeRate;
                 const padding = req.body.padding;
 
-                const fee = await bulkTextFeeEstimate(
+                const feeData = await bulkTextFeeEstimate(
                     'text/plain',
                     contents,
                     feeRate,
                     padding,
                     'tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl'
                 );
-                res.status(200).send({
-                    satsInItem: padding * contents.length,
-                    networkFee: fee,
-                    serviceBaseFee: fee / 50,
-                    feeBySize: fee / 20,
-                    total: fee + padding * contents.length + fee / 50 + fee / 20
-                })
+                let fee: number = 0;
+                if(feeData.isSuccess) {
+                    fee = feeData.data;
+                    res.status(200).send({
+                        satsInItem: padding,
+                        networkFee: fee,
+                        serviceBaseFee: fee / 50,
+                        feeBySize: fee / 20,
+                        total: fee + padding + fee / 50 + fee / 20
+                    })
+                } else {
+                    res.status(400).send({
+                        isSuccess: feeData.isSuccess,
+                        data: feeData.data
+                    })
+                }
             }
         } catch (error: any) {
             console.error(error);

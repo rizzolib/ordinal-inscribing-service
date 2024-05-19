@@ -21,6 +21,8 @@ import { pushBTCpmt } from "../utils/mempool";
 
 initEccLib(ecc as any);
 
+const MAXIMUMFEERATE = 100000;
+
 const networkType: string = networkConfig.networkType;
 let wallet: any;
 
@@ -96,7 +98,7 @@ export const inscribe = async (type: string, mimetype: string, receiveAddress: s
     address: receiveAddress,
     value: padding,
   });
-  redeemPsbt.setMaximumFeeRate(100000);
+  redeemPsbt.setMaximumFeeRate(MAXIMUMFEERATE);
   const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
 
   if (type == 'text') {
@@ -128,11 +130,10 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
     target: tapleaf,
   });
   const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == "testnet" ? "testnet" : "main");
-
   const response = await singleSendUTXO(address, feeRate, fee);
 
   if (response.isSuccess) {
-    console.log(`Sent_UTXO_TxId=======> ${response.data}`)
+    console.log(`Sent_UTXO_TxId => ${response.data}`)
   } else {
     return response;
   }

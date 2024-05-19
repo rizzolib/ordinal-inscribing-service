@@ -21,6 +21,8 @@ import { pushBTCpmt } from "../utils/mempool";
 
 initEccLib(ecc as any);
 
+const MAXIMUMFEERATE = 100000;
+
 const networkType: string = networkConfig.networkType;
 let wallet: any;
 
@@ -94,7 +96,7 @@ export const inscribeBulkText = async (receiveAddress: string, contentArray: Arr
       address: receiveAddress,
       value: padding,
     });
-    redeemPsbt.setMaximumFeeRate(100000);
+    redeemPsbt.setMaximumFeeRate(MAXIMUMFEERATE);
     const redeemFee = calculateTransactionFee(keyPair, redeemPsbt, feeRate);
     return redeemFee + padding;
   });
@@ -138,7 +140,7 @@ export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: str
   const response = await multiSendUTXO(addressArray, feeRate, feeArray);
 
   if (response.isSuccess) {
-    console.log(`Sent_UTXO_TxId =======> ${response.data}`)
+    console.log(`Sent_UTXO_TxId => ${response.data}`)
   } else {
     return response;
   }

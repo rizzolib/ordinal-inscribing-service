@@ -8,7 +8,7 @@ import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
 
-const SEND_UTXO_LIMIT = 1000;
+const SEND_UTXO_FEE_LIMIT = 100000;
 
 dotenv.config();
 Bitcoin.initEccLib(ecc);
@@ -28,7 +28,7 @@ export const multiSendUTXO = async (addressArray: any, feeRate: number, amountAr
   const totalAmount = amountArray.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
   const utxos = await getUtxos(wallet.address, networkType);
-  let response = getSendBTCUTXOArray(utxos, totalAmount + SEND_UTXO_LIMIT);
+  let response = getSendBTCUTXOArray(utxos, totalAmount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   } else {

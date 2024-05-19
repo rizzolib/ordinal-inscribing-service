@@ -8,6 +8,8 @@ interface IUtxo {
     value: number;
 }
 
+const SEND_UTXO_FEE_LIMIT = 100000;
+
 export const redeemMultiSendPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, networkType: string, outputAmountArray: Array<number>): Bitcoin.Psbt => {
     const psbt = new Bitcoin.Psbt({
         network: networkType == "testnet" ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
@@ -35,7 +37,7 @@ export const redeemMultiSendPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, n
 
     psbt.addOutput({
         address: wallet.address,
-        value: inputUtxoSumValue - 1000 - outputUtxoSumAmount,
+        value: inputUtxoSumValue - SEND_UTXO_FEE_LIMIT - outputUtxoSumAmount,
     });
 
     return psbt;

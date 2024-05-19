@@ -85,7 +85,6 @@ MultiInscriptionRouter.post(
                     if (response.isSuccess) {
                         txList.push(response.data);
                     } else {
-                        res.status(400).send({ error: { type: 1, data: response.data } })
                     }
                 }
                 res.status(200).send({ tx: txList })
@@ -134,7 +133,6 @@ MultiInscriptionRouter.post(
                     if (response.isSuccess) {
                         txList.push(response.data);
                     } else {
-                        res.status(400).send({ error: { type: 1, data: response.data } })
                     }
                 }
                 res.status(200).send({ tx: txList })
