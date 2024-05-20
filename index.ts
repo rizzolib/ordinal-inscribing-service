@@ -2,6 +2,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import fileUpload from 'express-fileupload';
 import swaggerUi from 'swagger-ui-express';
 import YAML from "yamljs";
@@ -11,7 +12,9 @@ import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import { MultiInscriptionRouter } from "./src/routes/multi.inscription.route";
 import http from "http";
+const { Mutex } = require('async-mutex');
 
+export const flagMutex = new Mutex();
 
 const swaggerDocument = YAML.load('swagger.yaml');
 
@@ -21,13 +24,14 @@ const swaggerDocument = YAML.load('swagger.yaml');
  * object of Node.js
  */
 dotenv.config();
-
 /*
  * Create an Express application and get the
  * value of the PORT environment variable
  * from the `process.env`
  */
-const app: Express = express();
+export const app: Express = express();
+
+app.locals.utxoflag = false;
 
 const server = http.createServer(app);
 
@@ -50,8 +54,19 @@ app.use(
   swaggerUi.setup(swaggerDocument, { explorer: true })
 );
 
-/* Start the Express app and listen
- for incoming requests on the specified port */
-server.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+mongoose
+  .connect(process.env.MONGO_URI as string)
+  .then(async () => {
+    console.log("Connected to the database! ❤️");
+
+    /* Start the Express app and listen
+     for incoming requests on the specified port */
+    server.listen(port, () => {
+      console.log(`[server]: Server is running at http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log("Cannot connect to the database! 😭", err);
+    process.exit();
+  });
+

@@ -7,17 +7,12 @@ import { redeemSingleSendUTXOPsbt, singleSendUTXOPsbt } from "./utxo.singleSendP
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
+import { setUtxoFlag, waitUtxoFlag } from "../mutex";
 
 const SEND_UTXO_FEE_LIMIT = 100000;
 
 dotenv.config();
 Bitcoin.initEccLib(ecc);
-
-interface IUtxo {
-  txid: string;
-  vout: number;
-  value: number;
-}
 
 const networkType: string = networkConfig.networkType;
 let wallet: SeedWallet | WIFWallet;
@@ -31,6 +26,10 @@ if (networkConfig.walletType == 'WIF') {
 }
 
 export const singleSendUTXO = async (address: string, feeRate: number, amount: number) => {
+
+  await waitUtxoFlag();
+  await setUtxoFlag(1);
+
   const utxos = await getUtxos(wallet.address, networkType);
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
@@ -52,6 +51,8 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
   const txHex = signedPsbt.extractTransaction().toHex();
 
   const txId = await pushBTCpmt(txHex, networkType);
+
+  await setUtxoFlag(0);
 
   return { isSuccess: true, data: txId };
 }

@@ -7,6 +7,7 @@ import { redeemMultiSendPsbt, multiSendPsbt } from "./utxo.multiSendPsbt";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
+import { setUtxoFlag, waitUtxoFlag } from "../mutex";
 
 const SEND_UTXO_FEE_LIMIT = 100000;
 
@@ -27,6 +28,9 @@ if (networkConfig.walletType == 'WIF') {
 export const multiSendUTXO = async (addressArray: any, feeRate: number, amountArray: any) => {
   const totalAmount = amountArray.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
+  await waitUtxoFlag();
+  await setUtxoFlag(1);
+
   const utxos = await getUtxos(wallet.address, networkType);
   let response = getSendBTCUTXOArray(utxos, totalAmount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
@@ -37,7 +41,7 @@ export const multiSendUTXO = async (addressArray: any, feeRate: number, amountAr
     let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
     response = getSendBTCUTXOArray(utxos, totalAmount + redeemFee);
-    
+
     if (!response.isSuccess) {
       return { isSuccess: false, data: 'No enough balance on admin wallet.' };
     }
@@ -48,6 +52,8 @@ export const multiSendUTXO = async (addressArray: any, feeRate: number, amountAr
     const txHex = signedPsbt.extractTransaction().toHex();
 
     const txId = await pushBTCpmt(txHex, networkType);
+
+    await setUtxoFlag(0);
 
     return { isSuccess: true, data: txId };
   }
