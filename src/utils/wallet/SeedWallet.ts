@@ -6,6 +6,7 @@ import BIP32Factory, { type BIP32Interface } from "bip32";
 import ECPairFactory, { type ECPairInterface } from "ecpair";
 import dotenv from "dotenv";
 import { type PublicKey, SecretKey } from "@cmdcode/crypto-utils";
+import { TESTNET } from "../../config/network.config";
 
 interface ISeedWallet {
   networkType: string;
@@ -32,11 +33,11 @@ export class SeedWallet {
   public secret: any;
   public pubkey?: PublicKey;
 
-  constructor(walletParam : ISeedWallet) {
-    if(walletParam.networkType == "mainnet") {
-      this.network = networks.bitcoin;
-    } else {
+  constructor(walletParam: ISeedWallet) {
+    if (walletParam.networkType == TESTNET) {
       this.network = networks.testnet;
+    } else {
+      this.network = networks.bitcoin;
     }
     const mnemonic = walletParam.seed;
 
@@ -51,7 +52,7 @@ export class SeedWallet {
       this.bip32.derivePath(this.hdPath).privateKey!,
       { network: this.network }
     );
-    
+
     this.secret = this.ecPair.privateKey?.toString('hex');
     this.seckey = new SecretKey(this.secret, { type: "taproot" });
     this.pubkey = this.seckey.pub;

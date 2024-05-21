@@ -285,6 +285,24 @@ paths:
             application/json:
               schema:
                 type: string
+  /wallet/split:
+    get:
+      summary: Split large UTXO of Admin wallet
+      tags:
+        - Status
+      responses:
+        "200":
+          description: Split large UTXO of Admin wallet Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Split large UTXO of Admin wallet Failed!
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   schemas:
     TextInscription:

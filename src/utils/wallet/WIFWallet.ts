@@ -5,7 +5,7 @@ import BIP32Factory, { type BIP32Interface } from "bip32";
 import ECPairFactory, { type ECPairInterface } from "ecpair";
 import dotenv from "dotenv";
 import { type PublicKey, SecretKey } from "@cmdcode/crypto-utils";
-import { Address, Script, Tap } from "@cmdcode/tapscript";
+import { TESTNET } from "../../config/network.config";
 
 interface IWIFWallet {
   networkType: string;
@@ -31,10 +31,10 @@ export class WIFWallet {
   public pubkey: PublicKey;
   
   constructor(walletParam: IWIFWallet) {
-    if (walletParam.networkType == "mainnet") {
-      this.network = networks.bitcoin;
-    } else {
+    if (walletParam.networkType == TESTNET) {
       this.network = networks.testnet;
+    } else {
+      this.network = networks.bitcoin;
     }
 
     this.ecPair = ECPair.fromWIF(walletParam.privateKey, this.network);

@@ -2,7 +2,6 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import fileUpload from 'express-fileupload';
 import swaggerUi from 'swagger-ui-express';
 import YAML from "yamljs";
@@ -12,6 +11,7 @@ import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import { MultiInscriptionRouter } from "./src/routes/multi.inscription.route";
 import http from "http";
+import { WalletManageRoute } from "./src/routes/wallet.management.route";
 const { Mutex } = require('async-mutex');
 
 export const flagMutex = new Mutex();
@@ -47,6 +47,7 @@ app.use('/api/inscribe', InscriptionRouter)
 app.use('/api/estimate', FeeEstimateRoute)
 app.use('/api/status', StatusNetworkRoute)
 app.use('/api/multi-inscribe', MultiInscriptionRouter)
+app.use('/api/wallet', WalletManageRoute)
 
 app.use(
   "/api-docs",
