@@ -36,7 +36,6 @@ export const redeemUtxoSplitPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, n
             value: SEND_UTXO_FEE_LIMIT,
         });
     }
-
     psbt.addOutput({
         address: wallet.address,
         value: inputUtxoSumValue - (outputSize + 1) * SEND_UTXO_FEE_LIMIT,
@@ -62,17 +61,15 @@ export const utxoSplitPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, network
             tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
         });
     });
-
     for (let i = 0; i < outputSize; i++) {
         psbt.addOutput({
             address: wallet.address,
             value: SEND_UTXO_FEE_LIMIT,
         });
     }
-
     psbt.addOutput({
         address: wallet.address,
-        value: inputUtxoSumValue - outputSize * SEND_UTXO_FEE_LIMIT,
+        value: Math.floor(inputUtxoSumValue - redeemFee - outputSize * SEND_UTXO_FEE_LIMIT),
     });
 
     return psbt;

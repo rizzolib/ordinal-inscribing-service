@@ -32,27 +32,23 @@ export const splitUTXO = async () => {
   await waitUtxoFlag();
   await setUtxoFlag(1);
   const utxos = await getUtxos(wallet.address, networkType);
-
-  const filteredUtxos = utxos.filter((utxo: any) => {
-    utxo.value > SEND_UTXO_FEE_LIMIT
-  });
+  const filteredUtxos = utxos.filter((utxo: any) => utxo.value > SEND_UTXO_FEE_LIMIT);
   if (filteredUtxos.length) {
 
     let redeemPsbt: Bitcoin.Psbt = redeemUtxoSplitPsbt(wallet, filteredUtxos, networkType);
     redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
     let redeemFee = redeemPsbt.extractTransaction().virtualSize() * splitFeeRate;
-
     let psbt = utxoSplitPsbt(wallet, filteredUtxos, networkType, redeemFee);
     let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
 
     const txHex = signedPsbt.extractTransaction().toHex();
 
     const txId = await pushBTCpmt(txHex, networkType);
-    
+
     await setUtxoFlag(0);
 
     return { isSuccess: true, data: txId };
   } else {
-    return { isSuccess: true, data: 'Wallet UTXO split is failed!' };
+    return { isSuccess: false, data: 'Wallet UTXO split is failed!' };
   }
 }

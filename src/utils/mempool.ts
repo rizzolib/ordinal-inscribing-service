@@ -18,12 +18,11 @@ export const getUtxos = async (address: string, networkType: string): Promise<an
   try {
     const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/address/${address}/utxo`;
     const res = await axios.get(url);
-    const utxos: IUtxo[] = [];
     const confirmedUtxos: IUtxo[] = [];
     const unConfirmedUtxos: IUtxo[] = [];
 
     res.data.forEach((utxoData: any) => {
-      if (utxoData.confirmed) {
+      if (utxoData.status.confirmed) {
         confirmedUtxos.push({
           txid: utxoData.txid,
           vout: utxoData.vout,
