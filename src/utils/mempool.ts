@@ -52,7 +52,7 @@ const postData = async (
       });
       return res.data as string;
     } catch (err: any) {
-      throw new Error(err)
+      console.error(err);
     }
   }
 }

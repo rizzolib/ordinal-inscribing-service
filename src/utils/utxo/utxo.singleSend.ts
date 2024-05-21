@@ -29,7 +29,6 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
-
   const utxos = await getUtxos(wallet.address, networkType);
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
@@ -53,6 +52,5 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
   const txId = await pushBTCpmt(txHex, networkType);
 
   await setUtxoFlag(0);
-
   return { isSuccess: true, data: txId };
 }
