@@ -313,10 +313,10 @@ components:
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         content:
           type: string
-          example: 350.364807.bitmap
+          example: 360.364807.bitmap
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -336,7 +336,7 @@ components:
           example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -353,7 +353,7 @@ components:
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         feeRate:
           type: number
-          example: 50
+          example: 60
         file:
           type: string
           format: binary
@@ -373,10 +373,10 @@ components:
           example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
         content:
           type: string
-          example: 350.364807.bitmap
+          example: 360.364807.bitmap
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -396,7 +396,7 @@ components:
           example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -413,7 +413,7 @@ components:
           example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
         feeRate:
           type: number
-          example: 50
+          example: 60
         file:
           type: string
           format: binary
@@ -430,10 +430,10 @@ components:
       properties:
         content:
           type: string
-          example: 350.364807.bitmap
+          example: 360.364807.bitmap
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -449,7 +449,7 @@ components:
           example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
         feeRate:
           type: number
-          example: 50
+          example: 60
         padding:
           type: number
           example: 546
@@ -463,7 +463,7 @@ components:
       properties:
         feeRate:
           type: number
-          example: 50
+          example: 60
         file:
           type: string
           format: binary
