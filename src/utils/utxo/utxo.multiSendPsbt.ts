@@ -1,5 +1,7 @@
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
+import { TESTNET } from "../../config/network.config";
+import { SEND_UTXO_FEE_LIMIT } from "../../config/network.config";
 Bitcoin.initEccLib(ecc);
 
 interface IUtxo {
@@ -8,11 +10,10 @@ interface IUtxo {
     value: number;
 }
 
-const SEND_UTXO_FEE_LIMIT = 100000;
 
 export const redeemMultiSendPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, networkType: string, outputAmountArray: Array<number>): Bitcoin.Psbt => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == "testnet" ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
     let inputUtxoSumValue: number = inputUtxoArray.reduce((accumulator:number, currentValue: IUtxo) => accumulator + currentValue.value, 0);
     const outputUtxoSumAmount: number = outputAmountArray.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
@@ -45,7 +46,7 @@ export const redeemMultiSendPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, n
 
 export const multiSendPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, networkType: string, fee: number, outputAddressArray: Array<string>, outputAmountArray: Array<number>): Bitcoin.Psbt => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == "testnet" ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
     let inputUtxoSumValue: number = inputUtxoArray.reduce((accumulator:number, currentValue: IUtxo) => accumulator + currentValue.value, 0);
     const outputUtxoSumAmount: number = outputAmountArray.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);

@@ -17,21 +17,20 @@ import { redeemMultiSendPsbt } from "../utils/utxo/utxo.multiSendPsbt";
 import { redeemSingleSendUTXOPsbt } from "../utils/utxo/utxo.singleSendPsbt";
 import { getUtxos } from "../utils/mempool";
 import { getSendBTCUTXOArray } from "../utils/utxo/utxo.management";
-
+import { WIF, SEED, TESTNET } from "../config/network.config";
+import { MAXIMUMFEERATE, SEND_UTXO_FEE_LIMIT } from "../config/network.config";
 initEccLib(ecc as any);
 
-const MAXIMUMFEERATE = 100000;
-const SEND_UTXO_FEE_LIMIT = 100000;
 
 const networkType: string = networkConfig.networkType;
 let wallet: any;
 
-const network = networkConfig.networkType == "testnet" ? networks.testnet : networks.bitcoin;
+const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
 
-if (networkConfig.walletType == 'WIF') {
+if (networkConfig.walletType == WIF) {
   const privateKey: string = process.env.PRIVATE_KEY as string;
   wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
-} else if (networkConfig.walletType == 'SEED') {
+} else if (networkConfig.walletType == SEED) {
   const seed: string = process.env.MNEMONIC as string;
   wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }

@@ -18,20 +18,20 @@ import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx } from "@cmdcode/tapscript";
 import { Buff } from "@cmdcode/buff-utils";
 import { pushBTCpmt } from "../utils/mempool";
+import { WIF, SEED, TESTNET } from "../config/network.config";
+import { MAXIMUMFEERATE } from "../config/network.config";
 
 initEccLib(ecc as any);
-
-const MAXIMUMFEERATE = 100000;
 
 const networkType: string = networkConfig.networkType;
 let wallet: any;
 
-const network = networkConfig.networkType == "testnet" ? networks.testnet : networks.bitcoin;
+const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
 
-if (networkConfig.walletType == 'WIF') {
+if (networkConfig.walletType == WIF) {
   const privateKey: string = process.env.PRIVATE_KEY as string;
   wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
-} else if (networkConfig.walletType == 'SEED') {
+} else if (networkConfig.walletType == SEED) {
   const seed: string = process.env.MNEMONIC as string;
   wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }
@@ -129,7 +129,7 @@ export const tapRootInscribe = async (mimetype: any, receiveAddress: string, con
   const [tpubkey, cblock] = Tap.getPubKey(wallet.pubkey as PublicKey, {
     target: tapleaf,
   });
-  const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == "testnet" ? "testnet" : "main");
+  const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == TESTNET ? TESTNET : "main");
   const response = await singleSendUTXO(address, feeRate, fee);
 
   if (response.isSuccess) {

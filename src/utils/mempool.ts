@@ -1,5 +1,5 @@
 import axios, { type AxiosError } from "axios";
-import { raw } from "body-parser";
+import { TESTNET } from "../config/network.config";
 
 interface IUtxo {
   txid: string;
@@ -8,7 +8,7 @@ interface IUtxo {
 }
 
 export const getScriptPubkey = async (tx: string, address: string, networkType: string): Promise<string> => {
-  const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/tx/${tx}`;
+  const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/tx/${tx}`;
   const res = await axios.get(url);
   const output = res.data.vout.find((output: any) => output.scriptpubkey_address === address)
   return output.scriptpubkey;
@@ -16,18 +16,28 @@ export const getScriptPubkey = async (tx: string, address: string, networkType: 
 
 export const getUtxos = async (address: string, networkType: string): Promise<any> => {
   try {
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/address/${address}/utxo`;
+    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/address/${address}/utxo`;
     const res = await axios.get(url);
     const utxos: IUtxo[] = [];
+    const confirmedUtxos: IUtxo[] = [];
+    const unConfirmedUtxos: IUtxo[] = [];
 
     res.data.forEach((utxoData: any) => {
-      utxos.push({
-        txid: utxoData.txid,
-        vout: utxoData.vout,
-        value: utxoData.value,
-      });
+      if (utxoData.confirmed) {
+        confirmedUtxos.push({
+          txid: utxoData.txid,
+          vout: utxoData.vout,
+          value: utxoData.value,
+        });
+      } else {
+        unConfirmedUtxos.push({
+          txid: utxoData.txid,
+          vout: utxoData.vout,
+          value: utxoData.value,
+        });
+      }
     });
-    return utxos;
+    return [...confirmedUtxos, ...unConfirmedUtxos];
   } catch (err: any) {
     console.log('Get Utxos Error')
   }
@@ -35,7 +45,7 @@ export const getUtxos = async (address: string, networkType: string): Promise<an
 
 export const pushBTCpmt = async (rawtx: any, networkType: string) => {
   const txid = await postData(
-    `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/tx`,
+    `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/tx`,
     rawtx
   );
   return txid;
@@ -63,7 +73,7 @@ const postData = async (
 
 export const getPrice = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/prices`;
+    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/prices`;
     const res: any = await axios.get(url);
     return res.data;
   } catch (error: any) {
@@ -73,7 +83,7 @@ export const getPrice = async (networkType: string) => {
 
 export const getBlockHeight = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}/api/blocks/tip/height`;
+    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}/api/blocks/tip/height`;
     const res = await axios.get(url);
     return res.data;
   } catch (error: any) {
@@ -84,7 +94,7 @@ export const getBlockHeight = async (networkType: string) => {
 export const getFeeRate = async (networkType: string) => {
   try {
     const height = await getBlockHeight(networkType);
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/blocks/${height}`;
+    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/blocks/${height}`;
     const blockData: any = await axios.get(url);
     const feeRateData = blockData.data.map((item: any) => {
       return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate }
@@ -97,7 +107,7 @@ export const getFeeRate = async (networkType: string) => {
 
 export const getRecommendedFeeRate = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/fees/recommended`;
+    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/fees/recommended`;
     const response: any = await axios.get(url);
 
     return response.data;

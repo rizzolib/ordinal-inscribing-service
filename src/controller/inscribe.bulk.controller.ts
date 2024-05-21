@@ -13,25 +13,23 @@ import { multiSendUTXO } from "../utils/utxo/utxo.multiSend";
 import networkConfig from "../config/network.config";
 import { SeedWallet } from "../utils/wallet/SeedWallet";
 import { WIFWallet } from '../utils/wallet/WIFWallet';
-
 import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx, TxTemplate } from "@cmdcode/tapscript";
 import { Buff } from "@cmdcode/buff-utils";
 import { pushBTCpmt } from "../utils/mempool";
-
+import { WIF, SEED, TESTNET } from "../config/network.config";
+import { MAXIMUMFEERATE } from "../config/network.config";
 initEccLib(ecc as any);
-
-const MAXIMUMFEERATE = 100000;
 
 const networkType: string = networkConfig.networkType;
 let wallet: any;
 
-const network = networkConfig.networkType == "testnet" ? networks.testnet : networks.bitcoin;
+const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
 
-if (networkConfig.walletType == 'WIF') {
+if (networkConfig.walletType == WIF) {
   const privateKey: string = process.env.PRIVATE_KEY as string;
   wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
-} else if (networkConfig.walletType == 'SEED') {
+} else if (networkConfig.walletType == SEED) {
   const seed: string = process.env.MNEMONIC as string;
   wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }
@@ -132,7 +130,7 @@ export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: str
     scriptArray.push(script);
     cblockArray.push(cblock);
 
-    const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == "testnet" ? "testnet" : "main");
+    const address = Address.p2tr.fromPubKey(tpubkey, networkConfig.networkType == TESTNET ? TESTNET : "main");
 
     return address;
   });
@@ -177,7 +175,7 @@ export const tapRootInscribeBulkText = async (mimetype: any, receiveAddress: str
 
     const rawTx = Tx.encode(txdataArray[i]).hex;
     const tx = await pushBTCpmt(rawTx, networkType);
-    
+
     inscriptionTxArray.push(tx);
   }
 
@@ -189,7 +187,7 @@ export function calculateTransactionFee(
   psbt: Psbt,
   feeRate: number
 ): number {
-  for(let i = 0; i < psbt.inputCount; i ++) {
+  for (let i = 0; i < psbt.inputCount; i++) {
     psbt.signInput(0, keyPair);
   }
   psbt.finalizeAllInputs();
