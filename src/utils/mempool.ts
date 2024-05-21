@@ -1,4 +1,5 @@
 import axios, { type AxiosError } from "axios";
+import { raw } from "body-parser";
 
 interface IUtxo {
   txid: string;
@@ -56,6 +57,7 @@ const postData = async (
     return res.data as string;
   } catch (err: any) {
     console.log('Push Transaction Error')
+    console.log(err.response.data)
   }
 }
 
@@ -95,7 +97,7 @@ export const getFeeRate = async (networkType: string) => {
 
 export const getRecommendedFeeRate = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet4/' : ''}api/v1/fees/recommended`;
+    const url = `https://mempool.space/${networkType == 'testnet' ? 'testnet/' : ''}api/v1/fees/recommended`;
     const response: any = await axios.get(url);
 
     return response.data;

@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { inscribe } from "../controller/inscribe.controller";
 import { inscribeBulkText } from "../controller/inscribe.bulk.controller";
+import { isValidBitcoinAddress } from "../utils/validationAddress";
 
 // Create a new instance of the Express Router
 export const InscriptionRouter = Router();
@@ -25,23 +26,27 @@ InscriptionRouter.post(
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
-                const receiveAddress = req.body.receiveAddress;
-                const content = req.body.content;
-                const feeRate = req.body.feeRate;
-                const padding = req.body.padding;
-
-                const response = await inscribe(
-                    'text',
-                    'text/plain',
-                    receiveAddress,
-                    content,
-                    feeRate,
-                    padding
-                );
-                if (response.isSuccess) {
-                    res.status(200).send({ tx: response.data })
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ error: { type: 2, data: 'This address is not valid address.' } })
                 } else {
-                    res.status(400).send({ error: { type: 1, data: response.data } })
+                    const receiveAddress = req.body.receiveAddress;
+                    const content = req.body.content;
+                    const feeRate = req.body.feeRate;
+                    const padding = req.body.padding;
+
+                    const response = await inscribe(
+                        'text',
+                        'text/plain',
+                        receiveAddress,
+                        content,
+                        feeRate,
+                        padding
+                    );
+                    if (response.isSuccess) {
+                        res.status(200).send({ tx: response.data })
+                    } else {
+                        res.status(400).send({ error: { type: 1, data: response.data } })
+                    }
                 }
             }
         } catch (error: any) {
@@ -66,20 +71,26 @@ InscriptionRouter.post(
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
-                const receiveAddress = req.body.receiveAddress;
-                const content: Array<string> = JSON.parse(req.body.contents).data;
-                const feeRate = req.body.feeRate;
-                const padding = req.body.padding;
-                const response = await inscribeBulkText(
-                    receiveAddress,
-                    content,
-                    feeRate,
-                    padding
-                );
-                if (response.isSuccess) {
-                    res.status(200).send({ tx: response.data })
+
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ error: { type: 2, data: 'This address is not valid address.' } })
                 } else {
-                    res.status(400).send({ error: { type: 1, data: response.data } })
+
+                    const receiveAddress = req.body.receiveAddress;
+                    const content: Array<string> = JSON.parse(req.body.contents).data;
+                    const feeRate = req.body.feeRate;
+                    const padding = req.body.padding;
+                    const response = await inscribeBulkText(
+                        receiveAddress,
+                        content,
+                        feeRate,
+                        padding
+                    );
+                    if (response.isSuccess) {
+                        res.status(200).send({ tx: response.data })
+                    } else {
+                        res.status(400).send({ error: { type: 1, data: response.data } })
+                    }
                 }
             }
         } catch (error: any) {
@@ -106,26 +117,32 @@ InscriptionRouter.post(
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
-                const receiveAddress = req.body.receiveAddress;
-                const feeRate: number = +req.body.feeRate;
-                const padding: number = +req.body.padding;
-                const file: IFile = req.files?.file as IFile;
-                const mimetype: string = file?.mimetype;
-                const content: Buffer = file?.data;
 
-                const response = await inscribe(
-                    'file',
-                    mimetype,
-                    receiveAddress,
-                    content,
-                    feeRate,
-                    padding
-                );
-                if (response.isSuccess) {
-                    res.status(200).send({ tx: response.data })
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ error: { type: 2, data: 'This address is not valid address.' } })
                 } else {
-                    res.status(400).send({ error: { type: 1, data: response.data } })
+                    const receiveAddress = req.body.receiveAddress;
+                    const feeRate: number = +req.body.feeRate;
+                    const padding: number = +req.body.padding;
+                    const file: IFile = req.files?.file as IFile;
+                    const mimetype: string = file?.mimetype;
+                    const content: Buffer = file?.data;
+
+                    const response = await inscribe(
+                        'file',
+                        mimetype,
+                        receiveAddress,
+                        content,
+                        feeRate,
+                        padding
+                    );
+                    if (response.isSuccess) {
+                        res.status(200).send({ tx: response.data })
+                    } else {
+                        res.status(400).send({ error: { type: 1, data: response.data } })
+                    }
                 }
+
             }
         } catch (error: any) {
             console.error(error);
