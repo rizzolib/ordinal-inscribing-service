@@ -54,19 +54,9 @@ app.use(
   swaggerUi.setup(swaggerDocument, { explorer: true })
 );
 
-mongoose
-  .connect(process.env.MONGO_URI as string)
-  .then(async () => {
-    console.log("Connected to the database! ❤️");
 
-    /* Start the Express app and listen
-     for incoming requests on the specified port */
-    server.listen(port, () => {
-      console.log(`[server]: Server is running at http://localhost:${port}`);
-    });
-  })
-  .catch((err) => {
-    console.log("Cannot connect to the database! 😭", err);
-    process.exit();
-  });
-
+/* Start the Express app and listen
+ for incoming requests on the specified port */
+server.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
+});
