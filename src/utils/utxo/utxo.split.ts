@@ -27,7 +27,7 @@ if (networkConfig.walletType == WIF) {
 
 export const splitUTXO = async () => {
   const recomFeeRate = await getRecommendedFeeRate(networkType);
-  const splitFeeRate = recomFeeRate.fastestFee * 1.5;
+  const splitFeeRate = recomFeeRate.fastestFee * 1.1;
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
