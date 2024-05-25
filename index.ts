@@ -10,8 +10,10 @@ import { InscriptionRouter } from "./src/routes/inscription.route";
 import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import { MultiInscriptionRouter } from "./src/routes/multi.inscription.route";
-import http from "http";
 import { WalletManageRoute } from "./src/routes/wallet.management.route";
+import { ChildInscriptionRouter } from "./src/routes/child.inscription.route";
+
+import http from "http";
 const { Mutex } = require('async-mutex');
 
 export const flagMutex = new Mutex();
@@ -48,6 +50,7 @@ app.use('/api/estimate', FeeEstimateRoute)
 app.use('/api/status', StatusNetworkRoute)
 app.use('/api/multi-inscribe', MultiInscriptionRouter)
 app.use('/api/wallet', WalletManageRoute)
+app.use('/api/child-inscribe', ChildInscriptionRouter)
 
 app.use(
   "/api-docs",
