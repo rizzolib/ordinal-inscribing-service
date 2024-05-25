@@ -484,7 +484,7 @@ components:
           example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         metadata:
           type: string
           example: Metadata Example Data
@@ -514,7 +514,7 @@ components:
           example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         metadata:
           type: string
           example: Metadata Example Data
@@ -544,7 +544,7 @@ components:
           example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         metadata:
           type: string
           example: Metadata Example Data
@@ -810,7 +810,7 @@ components:
           example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         sendAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         publicKey:
           type: string
           example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
