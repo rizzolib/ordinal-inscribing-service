@@ -190,10 +190,11 @@ async function signAndSend(
   psbt.signInput(1, keypair);
   psbt.finalizeAllInputs()
   const tx = psbt.extractTransaction();
-  console.log(tx.toHex());
 
   const txid = await pushBTCpmt(tx.toHex(), TESTNET);
 
+  console.log(`Inscription Tx: ${txid}`)
+  
   return { isSuccess: true, txid: txid }
 }
 

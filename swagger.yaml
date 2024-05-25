@@ -514,7 +514,7 @@ components:
           example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
         receiveAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         metadata:
           type: string
           example: Metadata Example Data
@@ -544,15 +544,15 @@ components:
           example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
         receiveAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         metadata:
           type: string
           example: Metadata Example Data
         metaprotocol:
           type: string
-          example: Metaprotocol Example Data
+          example: Metaprotocol Example
         file:
-          type: string
+          type: file
           format: binary
         feeRate:
           type: number
@@ -562,10 +562,12 @@ components:
           example: 546
       required:
         - receiveAddress
-        - content
         - feeRate
         - padding
         - parentId
+        - file
+        - metadata
+        - metaprotocol
     ChildTextEstimateFee:
       type: object
       properties:
