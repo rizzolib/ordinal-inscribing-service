@@ -6,7 +6,7 @@ info:
   version: 0.0.1
 
 servers:
-  # - url: "https://file-inscription-backend.onrender.com/api"
+  - url: "https://file-inscription-backend.onrender.com/api"
   - url: "http://localhost:8081/api"
 
 tags:
@@ -481,7 +481,7 @@ components:
       properties:
         parentId:
           type: string
-          example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
           example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
@@ -511,7 +511,7 @@ components:
       properties:
         parentId:
           type: string
-          example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
           example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
@@ -541,7 +541,7 @@ components:
       properties:
         parentId:
           type: string
-          example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         receiveAddress:
           type: string
           example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
@@ -807,10 +807,10 @@ components:
       properties:
         parentId:
           type: string
-          example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
         sendAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         publicKey:
           type: string
           example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
