@@ -94,7 +94,6 @@ paths:
       tags:
         - Inscribe
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
@@ -118,7 +117,6 @@ paths:
       tags:
         - Inscribe
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
@@ -142,7 +140,6 @@ paths:
       tags:
         - Inscribe
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
@@ -168,7 +165,6 @@ paths:
       tags:
         - Estimate
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
@@ -192,7 +188,6 @@ paths:
       tags:
         - Estimate
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
@@ -217,7 +212,6 @@ paths:
       tags:
         - Estimate
       requestBody:
-        required: true
         content:
           multipart/form-data:
             schema:
