@@ -10,397 +10,11 @@ servers:
   - url: "http://localhost:8081/api"
 
 tags:
-  - name: Child-Inscription
-  - name: Child-Inscription-Estimate-Fee
-  - name: Inscription
   - name: Status
-  - name: Fee-Estimate
+  - name: Inscribe
+  - name: Estimate
 
 paths:
-  /child-inscribe/text:
-    post:
-      summary: Create new text child inscription.
-      tags:
-        - Child-Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TextChildInscription"
-      responses:
-        "200":
-          description: Text Child Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Text Child Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-inscribe/bulk-text:
-    post:
-      summary: Create new bulk text child inscription.
-      tags:
-        - Child-Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BulkTextChildInscription"
-      responses:
-        "200":
-          description: Bulk Text Child Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Bulk Text Child Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-inscribe/file:
-    post:
-      summary: Create new text child inscription.
-      tags:
-        - Child-Inscription
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileChildInscription"
-      responses:
-        "200":
-          description: File Child Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: File Child Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-inscribe/ordinal-send-psbt:
-    post:
-      summary: Get Psbt for sending parent Ordinal.
-      tags:
-        - Child-Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ParentOrdinalSendPsbt"
-      responses:
-        "200":
-          description: Get Psbt for sending parent Ordinal Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Get Psbt for sending parent Ordinal Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-estimate/child-text-estimate-fee:
-    post:
-      summary: Text Fee Estimate.
-      tags:
-        - Child-Inscription-Estimate-Fee
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ChildTextEstimateFee"
-      responses:
-        "200":
-          description: Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-estimate/child-bulk-text-estimate-fee:
-    post:
-      summary: Child Bulk Text Fee Estimate.
-      tags:
-        - Child-Inscription-Estimate-Fee
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ChildBulkTextEstimateFee"
-      responses:
-        "200":
-          description: Bulk Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Bulk Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-  /child-estimate/child-file-estimate-fee:
-    post:
-      summary: Child File Inscription Fee Estimate
-      tags:
-        - Child-Inscription-Estimate-Fee
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/ChildFileEstimateFee"
-      responses:
-        "200":
-          description: Child File Fee Estimate Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Child File Fee Estimate Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /inscribe/text:
-    post:
-      summary: Create new text inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TextInscription"
-      responses:
-        "200":
-          description: Text Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Text Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /inscribe/bulk-text:
-    post:
-      summary: Create new bulk text inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BulkTextInscription"
-      responses:
-        "200":
-          description: Bulk Text Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Bulk Text Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /inscribe/file:
-    post:
-      summary: Create new file inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileInscription"
-      responses:
-        "200":
-          description: File Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: File Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /multi-inscribe/text:
-    post:
-      summary: Create new text inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MultiTextInscription"
-      responses:
-        "200":
-          description: Text Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Text Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /multi-inscribe/bulk-text:
-    post:
-      summary: Create new bulk text inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MultiBulkTextInscription"
-      responses:
-        "200":
-          description: Bulk Text Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Bulk Text Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /multi-inscribe/file:
-    post:
-      summary: Create new file inscription.
-      tags:
-        - Inscription
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/MultiFileInscription"
-      responses:
-        "200":
-          description: File Inscription Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: File Inscription Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /estimate/text-estimate-fee:
-    post:
-      summary: Text Fee Estimate.
-      tags:
-        - Fee-Estimate
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TextEstimateFee"
-      responses:
-        "200":
-          description: Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-  /estimate/bulk-text-estimate-fee:
-    post:
-      summary: Bulk Text Fee Estimate.
-      tags:
-        - Fee-Estimate
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BulkTextEstimateFee"
-      responses:
-        "200":
-          description: Bulk Text Fee Estimage Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: Bulk Text Fee Estimage Failed!
-          content:
-            application/json:
-              schema:
-                type: string
-  /estimate/file-estimate-fee:
-    post:
-      summary: File Inscription Fee Estimate
-      tags:
-        - Fee-Estimate
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileEstimateFee"
-      responses:
-        "200":
-          description: File Fee Estimate Success!
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          description: File Fee Estimate Failed!
-          content:
-            application/json:
-              schema:
-                type: string
   /status/price:
     get:
       summary: Get Current bitcoin price
@@ -437,7 +51,7 @@ paths:
             application/json:
               schema:
                 type: string
-  /status/recomFeeRate:
+  /status/recommendFeeRate:
     get:
       summary: Get recommended block feeRate
       tags:
@@ -455,7 +69,7 @@ paths:
             application/json:
               schema:
                 type: string
-  /wallet/split:
+  /wallet/utxo-split:
     get:
       summary: Split large UTXO of Admin wallet
       tags:
@@ -474,166 +88,155 @@ paths:
               schema:
                 type: string
 
+  /inscribe/text:
+    post:
+      summary: Create new Text Inscription
+      tags:
+        - Inscribe
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/TextInscription"
+      responses:
+        "200":
+          description: Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /inscribe/file:
+    post:
+      summary: Create new file inscription.
+      tags:
+        - Inscribe
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FileInscription"
+      responses:
+        "200":
+          description: File Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: File Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /inscribe/delegate:
+    post:
+      summary: Create new Delegate Inscription
+      tags:
+        - Inscribe
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/DelegateInscription"
+      responses:
+        "200":
+          description: Delegate Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Delegate Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+        
+  
+  /estimate/text:
+    post:
+      summary: Estimate Text Inscription
+      tags:
+        - Estimate
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/TextInscription"
+      responses:
+        "200":
+          description: Estimate Text Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Estimate Text Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+  /estimate/file:
+    post:
+      summary: Estimate file inscription
+      tags:
+        - Estimate
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FileInscription"
+      responses:
+        "200":
+          description: Estimate File Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Estimate File Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /estimate/delegate:
+    post:
+      summary: Estimate Delegate Inscription
+      tags:
+        - Estimate
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/TextInscription"
+      responses:
+        "200":
+          description: Estimate Delegate Inscription Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Estimate Delegate Inscription Failed!
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   schemas:
-    TextChildInscription:
-      type: object
-      properties:
-        parentId:
-          type: string
-          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
-        receiveAddress:
-          type: string
-          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
-        metadata:
-          type: string
-          example: Metadata Example Data
-        metaprotocol:
-          type: string
-          example: Metaprotocol Example Data
-        content:
-          type: string
-          example: 350.364807.bitmap
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - content
-        - feeRate
-        - padding
-        - parentId
-    BulkTextChildInscription:
-      type: object
-      properties:
-        parentId:
-          type: string
-          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
-        receiveAddress:
-          type: string
-          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
-        metadata:
-          type: string
-          example: Metadata Example Data
-        metaprotocol:
-          type: string
-          example: Metaprotocol Example Data
-        contents:
-          type: string
-          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - content
-        - feeRate
-        - padding
-        - parentId
-    FileChildInscription:
-      type: object
-      properties:
-        parentId:
-          type: string
-          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
-        receiveAddress:
-          type: string
-          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
-        metadata:
-          type: string
-          example: Metadata Example Data
-        metaprotocol:
-          type: string
-          example: Metaprotocol Example
-        file:
-          type: file
-          format: binary
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - feeRate
-        - padding
-        - parentId
-        - file
-        - metadata
-        - metaprotocol
-    ChildTextEstimateFee:
-      type: object
-      properties:
-        content:
-          type: string
-          example: 350.364807.bitmap
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-        metadata:
-          type: string
-          example: Child Inscription metadata
-        metaprotocol:
-          type: string
-          example: Child Inscription metaprotocol
-      required:
-        - content
-        - feeRate
-        - padding
-    ChildBulkTextEstimateFee:
-      type: object
-      properties:
-        contents:
-          type: string
-          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-        metadata:
-          type: string
-          example: Child Inscription metadata
-        metaprotocol:
-          type: string
-          example: Child Inscription metaprotocol
-      required:
-        - content
-        - feeRate
-        - padding
-    ChildFileEstimateFee:
-      type: object
-      properties:
-        feeRate:
-          type: number
-          example: 200
-        file:
-          type: string
-          format: binary
-        padding:
-          type: string
-          example: 546
-        metadata:
-          type: string
-          example: Child Inscription metadata
-        metaprotocol:
-          type: string
-          example: Child Inscription metaprotocol
-      required:
-        - feeRate
-        - file
-        - padding
     TextInscription:
       type: object
       properties:
@@ -641,37 +244,31 @@ components:
           type: string
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         content:
-          type: string
-          example: 350.364807.bitmap
+          type: array
+          items:
+            type: string
+            example: 350.364807.bitmap
         feeRate:
           type: number
-          example: 200
+          example: 130
         padding:
           type: number
           example: 546
+        parentId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+        metadata:
+          type: string
+          example: '{"type":"dog","size":"medium"}'
+        metaprotocol:
+          type: string
+          example: bitmap.community
+        reinscriptionId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
       required:
         - receiveAddress
         - content
-        - feeRate
-        - padding
-    BulkTextInscription:
-      type: object
-      properties:
-        receiveAddress:
-          type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
-        contents:
-          type: string
-          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - contents
         - feeRate
         - padding
     FileInscription:
@@ -682,139 +279,63 @@ components:
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
         feeRate:
           type: number
-          example: 200
-        file:
-          type: string
-          format: binary
+          example: 50
+        files:
+          type: array
+          items:
+            type: string
+            format: binary
         padding:
           type: string
           example: 546
-      required:
-        - receiveAddress
-        - feeRate
-        - file
-        - padding
-    MultiTextInscription:
-      type: object
-      properties:
-        receiveAddress:
-          type: string
-          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
-        content:
-          type: string
-          example: 350.364807.bitmap
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - content
-        - feeRate
-        - padding
-    MultiBulkTextInscription:
-      type: object
-      properties:
-        receiveAddress:
-          type: string
-          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
-        contents:
-          type: string
-          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - receiveAddress
-        - content
-        - feeRate
-        - padding
-    MultiFileInscription:
-      type: object
-      properties:
-        receiveAddress:
-          type: string
-          example: '{ "data": ["tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl", "tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn"] }'
-        feeRate:
-          type: number
-          example: 200
-        file:
-          type: string
-          format: binary
-        padding:
-          type: string
-          example: 546
-      required:
-        - receiveAddress
-        - feeRate
-        - file
-        - padding
-    TextEstimateFee:
-      type: object
-      properties:
-        content:
-          type: string
-          example: 350.364807.bitmap
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - content
-        - feeRate
-        - padding
-    BulkTextEstimateFee:
-      type: object
-      properties:
-        contents:
-          type: string
-          example: '{ "data": ["360bitmap", "361bitmap.362bitmap", "361bitmap.362bitmap361bitmap", "361bitmap.362bitmap361bitmap.362bitmap"] }'
-        feeRate:
-          type: number
-          example: 200
-        padding:
-          type: number
-          example: 546
-      required:
-        - content
-        - feeRate
-        - padding
-    FileEstimateFee:
-      type: object
-      properties:
-        feeRate:
-          type: number
-          example: 200
-        file:
-          type: string
-          format: binary
-        padding:
-          type: string
-          example: 546
-      required:
-        - feeRate
-        - file
-        - padding
-    ParentOrdinalSendPsbt:
-      type: object
-      properties:
         parentId:
           type: string
-          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
-        sendAddress:
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+        metadata:
           type: string
-          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
-        publicKey:
+          example: '{"type":"dog","size":"medium"}'
+        metaprotocol:
           type: string
-          example: d9b95d549219eebcd1be0360f41c7164c4ad040b716475630154f08263ab2fdfi0
+          example: bitmap.community
+        reinscriptionId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
       required:
+        - receiveAddress
+        - feeRate
+        - files
+        - padding
+    DelegateInscription:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+        content:
+          type: array
+          items:
+            type: string
+            example: 350.364807.bitmap
+        feeRate:
+          type: number
+          example: 130
+        padding:
+          type: number
+          example: 546
+        parentId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+        metadata:
+          type: string
+          example: '{"type":"dog","size":"medium"}'
+        metaprotocol:
+          type: string
+          example: bitmap.community
+        reinscriptionId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+      required:
+        - receiveAddress
         - content
         - feeRate
         - padding
