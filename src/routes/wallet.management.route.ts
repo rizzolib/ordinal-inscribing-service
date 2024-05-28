@@ -1,9 +1,6 @@
 
 import { Request, Response, Router } from "express";
-import { getRecommendedFeeRate } from "../utils/mempool";
-import networkConfig from "../config/network.config";
 import { splitUTXO } from "../utils/utxo/utxo.split";
-
 
 // Create a new instance of the Express Router
 export const WalletManageRoute = Router();
@@ -12,7 +9,7 @@ export const WalletManageRoute = Router();
 // @desc     Get Recommended Fee Rate
 // @access   Public
 WalletManageRoute.get(
-    "/split",
+    "/utxo-split",
     async (req: Request, res: Response) => {
         try {
             const response = await splitUTXO();

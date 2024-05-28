@@ -5,7 +5,6 @@ import * as ecc from "tiny-secp256k1";
 import dotenv from "dotenv";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
-import { getSendBTCUTXOArray } from "./utxo.management";
 import { setUtxoFlag, waitUtxoFlag } from "../mutex";
 import { WIF, SEED } from "../../config/network.config";
 import { getRecommendedFeeRate } from "../mempool";

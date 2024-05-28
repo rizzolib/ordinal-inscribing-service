@@ -7,13 +7,6 @@ interface IUtxo {
   value: number;
 }
 
-export const getScriptPubkey = async (tx: string, address: string, networkType: string): Promise<string> => {
-  const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/tx/${tx}`;
-  const res = await axios.get(url);
-  const output = res.data.vout.find((output: any) => output.scriptpubkey_address === address)
-  return output.scriptpubkey;
-};
-
 export const getUtxos = async (address: string, networkType: string): Promise<any> => {
   try {
     const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/address/${address}/utxo`;

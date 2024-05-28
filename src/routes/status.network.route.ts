@@ -41,7 +41,7 @@ StatusNetworkRoute.get(
 // @desc     Get Recommended Fee Rate
 // @access   Public
 StatusNetworkRoute.get(
-    "/recomFeeRate",
+    "/recommendFeeRate",
     async (req: Request, res: Response) => {
         try {
             const response = await getRecommendedFeeRate(networkConfig.networkType);
