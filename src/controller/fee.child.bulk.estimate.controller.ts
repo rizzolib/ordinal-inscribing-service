@@ -22,7 +22,7 @@ import { MAXIMUMFEERATE } from "../config/network.config";
 import { splitBuffer } from "../utils/buffer";
 import { getInscriptionInfo } from "../utils/unisat.api";
 import cbor from 'cbor';
-import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.singleSendPsbt";
+import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.reinscribe.singleSendPsbt";
 import { SEND_UTXO_FEE_LIMIT } from "../config/network.config";
 import { getSendBTCUTXOArray } from "../services/utxo/utxo.management";
 
@@ -56,7 +56,7 @@ export const FeechildBulkInscribe = async (mimetype: string, contents: Array<str
   const parentId = 'f93d8fee42222724a7a211f495b6e3df5b45b7374ec0c9c2b97c5637b52209aai0';
   const receiveAddress = 'tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn';
   //get Inscription UTXO Info
-  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, TESTNET);
+  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, networkConfig.networkType);
   const inscriptionIdBuffer = Buffer.from(parentId, 'hex');
   const inscriptionBuffer = inscriptionIdBuffer.reverse();
   const metadataJson = {

@@ -57,7 +57,7 @@ export const childInscribe = async (parentId: string, type: string, mimetype: st
   const splitedBuffer = splitBuffer(bufferContent, 400);
 
   //get Inscription UTXO Info
-  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, TESTNET);
+  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, networkConfig.networkType);
   const txidBuffer = Buffer.from(parentId, 'hex');
   const inscriptionBuffer = txidBuffer.reverse();
   const metadataJson = {
@@ -191,7 +191,7 @@ async function signAndSend(
   psbt.finalizeAllInputs()
   const tx = psbt.extractTransaction();
 
-  const txid = await pushBTCpmt(tx.toHex(), TESTNET);
+  const txid = await pushBTCpmt(tx.toHex(), networkConfig.networkType);
 
   console.log(`Inscription Tx: ${txid}`)
   

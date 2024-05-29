@@ -11,14 +11,14 @@ import {
     payments,
 } from "bitcoinjs-lib";
 import { getInscriptionInfo } from "../../utils/unisat.api";
-import { TESTNET } from "../../config/network.config";
+import networkConfig, { TESTNET } from "../../config/network.config";
 import cbor from 'cbor';
 import { splitBuffer } from "../../utils/buffer";
 import { toXOnly } from "../../utils/buffer";
 
 const keyPair = wallet.ecPair;
 
-export const textTapScript = async (inscrptionData: ITextInscription) => {
+export const textTapScript = async (inscriptionData: ITextInscription) => {
 
     let tapScript: Array<any> = [
         toXOnly(keyPair.publicKey),
@@ -26,12 +26,12 @@ export const textTapScript = async (inscrptionData: ITextInscription) => {
     ];
     let pointers: Array<number> = [];
 
-    inscrptionData.contents.forEach((item: string, index: number) => {
-        pointers.push(index * inscrptionData.padding);
+    inscriptionData.contents.forEach((item: string, index: number) => {
+        pointers.push(index * inscriptionData.padding);
     })
 
-    if (inscrptionData.parentId) {
-        let parentInscriptionUTXO: IUtxo = await getInscriptionInfo(inscrptionData.parentId, TESTNET);
+    if (inscriptionData.parentId) {
+        let parentInscriptionUTXO: IUtxo = await getInscriptionInfo(inscriptionData.parentId, networkConfig.networkType);
         pointers = pointers.map((pointer, index) => {
             return pointer + parentInscriptionUTXO.value
         })
@@ -41,15 +41,15 @@ export const textTapScript = async (inscrptionData: ITextInscription) => {
     pointerBuffer = pointers.map((pointer, index) => {
         return Buffer.from(pointer.toString(16).padStart(4, '0'), 'hex').reverse()
     })
-    const parts = inscrptionData.parentId.split('i');
+    const parts = inscriptionData.parentId.split('i');
     const parentInscriptionTransactionID = parts[0];
     const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, 'hex').reverse();
     const index = parts[1];
     const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
     const parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
 
-    for (let i = 0; i < inscrptionData.contents.length; i++) {
-        const contentBuffer = Buffer.from(inscrptionData.contents[i]);
+    for (let i = 0; i < inscriptionData.contents.length; i++) {
+        const contentBuffer = Buffer.from(inscriptionData.contents[i]);
         const contentBufferArray: Array<Buffer> = splitBuffer(contentBuffer, 450);
 
         let subScript: Array<any> = [];
@@ -74,19 +74,19 @@ export const textTapScript = async (inscrptionData: ITextInscription) => {
             parentInscriptionBuffer
         )
 
-        if (inscrptionData.metadata) {
+        if (inscriptionData.metadata) {
             subScript.push(
                 1,
                 5,
-                cbor.encode(inscrptionData.metadata)
+                cbor.encode(inscriptionData.metadata)
             )
         }
 
-        if (inscrptionData.metaprotocol) {
+        if (inscriptionData.metaprotocol) {
             subScript.push(
                 1,
                 7,
-                Buffer.from(inscrptionData.metaprotocol, "utf8"),
+                Buffer.from(inscriptionData.metaprotocol, "utf8"),
             )
         }
 

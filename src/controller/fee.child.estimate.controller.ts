@@ -22,7 +22,7 @@ import { getInscriptionInfo } from "../utils/unisat.api";
 import cbor from 'cbor';
 import { SEND_UTXO_FEE_LIMIT } from "../config/network.config";
 import { getSendBTCUTXOArray } from "../services/utxo/utxo.management";
-import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.singleSendPsbt";
+import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.reinscribe.singleSendPsbt";
 
 initEccLib(ecc as any);
 const ECPair: ECPairAPI = ECPairFactory(ecc);
@@ -60,7 +60,7 @@ export const FeechildInscribe = async (type: string, mimetype: string, content: 
   const receiveAddress = 'tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn';
 
   //get Inscription UTXO Info
-  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, TESTNET);
+  const inscriptionUtxoInfo = await getInscriptionInfo(parentId, networkConfig.networkType);
   const txidBuffer = Buffer.from(parentId, 'hex');
   const inscriptionBuffer = txidBuffer.reverse();
   const metadataJson = {

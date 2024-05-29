@@ -3,12 +3,14 @@ import { getUtxos, pushBTCpmt } from "../../utils/mempool";
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import dotenv from "dotenv";
-import { redeemSingleSendUTXOPsbt, singleSendUTXOPsbt } from "./utxo.singleSendPsbt";
+import { redeemReinscribeAndUtxoSendPsbt, ReinscribeAndUtxoSendPsbt } from "./utxo.reinscribe.singleSendPsbt";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
 import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
+import { getInscriptionInfo } from "../../utils/unisat.api";
+import { IUtxo } from "../../utils/types";
 
 
 dotenv.config();
@@ -25,7 +27,9 @@ if (networkConfig.walletType == WIF) {
   wallet = new SeedWallet({ networkType: networkType, seed: seed });
 }
 
-export const singleSendUTXO = async (address: string, feeRate: number, amount: number) => {
+export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address: string, feeRate: number, amount: number) => {
+
+  const reinscriptionUTXO: IUtxo = await getInscriptionInfo(reinscriptionId, networkConfig.networkType)
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
@@ -34,7 +38,7 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
-  let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, response.data, networkType, amount);
+  let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(wallet, response.data, networkType, amount, reinscriptionUTXO);
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
   let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
@@ -44,11 +48,11 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
 
-  let psbt = singleSendUTXOPsbt(wallet, response.data, networkType, redeemFee, address, amount);
+  let psbt = ReinscribeAndUtxoSendPsbt(wallet, response.data, networkType, redeemFee, address, amount, reinscriptionUTXO);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
   const tx = signedPsbt.extractTransaction();
 
   await setUtxoFlag(0);
-  
+
   return { isSuccess: true, data: tx };
 }
