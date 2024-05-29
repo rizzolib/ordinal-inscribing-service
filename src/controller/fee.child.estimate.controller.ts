@@ -11,18 +11,18 @@ import {
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
 import networkConfig from "../config/network.config";
-import { SeedWallet } from "../utils/wallet/SeedWallet";
-import { WIFWallet } from '../utils/wallet/WIFWallet';
+import { SeedWallet } from "../services/wallet/SeedWallet";
+import { WIFWallet } from '../services/wallet/WIFWallet';
 import { getUtxos } from "../utils/mempool";
 import { ECPairFactory, ECPairAPI } from "ecpair";
 import { WIF, SEED, TESTNET } from "../config/network.config";
 import { MAXIMUMFEERATE } from "../config/network.config";
-import { splitBuffer } from "../utils/buffer/splitBuffer";
+import { splitBuffer } from "../utils/buffer";
 import { getInscriptionInfo } from "../utils/unisat.api";
 import cbor from 'cbor';
 import { SEND_UTXO_FEE_LIMIT } from "../config/network.config";
-import { getSendBTCUTXOArray } from "../utils/utxo/utxo.management";
-import { redeemSingleSendUTXOPsbt } from "../utils/utxo/utxo.singleSendPsbt";
+import { getSendBTCUTXOArray } from "../services/utxo/utxo.management";
+import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.singleSendPsbt";
 
 initEccLib(ecc as any);
 const ECPair: ECPairAPI = ECPairFactory(ecc);

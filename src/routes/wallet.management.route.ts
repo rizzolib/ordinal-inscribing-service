@@ -1,6 +1,6 @@
 
 import { Request, Response, Router } from "express";
-import { splitUTXO } from "../utils/utxo/utxo.split";
+import { splitUTXO } from "../services/utxo/utxo.split";
 
 // Create a new instance of the Express Router
 export const WalletManageRoute = Router();

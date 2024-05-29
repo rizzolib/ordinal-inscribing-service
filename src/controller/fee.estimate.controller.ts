@@ -10,13 +10,13 @@ import {
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
 import networkConfig from "../config/network.config";
-import { SeedWallet } from "../utils/wallet/SeedWallet";
-import { WIFWallet } from '../utils/wallet/WIFWallet';
+import { SeedWallet } from "../services/wallet/SeedWallet";
+import { WIFWallet } from '../services/wallet/WIFWallet';
 import * as Bitcoin from "bitcoinjs-lib";
-import { redeemMultiSendPsbt } from "../utils/utxo/utxo.multiSendPsbt";
-import { redeemSingleSendUTXOPsbt } from "../utils/utxo/utxo.singleSendPsbt";
+import { redeemMultiSendPsbt } from "../services/utxo/utxo.multiSendPsbt";
+import { redeemSingleSendUTXOPsbt } from "../services/utxo/utxo.singleSendPsbt";
 import { getUtxos } from "../utils/mempool";
-import { getSendBTCUTXOArray } from "../utils/utxo/utxo.management";
+import { getSendBTCUTXOArray } from "../services/utxo/utxo.management";
 import { WIF, SEED, TESTNET } from "../config/network.config";
 import { MAXIMUMFEERATE, SEND_UTXO_FEE_LIMIT } from "../config/network.config";
 initEccLib(ecc as any);

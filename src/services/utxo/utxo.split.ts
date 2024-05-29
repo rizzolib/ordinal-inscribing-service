@@ -1,13 +1,13 @@
 import networkConfig, { SEND_UTXO_FEE_LIMIT } from "../../config/network.config";
-import { getUtxos, pushBTCpmt } from "../mempool";
+import { getUtxos, pushBTCpmt } from "../../utils/mempool";
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import dotenv from "dotenv";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from '../wallet/WIFWallet'
-import { setUtxoFlag, waitUtxoFlag } from "../mutex";
+import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
-import { getRecommendedFeeRate } from "../mempool";
+import { getRecommendedFeeRate } from "../../utils/mempool";
 import { redeemUtxoSplitPsbt, utxoSplitPsbt } from "./utxo.splitPsbt";
 
 dotenv.config();

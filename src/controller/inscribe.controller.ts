@@ -9,10 +9,10 @@ import {
 } from "bitcoinjs-lib";
 import { Taptree } from "bitcoinjs-lib/src/types";
 import * as ecc from "tiny-secp256k1";
-import { singleSendUTXO } from "../utils/utxo/utxo.singleSend";
+import { singleSendUTXO } from "../services/utxo/utxo.singleSend";
 import networkConfig from "../config/network.config";
-import { SeedWallet } from "../utils/wallet/SeedWallet";
-import { WIFWallet } from '../utils/wallet/WIFWallet';
+import { SeedWallet } from "../services/wallet/SeedWallet";
+import { WIFWallet } from '../services/wallet/WIFWallet';
 import { getUtxos } from "../utils/mempool";
 import { type PublicKey, type SecretKey } from "@cmdcode/crypto-utils";
 import { Address, Signer, Tap, Tx } from "@cmdcode/tapscript";
