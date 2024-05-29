@@ -34,7 +34,7 @@ export interface IFileInscription {
 
 export interface IDelegateInscription {
     receiveAddress: string,
-    delegateId: string,
+    delegateIds: Array<string>,
     feeRate: number,
     padding: number,
     parentId: string,

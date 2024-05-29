@@ -236,7 +236,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         contents:
           type: array
           items:
@@ -250,7 +250,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -259,7 +259,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
       required:
         - receiveAddress
         - contents
@@ -270,7 +270,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         feeRate:
           type: number
           example: 50
@@ -284,7 +284,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -293,7 +293,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
       required:
         - receiveAddress
         - feeRate
@@ -304,10 +304,12 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
+          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         delegateId:
-          type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          type: array
+          items:
+            type: string
+            example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
         feeRate:
           type: number
           example: 130
@@ -316,7 +318,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -325,7 +327,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
+          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
       required:
         - receiveAddress
         - delegateId

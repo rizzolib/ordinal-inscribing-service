@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
-import { FileEstimateFeeController, TextEstimateFeeController } from "../controller/estimate.controller";
+import { DelegateEstimateFeeController, FileEstimateFeeController, TextEstimateFeeController } from "../controller/estimate.controller";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();
@@ -96,8 +96,9 @@ EstimateFeeRouter.post(
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
-                const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata }
-
+                const delegateIds: Array<string> = req.body.delegateId.split(',');
+                const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
+                await DelegateEstimateFeeController(delegateInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);

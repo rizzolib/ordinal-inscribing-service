@@ -1,11 +1,12 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
+import { TextInscribeController, DelegateInscribeController, FileInscribeController, } from "../controller/inscribe.controller";
 
 // Create a new instance of the Inscription Router
 export const InscriptionRouter = Router();
 
 // @route    POST api/inscribe/text
-// @desc     Text Inscription Fee
+// @desc     Inscribe Text Inscription
 // @access   Private
 InscriptionRouter.post(
     "/text",
@@ -17,7 +18,7 @@ InscriptionRouter.post(
                 if (!req.body.contents) { error.push({ contents: 'Content is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const feeRate: number = +req.body.feeRate;
@@ -25,8 +26,8 @@ InscriptionRouter.post(
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const contents: Array<string> = req.body.contents.split(',');
                 const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
-                
-                console.log('textInscriptionData =>', textInscriptionData)
+
+                await TextInscribeController(textInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);
@@ -36,7 +37,7 @@ InscriptionRouter.post(
 );
 
 // @route    POST api/inscribe/file
-// @desc     File Inscription Fee
+// @desc     Inscribe File Inscription
 // @access   Private
 InscriptionRouter.post(
     "/file",
@@ -48,10 +49,14 @@ InscriptionRouter.post(
                 if (!req.files?.files) { error.push({ file: 'File is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
-                const fileData = req.files?.files as any;
+                let fileData = req.files?.files as any;
+                if (!Array.isArray(fileData)) {
+                    fileData = [fileData];
+                }
+
                 const fileArray: Array<IFile> = fileData.map((item: any) => {
                     return {
                         mimetype: item.mimetype,
@@ -62,8 +67,8 @@ InscriptionRouter.post(
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const fileInscriptionData: IFileInscription = { ...req.body, feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata };
-                
-                console.log('fileInscriptionData => ', fileInscriptionData)
+
+                await FileInscribeController(fileInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);
@@ -73,7 +78,7 @@ InscriptionRouter.post(
 );
 
 // @route    POST api/inscribe/delegate
-// @desc     Delegate Inscription Fee
+// @desc     Inscribe Delegate Inscription Fee
 // @access   Private
 InscriptionRouter.post(
     "/delegate",
@@ -85,15 +90,15 @@ InscriptionRouter.post(
                 if (!req.body.delegateId) { error.push({ delegateId: 'DelegateId is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
-                const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata }
-                
-                console.log('delegateInscriptionData =>', delegateInscriptionData)
+                const delegateIds: Array<string> = req.body.delegateId.split(',');
+                const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
+                await DelegateInscribeController(delegateInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);

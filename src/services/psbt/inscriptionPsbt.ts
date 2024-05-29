@@ -90,9 +90,11 @@ export const inscriptionPsbt = async (contentType: string, inscriptionData: any,
             })
         })
     } else if (contentType == DELEGATE_CONTENT) {
-        psbt.addOutput({
-            address: inscriptionData.receiveAddress,
-            value: inscriptionData.padding
+        inscriptionData.delegateIds.forEach((content: string) => {
+            psbt.addOutput({
+                address: inscriptionData.receiveAddress,
+                value: inscriptionData.padding
+            })
         })
     }
     //Sign psbt
