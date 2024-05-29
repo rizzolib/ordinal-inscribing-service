@@ -30,7 +30,7 @@ InscriptionRouter.post(
             }
         } catch (error: any) {
             console.error(error);
-            return res.status(400).send({ error: error });
+            return res.status(400).send({ error });
         }
     }
 );

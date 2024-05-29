@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
+import { TextEstimateFeeController } from "../controller/estimate.controller";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();
@@ -26,7 +27,10 @@ EstimateFeeRouter.post(
                 const contents: Array<string> = req.body.contents.split(',');
                 const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
                 
-                console.log('textInscriptionData =>', textInscriptionData)
+                console.log('textInscriptionData =>', textInscriptionData) 
+                
+                await TextEstimateFeeController(textInscriptionData, res)
+
             }
         } catch (error: any) {
             console.error(error);

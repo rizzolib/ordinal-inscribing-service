@@ -15,7 +15,6 @@ StatusNetworkRoute.get(
             const response = await getPrice(networkConfig.networkType);
             return res.status(200).send(response);
         } catch (error: any) {
-            console.error(error);
             return res.status(400).send({ error });
         }
     }
@@ -28,10 +27,8 @@ StatusNetworkRoute.get(
     "/avgFeeRate",
     async (req: Request, res: Response) => {
         try {
-            const response = await getFeeRate(networkConfig.networkType);
-            return res.status(200).send(response);
+            await getFeeRate(networkConfig.networkType, res);
         } catch (error: any) {
-            console.error(error);
             return res.status(400).send({ error });
         }
     }
@@ -44,11 +41,10 @@ StatusNetworkRoute.get(
     "/recommendFeeRate",
     async (req: Request, res: Response) => {
         try {
-            const response = await getRecommendedFeeRate(networkConfig.networkType);
-            return res.status(200).send(response);
+            const recommendFeeRate = await getRecommendedFeeRate(networkConfig.networkType);
+            res.status(200).send({ recommendFeeRate });
         } catch (error: any) {
-            console.error(error);
-            return res.status(400).send({ error });
+            res.status(400).send({ error });
         }
     }
 );

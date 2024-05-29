@@ -4,6 +4,12 @@ export interface IFile {
     data: Buffer
 }
 
+export interface IUtxo {
+    txid: string;
+    vout: number;
+    value: number;
+}
+
 export interface ITextInscription {
     receiveAddress: string,
     contents: Array<string>,

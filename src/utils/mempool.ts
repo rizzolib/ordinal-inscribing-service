@@ -1,5 +1,6 @@
 import axios, { type AxiosError } from "axios";
 import { TESTNET } from "../config/network.config";
+import { Response } from "express";
 
 interface IUtxo {
   txid: string;
@@ -83,7 +84,7 @@ export const getBlockHeight = async (networkType: string) => {
   }
 }
 
-export const getFeeRate = async (networkType: string) => {
+export const getFeeRate = async (networkType: string, response: Response) => {
   try {
     const height = await getBlockHeight(networkType);
     const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/blocks/${height}`;
@@ -91,9 +92,16 @@ export const getFeeRate = async (networkType: string) => {
     const feeRateData = blockData.data.map((item: any) => {
       return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate }
     })
-    return feeRateData;
+
+    return response.status(200).send({ feeRateData });
+
   } catch (error: any) {
-    console.log("Get Fee Rate Error!")
+
+    return response.status(400).send({
+      type: 1,
+      data: 'Get Fee Rate Error!'
+    })
+
   }
 }
 
@@ -101,9 +109,11 @@ export const getRecommendedFeeRate = async (networkType: string) => {
   try {
     const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/fees/recommended`;
     const response: any = await axios.get(url);
+    const recommendFeeRate = response.data;
 
-    return response.data;
+    return recommendFeeRate;
   } catch (error: any) {
-    console.log("Get Recommended Fee Rate Error!")
+
+    console.log('Get Recommend Fee Rate Error!')
   }
 }

@@ -50,7 +50,7 @@ exports.InscriptionRouter.post("/text", (req, res) => __awaiter(void 0, void 0, 
             const content = req.body.content;
             const feeRate = req.body.feeRate;
             const txId = yield (0, inscribe_controller_1.inscribe)('text', 'text/plain', receiveAddress, content, feeRate);
-            res.send({ tx: txId });
+            res.status(200).send({ tx: txId });
         }
     }
     catch (error) {
