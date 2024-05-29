@@ -2,12 +2,12 @@ import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
 
 // Create a new instance of the Estimation Fee Router
-export const InscriptionRouter = Router();
+export const EstimateFeeRouter = Router();
 
 // @route    POST api/estimate/text
 // @desc     Estimate Text Inscription Fee
 // @access   Private
-InscriptionRouter.post(
+EstimateFeeRouter.post(
     "/text",
     async (req: Request, res: Response) => {
         try {
@@ -38,7 +38,7 @@ InscriptionRouter.post(
 // @route    POST api/estimate/file
 // @desc     Estimate File Inscription Fee
 // @access   Private
-InscriptionRouter.post(
+EstimateFeeRouter.post(
     "/file",
     async (req: Request, res: Response) => {
         try {
@@ -75,7 +75,7 @@ InscriptionRouter.post(
 // @route    POST api/estimate/delegate
 // @desc     Estimate Delegate Inscription Fee
 // @access   Private
-InscriptionRouter.post(
+EstimateFeeRouter.post(
     "/delegate",
     async (req: Request, res: Response) => {
         try {

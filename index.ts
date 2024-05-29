@@ -1,4 +1,3 @@
-// src/index.ts
 import express, { Express } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
@@ -7,9 +6,9 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from "yamljs";
 import bodyParser = require("body-parser");
 import { InscriptionRouter } from "./src/routes/inscription.route";
-import { FeeEstimateRoute } from "./src/routes/fee.estimate.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import { WalletManageRoute } from "./src/routes/wallet.management.route";
+import { EstimateFeeRouter } from "./src/routes/estimate.fee.route";
 
 import http from "http";
 const { Mutex } = require('async-mutex');
@@ -44,7 +43,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
 
 app.use('/api/inscribe', InscriptionRouter)
-app.use('/api/estimate', FeeEstimateRoute)
+app.use('/api/estimate', EstimateFeeRouter)
 app.use('/api/status', StatusNetworkRoute)
 app.use('/api/wallet', WalletManageRoute)
 

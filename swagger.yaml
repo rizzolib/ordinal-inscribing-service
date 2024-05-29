@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 servers:
-  - url: "https://file-inscription-backend.onrender.com/api"
   - url: "http://localhost:8081/api"
+  - url: "https://file-inscription-backend.onrender.com/api"
 
 tags:
   - name: Status
@@ -215,7 +215,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/TextInscription"
+              $ref: "#/components/schemas/DelegateInscription"
       responses:
         "200":
           description: Estimate Delegate Inscription Success!
@@ -237,7 +237,7 @@ components:
         receiveAddress:
           type: string
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
-        content:
+        contents:
           type: array
           items:
             type: string
@@ -262,7 +262,7 @@ components:
           example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
       required:
         - receiveAddress
-        - content
+        - contents
         - feeRate
         - padding
     FileInscription:
@@ -305,11 +305,9 @@ components:
         receiveAddress:
           type: string
           example: tb1pxa7j0z4s0ns6vm532z9qnv292mnvhuc05nxd69zns9rcxqegcunq6wrmjl
-        content:
-          type: array
-          items:
-            type: string
-            example: 350.364807.bitmap
+        delegateId:
+          type: string
+          example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
         feeRate:
           type: number
           example: 130
@@ -330,6 +328,6 @@ components:
           example: 7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76ai0
       required:
         - receiveAddress
-        - content
+        - delegateId
         - feeRate
         - padding
