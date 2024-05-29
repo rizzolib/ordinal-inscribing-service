@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
-import { TextEstimateFeeController } from "../controller/estimate.controller";
+import { FileEstimateFeeController, TextEstimateFeeController } from "../controller/estimate.controller";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();
@@ -18,7 +18,7 @@ EstimateFeeRouter.post(
                 if (!req.body.contents) { error.push({ contents: 'Content is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const feeRate: number = +req.body.feeRate;
@@ -26,7 +26,7 @@ EstimateFeeRouter.post(
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const contents: Array<string> = req.body.contents.split(',');
                 const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
-                
+
                 await TextEstimateFeeController(textInscriptionData, res)
             }
         } catch (error: any) {
@@ -49,10 +49,14 @@ EstimateFeeRouter.post(
                 if (!req.files?.files) { error.push({ file: 'File is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
-                const fileData = req.files?.files as any;
+                let fileData = req.files?.files as any;
+                if (!Array.isArray(fileData)) {
+                    fileData = [fileData];
+                }
+
                 const fileArray: Array<IFile> = fileData.map((item: any) => {
                     return {
                         mimetype: item.mimetype,
@@ -63,8 +67,8 @@ EstimateFeeRouter.post(
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const fileInscriptionData: IFileInscription = { ...req.body, feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata };
-                
-                console.log('fileInscriptionData => ', fileInscriptionData)
+
+                await FileEstimateFeeController(fileInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);
@@ -86,15 +90,14 @@ EstimateFeeRouter.post(
                 if (!req.body.delegateId) { error.push({ delegateId: 'DelegateId is required' }) }
                 if (!req.body.feeRate) { error.push({ feeRate: 'FeeRate is required' }) }
                 if (!req.body.padding) { error.push({ padding: 'Padding is required' }) }
-                
+
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata }
-                
-                console.log('delegateInscriptionData =>', delegateInscriptionData)
+
             }
         } catch (error: any) {
             console.error(error);
