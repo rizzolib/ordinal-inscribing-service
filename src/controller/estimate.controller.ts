@@ -5,7 +5,7 @@ import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
 import { FILE_CONTENT, TEXT_CONTENT } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
-import { tapleafPsbt } from "../services/psbt/tapleafpsbt";
+import { tapleafPsbt } from "../services/psbt/tapLeafPsbt";
 import { toInteger } from "../utils/math";
 
 export const TextEstimateFeeController = async (inscriptionData: ITextInscription, res: Response) => {
