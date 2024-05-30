@@ -42,7 +42,7 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
     };
     let cursor = 0;
     const size = 5000;
-    const utxos: IUtxo[] = [];
+    let utxos: IUtxo[] = [];
     while (1) {
       const res = await axios.get(url, { ...config, params: { cursor, size } });
       if (res.data.code === -1) throw "Invalid Address";
@@ -58,5 +58,24 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
       cursor += res.data.data.utxo.length;
       if (cursor >= res.data.data.total - res.data.data.totalRunes) break;
     }
-    return utxos;
+    
+    const confirmedUtxos: IUtxo[] = [];
+    const unConfirmedUtxos: IUtxo[] = [];
+
+    utxos.forEach((utxoData: any) => {
+      if (utxoData.status.confirmed) {
+        confirmedUtxos.push({
+          txid: utxoData.txid,
+          vout: utxoData.vout,
+          value: utxoData.value,
+        });
+      } else {
+        unConfirmedUtxos.push({
+          txid: utxoData.txid,
+          vout: utxoData.vout,
+          value: utxoData.value,
+        });
+      }
+    });
+    return [...confirmedUtxos, ...unConfirmedUtxos];
   };
