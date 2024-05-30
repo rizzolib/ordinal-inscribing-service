@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 servers:
-  - url: "http://localhost:8081/api"
   - url: "https://file-inscription-backend.onrender.com/api"
+  - url: "http://localhost:8081/api"
 
 tags:
   - name: Status
@@ -236,7 +236,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         contents:
           type: array
           items:
@@ -250,7 +250,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
+          example: b01e86b038b50152ef9f881a5a00e789c6f662cb8918867cb3c9016683e235bai0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -259,7 +259,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
       required:
         - receiveAddress
         - contents
@@ -270,7 +270,7 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         feeRate:
           type: number
           example: 130
@@ -284,7 +284,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
+          example: b01e86b038b50152ef9f881a5a00e789c6f662cb8918867cb3c9016683e235bai0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -293,7 +293,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
       required:
         - receiveAddress
         - feeRate
@@ -304,12 +304,12 @@ components:
       properties:
         receiveAddress:
           type: string
-          example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
         delegateId:
           type: array
           items:
             type: string
-            example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
+            example: b01e86b038b50152ef9f881a5a00e789c6f662cb8918867cb3c9016683e235bai0
         feeRate:
           type: number
           example: 130
@@ -318,7 +318,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
+          example: b01e86b038b50152ef9f881a5a00e789c6f662cb8918867cb3c9016683e235bai0
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -327,7 +327,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
       required:
         - receiveAddress
         - delegateId
