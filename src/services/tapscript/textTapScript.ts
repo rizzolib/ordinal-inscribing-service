@@ -48,7 +48,9 @@ export const textTapScript = async (inscriptionData: ITextInscription) => {
     let parentInscriptionBuffer: Buffer;
     const index = parts[1];
 
-    if(index) {
+    console.log(parseInt(index, 10))
+    
+    if(parseInt(index, 10) != 0) {
         const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
         parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
     } else {

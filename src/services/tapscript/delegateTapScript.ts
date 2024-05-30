@@ -38,7 +38,7 @@ export const delegateTapScript = async (inscriptionData: IDelegateInscription) =
     let parentInscriptionBuffer: Buffer;
     const index = parts[1];
 
-    if(index) {
+    if(parseInt(index, 10) != 0) {
         const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
         parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
     } else {
@@ -53,7 +53,7 @@ export const delegateTapScript = async (inscriptionData: IDelegateInscription) =
     let DelegateInscriptionBuffer: Buffer;
     const DelegateIndex = DelegateIDparts[1];
 
-    if(index) {
+    if(parseInt(DelegateIndex, 10) != 0) {
         const DelegateIndexBuffer = Buffer.from(parseInt(DelegateIndex, 10).toString(16).padStart(2, '0'), 'hex').reverse();
         DelegateInscriptionBuffer = Buffer.concat([DelegateinscriptionTransactionBuffer, DelegateIndexBuffer]);
     } else {
