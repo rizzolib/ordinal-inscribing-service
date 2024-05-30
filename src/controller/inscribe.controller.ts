@@ -5,11 +5,12 @@ import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
 import { DELEGATE_CONTENT, FILE_CONTENT, TEXT_CONTENT } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
-import { tapleafPsbt } from "../services/psbt/tapleafpsbt";
+import tapleafPsbt from "../services/psbt/TapLeafPsbt";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import networkConfig from "../config/network.config";
 import { pushBTCpmt } from "../utils/mempool";
 import { setUtxoFlag } from "../utils/mutex";
+import { splitUTXO } from "../services/utxo/utxo.split";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {
@@ -26,7 +27,7 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const txid = await pushBTCpmt(tapleafTxData.toHex(), networkConfig.networkType);
 
@@ -44,6 +45,9 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
 
         console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId)
 
+        const response = await splitUTXO()
+        console.log(response)
+        
         return res.status(200).send({
             tx: realInscriptiontxId
         });
@@ -70,7 +74,7 @@ export const FileInscribeController = async (inscriptionData: IFileInscription, 
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const txid = await pushBTCpmt(tapleafTxData.toHex(), networkConfig.networkType);
 
@@ -88,6 +92,9 @@ export const FileInscribeController = async (inscriptionData: IFileInscription, 
 
         console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId)
 
+        const response = await splitUTXO()
+        console.log(response)
+        
         return res.status(200).send({
             tx: realInscriptiontxId
         });
@@ -115,7 +122,7 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const txid = await pushBTCpmt(tapleafTxData.toHex(), networkConfig.networkType);
 
@@ -132,6 +139,9 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
         const realInscriptiontxId = await pushBTCpmt(realInscriptionTxData.toHex(), networkConfig.networkType);
 
         console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId)
+
+        const response = await splitUTXO()
+        console.log(response)
 
         return res.status(200).send({
             tx: realInscriptiontxId

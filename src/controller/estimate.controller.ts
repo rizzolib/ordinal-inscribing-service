@@ -5,7 +5,7 @@ import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
 import { DELEGATE_CONTENT, FILE_CONTENT, TEXT_CONTENT } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
-import { tapleafPsbt } from "../services/psbt/tapleafpsbt";
+import tapleafPsbt from "../services/psbt/TapLeafPsbt";
 import { toInteger } from "../utils/math";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import { setUtxoFlag } from "../utils/mutex";
@@ -25,7 +25,7 @@ export const TextEstimateFeeController = async (inscriptionData: ITextInscriptio
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
 
@@ -57,7 +57,7 @@ export const FileEstimateFeeController = async (inscriptionData: IFileInscriptio
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
 
@@ -89,7 +89,7 @@ export const DelegateEstimateFeeController = async (inscriptionData: IDelegateIn
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
 
-        const tapleafTxData: Transaction = await tapleafPsbt(inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
 

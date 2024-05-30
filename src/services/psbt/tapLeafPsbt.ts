@@ -7,7 +7,7 @@ import {
 } from "bitcoinjs-lib";
 import { Taptree } from "bitcoinjs-lib/src/types";
 import { toXOnly } from "../../utils/buffer";
-import networkConfig, { TESTNET } from "../../config/network.config";
+import networkConfig, { DELEGATE_CONTENT, FILE_CONTENT, TESTNET, TEXT_CONTENT } from "../../config/network.config";
 import * as ecc from "tiny-secp256k1";
 import wallet from "../wallet/initializeWallet";
 import { reinscriptionAndUTXOSend } from "../utxo/utxo.reinscribe.singleSend";
@@ -15,10 +15,10 @@ import { singleSendUTXO } from "../utxo/utxo.singleSend";
 
 initEccLib(ecc as any);
 
-export const tapleafPsbt = async (inscriptionData: any, tapScript: Array<any>, sendUTXOSize: number): Promise<Transaction> => {
-    const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
-    const keyPair = wallet.ecPair;
+const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
+const keyPair = wallet.ecPair;
 
+export const tapleafPsbt = async (contentType: string, inscriptionData: any, tapScript: Array<any>, sendUTXOSize: number): Promise<Transaction> => {
     const ordinal_script = script.compile(tapScript);
 
     const scriptTree: Taptree = {
@@ -38,15 +38,22 @@ export const tapleafPsbt = async (inscriptionData: any, tapScript: Array<any>, s
     });
     const address: string = ordinal_p2tr.address ?? "";
     let res: any = {};
-    if (inscriptionData.reinscriptionId) {
+
+    let inscriptionAmount: number = 0;
+    if (contentType == TEXT_CONTENT) inscriptionAmount = inscriptionData.contents.length;
+    if (contentType == FILE_CONTENT) inscriptionAmount = inscriptionData.files.length;
+    if (contentType == DELEGATE_CONTENT) inscriptionAmount = inscriptionData.delegateIds.length;
+    
+    if (inscriptionData.reinscriptionId && inscriptionAmount == 1) {
         res = await reinscriptionAndUTXOSend(inscriptionData.reinscriptionId, address, inscriptionData.feeRate, sendUTXOSize)
     } else {
         res = await singleSendUTXO(address, inscriptionData.feeRate, sendUTXOSize);
     }
-    
+
     if (!res.isSuccess) {
         console.log(res.data)
     }
 
     return res.data;
 }
+export default tapleafPsbt;
