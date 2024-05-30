@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
 import { DelegateEstimateFeeController, FileEstimateFeeController, TextEstimateFeeController } from "../controller/estimate.controller";
+import { isValidBitcoinAddress } from "utils/validationAddress";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();
@@ -21,6 +22,9 @@ EstimateFeeRouter.post(
 
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ type: 2, data: 'This address is not valid address.' })
+                }
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
@@ -52,6 +56,9 @@ EstimateFeeRouter.post(
 
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ type: 2, data: 'This address is not valid address.' })
+                }
                 let fileData = req.files?.files as any;
                 if (!Array.isArray(fileData)) {
                     fileData = [fileData];
@@ -93,6 +100,9 @@ EstimateFeeRouter.post(
 
                 res.status(400).send({ error: { type: 0, data: error } })
             } else {
+                if (!isValidBitcoinAddress(req.body.receiveAddress)) {
+                    res.status(400).send({ type: 2, data: 'This address is not valid address.' })
+                }
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
                 const metadata: JSON = JSON.parse(req.body.metadata);
