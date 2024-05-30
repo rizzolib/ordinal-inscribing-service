@@ -13,7 +13,11 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "alias/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
-  "exclude": ["node_modules", ".vscode"]
+  "exclude": ["node_modules"]
 }

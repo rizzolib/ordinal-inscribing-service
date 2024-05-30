@@ -17,12 +17,12 @@ const fileTapScript_1 = require("../services/tapscript/fileTapScript");
 const textTapScript_1 = require("../services/tapscript/textTapScript");
 const inscriptionPsbt_1 = require("../services/psbt/inscriptionPsbt");
 const network_config_1 = require("../config/network.config");
-const TapLeafPsbt_1 = __importDefault(require("../services/psbt/TapLeafPsbt"));
 const delegateTapScript_1 = require("../services/tapscript/delegateTapScript");
 const network_config_2 = __importDefault(require("../config/network.config"));
 const mempool_1 = require("../utils/mempool");
 const mutex_1 = require("../utils/mutex");
 const utxo_split_1 = require("../services/utxo/utxo.split");
+const TapLeafPsbt_1 = __importDefault(require("../services/psbt/TapLeafPsbt"));
 const TextInscribeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tapScript = yield (0, textTapScript_1.textTapScript)(inscriptionData);
