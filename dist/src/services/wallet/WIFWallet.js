@@ -34,6 +34,7 @@ const bip32_1 = __importDefault(require("bip32"));
 const ecpair_1 = __importDefault(require("ecpair"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_utils_1 = require("@cmdcode/crypto-utils");
+const network_config_1 = require("../../config/network.config");
 dotenv_1.default.config();
 (0, bitcoinjs_lib_1.initEccLib)(ecc);
 const ECPair = (0, ecpair_1.default)(ecc);
@@ -41,11 +42,11 @@ const bip32 = (0, bip32_1.default)(ecc);
 class WIFWallet {
     constructor(walletParam) {
         var _a;
-        if (walletParam.networkType == "mainnet") {
-            this.network = bitcoinjs_lib_1.networks.bitcoin;
+        if (walletParam.networkType == network_config_1.TESTNET) {
+            this.network = bitcoinjs_lib_1.networks.testnet;
         }
         else {
-            this.network = bitcoinjs_lib_1.networks.testnet;
+            this.network = bitcoinjs_lib_1.networks.bitcoin;
         }
         this.ecPair = ECPair.fromWIF(walletParam.privateKey, this.network);
         this.secret = (_a = this.ecPair.privateKey) === null || _a === void 0 ? void 0 : _a.toString('hex');

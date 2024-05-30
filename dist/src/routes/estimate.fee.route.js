@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InscriptionRouter = void 0;
+exports.EstimateFeeRouter = void 0;
 const express_1 = require("express");
-const inscribe_controller_1 = require("../controller/inscribe.controller");
-// Create a new instance of the Inscription Router
-exports.InscriptionRouter = (0, express_1.Router)();
-// @route    POST api/inscribe/text
-// @desc     Inscribe Text Inscription
+const estimate_controller_1 = require("../controller/estimate.controller");
+// Create a new instance of the Estimation Fee Router
+exports.EstimateFeeRouter = (0, express_1.Router)();
+// @route    POST api/estimate/text
+// @desc     Estimate Text Inscription Fee
 // @access   Private
-exports.InscriptionRouter.post("/text", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.EstimateFeeRouter.post("/text", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!(req.body.receiveAddress && req.body.contents && req.body.feeRate && req.body.padding)) {
             let error = [];
@@ -41,7 +41,7 @@ exports.InscriptionRouter.post("/text", (req, res) => __awaiter(void 0, void 0, 
             const metadata = JSON.parse(req.body.metadata);
             const contents = req.body.contents.split(',');
             const textInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, metadata: metadata, contents: contents });
-            yield (0, inscribe_controller_1.TextInscribeController)(textInscriptionData, res);
+            yield (0, estimate_controller_1.TextEstimateFeeController)(textInscriptionData, res);
         }
     }
     catch (error) {
@@ -49,10 +49,10 @@ exports.InscriptionRouter.post("/text", (req, res) => __awaiter(void 0, void 0, 
         return res.status(400).send({ error });
     }
 }));
-// @route    POST api/inscribe/file
-// @desc     Inscribe File Inscription
+// @route    POST api/estimate/file
+// @desc     Estimate File Inscription Fee
 // @access   Private
-exports.InscriptionRouter.post("/file", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.EstimateFeeRouter.post("/file", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
         if (!(req.body.receiveAddress && ((_a = req.files) === null || _a === void 0 ? void 0 : _a.files) && req.body.feeRate && req.body.padding)) {
@@ -86,7 +86,7 @@ exports.InscriptionRouter.post("/file", (req, res) => __awaiter(void 0, void 0, 
             const padding = +req.body.padding;
             const metadata = JSON.parse(req.body.metadata);
             const fileInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata });
-            yield (0, inscribe_controller_1.FileInscribeController)(fileInscriptionData, res);
+            yield (0, estimate_controller_1.FileEstimateFeeController)(fileInscriptionData, res);
         }
     }
     catch (error) {
@@ -94,10 +94,10 @@ exports.InscriptionRouter.post("/file", (req, res) => __awaiter(void 0, void 0, 
         return res.status(400).send({ error });
     }
 }));
-// @route    POST api/inscribe/delegate
-// @desc     Inscribe Delegate Inscription Fee
+// @route    POST api/estimate/delegate
+// @desc     Estimate Delegate Inscription Fee
 // @access   Private
-exports.InscriptionRouter.post("/delegate", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.EstimateFeeRouter.post("/delegate", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!(req.body.receiveAddress && req.body.delegateId && req.body.feeRate && req.body.padding)) {
             let error = [];
@@ -121,7 +121,7 @@ exports.InscriptionRouter.post("/delegate", (req, res) => __awaiter(void 0, void
             const metadata = JSON.parse(req.body.metadata);
             const delegateIds = req.body.delegateId.split(',');
             const delegateInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds });
-            yield (0, inscribe_controller_1.DelegateInscribeController)(delegateInscriptionData, res);
+            yield (0, estimate_controller_1.DelegateEstimateFeeController)(delegateInscriptionData, res);
         }
     }
     catch (error) {

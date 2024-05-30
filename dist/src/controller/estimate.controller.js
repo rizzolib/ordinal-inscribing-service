@@ -12,18 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DelegateInscribeController = exports.FileInscribeController = exports.TextInscribeController = void 0;
+exports.DelegateEstimateFeeController = exports.FileEstimateFeeController = exports.TextEstimateFeeController = void 0;
 const fileTapScript_1 = require("../services/tapscript/fileTapScript");
 const textTapScript_1 = require("../services/tapscript/textTapScript");
 const inscriptionPsbt_1 = require("../services/psbt/inscriptionPsbt");
 const network_config_1 = require("../config/network.config");
 const TapLeafPsbt_1 = __importDefault(require("../services/psbt/TapLeafPsbt"));
+const math_1 = require("../utils/math");
 const delegateTapScript_1 = require("../services/tapscript/delegateTapScript");
-const network_config_2 = __importDefault(require("../config/network.config"));
-const mempool_1 = require("../utils/mempool");
 const mutex_1 = require("../utils/mutex");
-const utxo_split_1 = require("../services/utxo/utxo.split");
-const TextInscribeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
+const TextEstimateFeeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tapScript = yield (0, textTapScript_1.textTapScript)(inscriptionData);
         const sentUtxo = {
@@ -35,20 +33,12 @@ const TextInscribeController = (inscriptionData, res) => __awaiter(void 0, void 
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
         const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
-        const txid = yield (0, mempool_1.pushBTCpmt)(tapleafTxData.toHex(), network_config_2.default.networkType);
-        const sendingUtxo = {
-            txid: txid,
-            vout: 0,
-            value: sendUTXOSize
-        };
-        console.log('Sent Utxo for inscribing => ', sendingUtxo);
-        const realInscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sendingUtxo);
-        const realInscriptiontxId = yield (0, mempool_1.pushBTCpmt)(realInscriptionTxData.toHex(), network_config_2.default.networkType);
-        console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId);
-        const response = yield (0, utxo_split_1.splitUTXO)();
-        console.log(response);
+        const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
-            tx: realInscriptiontxId
+            satsInItem: inscriptionData.padding * inscriptionData.contents.length,
+            fee: totalFee,
+            serviceFee: (0, math_1.toInteger)(totalFee / 50),
+            feeBySize: (0, math_1.toInteger)(totalFee / 20)
         });
     }
     catch (error) {
@@ -57,8 +47,8 @@ const TextInscribeController = (inscriptionData, res) => __awaiter(void 0, void 
         return res.status(400).send({ error });
     }
 });
-exports.TextInscribeController = TextInscribeController;
-const FileInscribeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.TextEstimateFeeController = TextEstimateFeeController;
+const FileEstimateFeeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tapScript = yield (0, fileTapScript_1.fileTapScript)(inscriptionData);
         const sentUtxo = {
@@ -70,20 +60,12 @@ const FileInscribeController = (inscriptionData, res) => __awaiter(void 0, void 
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
         const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
-        const txid = yield (0, mempool_1.pushBTCpmt)(tapleafTxData.toHex(), network_config_2.default.networkType);
-        const sendingUtxo = {
-            txid: txid,
-            vout: 0,
-            value: sendUTXOSize
-        };
-        console.log('Sent Utxo for inscribing => ', sendingUtxo);
-        const realInscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sendingUtxo);
-        const realInscriptiontxId = yield (0, mempool_1.pushBTCpmt)(realInscriptionTxData.toHex(), network_config_2.default.networkType);
-        console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId);
-        const response = yield (0, utxo_split_1.splitUTXO)();
-        console.log(response);
+        const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
-            tx: realInscriptiontxId
+            satsInItem: inscriptionData.padding * inscriptionData.files.length,
+            fee: totalFee,
+            serviceFee: (0, math_1.toInteger)(totalFee / 50),
+            feeBySize: (0, math_1.toInteger)(totalFee / 20)
         });
     }
     catch (error) {
@@ -92,8 +74,8 @@ const FileInscribeController = (inscriptionData, res) => __awaiter(void 0, void 
         return res.status(400).send({ error });
     }
 });
-exports.FileInscribeController = FileInscribeController;
-const DelegateInscribeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.FileEstimateFeeController = FileEstimateFeeController;
+const DelegateEstimateFeeController = (inscriptionData, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tapScript = yield (0, delegateTapScript_1.delegateTapScript)(inscriptionData);
         const sentUtxo = {
@@ -105,20 +87,12 @@ const DelegateInscribeController = (inscriptionData, res) => __awaiter(void 0, v
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
         const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
-        const txid = yield (0, mempool_1.pushBTCpmt)(tapleafTxData.toHex(), network_config_2.default.networkType);
-        const sendingUtxo = {
-            txid: txid,
-            vout: 0,
-            value: sendUTXOSize
-        };
-        console.log('Sent Utxo for inscribing => ', sendingUtxo);
-        const realInscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sendingUtxo);
-        const realInscriptiontxId = yield (0, mempool_1.pushBTCpmt)(realInscriptionTxData.toHex(), network_config_2.default.networkType);
-        console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId);
-        const response = yield (0, utxo_split_1.splitUTXO)();
-        console.log(response);
+        const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
-            tx: realInscriptiontxId
+            satsInItem: inscriptionData.padding * inscriptionData.delegateIds.length,
+            fee: totalFee,
+            serviceFee: (0, math_1.toInteger)(totalFee / 50),
+            feeBySize: (0, math_1.toInteger)(totalFee / 20)
         });
     }
     catch (error) {
@@ -127,4 +101,4 @@ const DelegateInscribeController = (inscriptionData, res) => __awaiter(void 0, v
         return res.status(400).send({ error });
     }
 });
-exports.DelegateInscribeController = DelegateInscribeController;
+exports.DelegateEstimateFeeController = DelegateEstimateFeeController;

@@ -26,28 +26,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WIFWallet = void 0;
+exports.SeedWallet = void 0;
 const bitcoin = __importStar(require("bitcoinjs-lib"));
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const ecc = __importStar(require("tiny-secp256k1"));
+const bip39 = __importStar(require("bip39"));
 const bip32_1 = __importDefault(require("bip32"));
 const ecpair_1 = __importDefault(require("ecpair"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_utils_1 = require("@cmdcode/crypto-utils");
+const network_config_1 = require("../../config/network.config");
 dotenv_1.default.config();
 (0, bitcoinjs_lib_1.initEccLib)(ecc);
 const ECPair = (0, ecpair_1.default)(ecc);
 const bip32 = (0, bip32_1.default)(ecc);
-class WIFWallet {
+class SeedWallet {
     constructor(walletParam) {
         var _a;
-        if (walletParam.networkType == "mainnet") {
-            this.network = bitcoinjs_lib_1.networks.bitcoin;
-        }
-        else {
+        this.hdPath = "m/86'/0'/0'/0/0";
+        if (walletParam.networkType == network_config_1.TESTNET) {
             this.network = bitcoinjs_lib_1.networks.testnet;
         }
-        this.ecPair = ECPair.fromWIF(walletParam.privateKey, this.network);
+        else {
+            this.network = bitcoinjs_lib_1.networks.bitcoin;
+        }
+        const mnemonic = walletParam.seed;
+        if (!bip39.validateMnemonic(mnemonic)) {
+            throw new Error("invalid mnemonic");
+        }
+        this.bip32 = bip32.fromSeed(bip39.mnemonicToSeedSync(mnemonic), this.network);
+        this.ecPair = ECPair.fromPrivateKey(this.bip32.derivePath(this.hdPath).privateKey, { network: this.network });
         this.secret = (_a = this.ecPair.privateKey) === null || _a === void 0 ? void 0 : _a.toString('hex');
         this.seckey = new crypto_utils_1.SecretKey(this.secret, { type: "taproot" });
         this.pubkey = this.seckey.pub;
@@ -69,4 +77,4 @@ class WIFWallet {
         return psbt;
     }
 }
-exports.WIFWallet = WIFWallet;
+exports.SeedWallet = SeedWallet;
