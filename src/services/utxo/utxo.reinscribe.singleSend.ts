@@ -12,7 +12,6 @@ import { WIF, SEED } from "../../config/network.config";
 import { getBtcUtxoInfo, getInscriptionInfo } from "../../utils/unisat.api";
 import { IUtxo } from "../../utils/types";
 
-
 dotenv.config();
 Bitcoin.initEccLib(ecc);
 
@@ -28,7 +27,7 @@ if (networkConfig.walletType == WIF) {
 }
 
 export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address: string, feeRate: number, amount: number) => {
-  
+
   const reinscriptionUTXO: IUtxo = await getInscriptionInfo(reinscriptionId, networkConfig.networkType)
 
   await waitUtxoFlag();
@@ -42,17 +41,24 @@ export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address:
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
-  let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(wallet, response.data, networkType, amount, reinscriptionUTXO);
-  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
-  response = getSendBTCUTXOArray(utxos, amount + redeemFee);
+  let selectedUtxos = response.data;
+  let redeemFee = SEND_UTXO_FEE_LIMIT;
 
-  if (!response.isSuccess) {
-    return { isSuccess: false, data: 'No enough balance on admin wallet.' };
+  for (let i = 0; i < 3; i++) {
+    let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(wallet, selectedUtxos, networkType, amount, reinscriptionUTXO, redeemFee);
+    redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+    redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+
+    response = getSendBTCUTXOArray(utxos, amount + redeemFee);
+
+    if (!response.isSuccess) {
+      return { isSuccess: false, data: 'No enough balance on admin wallet.' };
+    }
+    selectedUtxos = response.data;
   }
-  console.log(response.data)
-  let psbt = ReinscribeAndUtxoSendPsbt(wallet, response.data, networkType, redeemFee, address, amount, reinscriptionUTXO);
+
+  let psbt = ReinscribeAndUtxoSendPsbt(wallet, selectedUtxos, networkType, redeemFee, address, amount, reinscriptionUTXO);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
   const tx = signedPsbt.extractTransaction();
 

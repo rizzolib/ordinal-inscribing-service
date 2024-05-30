@@ -1,7 +1,6 @@
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import { TESTNET } from "../../config/network.config";
-import { SEND_UTXO_FEE_LIMIT } from "../../config/network.config";
 
 Bitcoin.initEccLib(ecc);
 
@@ -11,8 +10,7 @@ interface IUtxo {
     value: number;
 }
 
-
-export const redeemSingleSendUTXOPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, networkType: string, amount: number): Bitcoin.Psbt => {
+export const redeemSingleSendUTXOPsbt = (wallet: any, inputUtxoArray: Array<IUtxo>, networkType: string, amount: number, fee: number): Bitcoin.Psbt => {
     const psbt = new Bitcoin.Psbt({
         network: networkType == TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
@@ -35,7 +33,7 @@ export const redeemSingleSendUTXOPsbt = (wallet: any, inputUtxoArray: Array<IUtx
     
     psbt.addOutput({
         address: wallet.address,
-        value: inputUtxoSumValue - SEND_UTXO_FEE_LIMIT - amount,
+        value: inputUtxoSumValue - fee - amount,
     });
 
     return psbt;

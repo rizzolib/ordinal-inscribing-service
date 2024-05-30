@@ -40,17 +40,24 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
-  let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, response.data, networkType, amount);
-  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-  let redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+  
+  let selectedUtxos = response.data;
+  let redeemFee = SEND_UTXO_FEE_LIMIT;
 
-  response = getSendBTCUTXOArray(utxos, amount + redeemFee);
+  for (let i = 0; i < 3; i++) {
+    let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, selectedUtxos, networkType, amount, redeemFee);
+    redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
+    redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
 
-  if (!response.isSuccess) {
-    return { isSuccess: false, data: 'No enough balance on admin wallet.' };
+    response = getSendBTCUTXOArray(utxos, amount + redeemFee);
+
+    if (!response.isSuccess) {
+      return { isSuccess: false, data: 'No enough balance on admin wallet.' };
+    }
+    selectedUtxos = response.data;
   }
 
-  let psbt = singleSendUTXOPsbt(wallet, response.data, networkType, redeemFee, address, amount);
+  let psbt = singleSendUTXOPsbt(wallet, selectedUtxos, networkType, redeemFee, address, amount);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
   const tx = signedPsbt.extractTransaction();
 
