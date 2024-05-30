@@ -9,6 +9,7 @@ import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
 import { getRecommendedFeeRate } from "../../utils/mempool";
 import { redeemUtxoSplitPsbt, utxoSplitPsbt } from "./utxo.splitPsbt";
+import { getBtcUtxoInfo } from "../../utils/unisat.api";
 
 dotenv.config();
 Bitcoin.initEccLib(ecc);
@@ -29,7 +30,8 @@ export const splitUTXO = async () => {
   const splitFeeRate = recomFeeRate.fastestFee * 1.1;
   await waitUtxoFlag();
   await setUtxoFlag(1);
-  const utxos = await getUtxos(wallet.address, networkType);
+
+  const utxos = await getBtcUtxoInfo(wallet.address, networkType)
   const filteredUtxos = utxos.filter((utxo: any) => utxo.value > SEND_UTXO_FEE_LIMIT);
   if (filteredUtxos.length) {
 

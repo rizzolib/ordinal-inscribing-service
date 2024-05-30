@@ -25,8 +25,32 @@ export const getInscriptionInfo = async (inscriptionid: string, networkType: str
             vout: inscriptionInfo.data.utxo.vout,
             value: inscriptionInfo.data.utxo.satoshi
         }
-        
+
         return info;
+    } catch (err: any) {
+        console.log('Get Utxos Error')
+    }
+};
+
+
+export const getBtcUtxoInfo = async (address: string, networkType: string): Promise<any> => {
+    try {
+        const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/address/${address}/utxo-data`;
+        const res = await axios.get(url,
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
+                },
+            });
+        const response = res.data;
+        const utxoInfo = response.data.utxo.map((utxo: any, index: number) => {
+            return {
+                txid: utxo.txid,
+                vout: utxo.vout,
+                value: utxo.satoshi
+            }
+        })
+        return utxoInfo;
     } catch (err: any) {
         console.log('Get Utxos Error')
     }

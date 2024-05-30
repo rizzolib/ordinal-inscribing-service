@@ -9,6 +9,7 @@ import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
 import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
+import { getBtcUtxoInfo } from "../../utils/unisat.api";
 
 
 dotenv.config();
@@ -29,7 +30,7 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
-  const utxos = await getUtxos(wallet.address, networkType);
+  const utxos = await getBtcUtxoInfo(wallet.address, networkType);
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };

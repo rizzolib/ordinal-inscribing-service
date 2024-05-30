@@ -16,7 +16,6 @@ import { singleSendUTXO } from "../utxo/utxo.singleSend";
 initEccLib(ecc as any);
 
 export const tapleafPsbt = async (inscriptionData: any, tapScript: Array<any>, sendUTXOSize: number): Promise<Transaction> => {
-
     const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
     const keyPair = wallet.ecPair;
 
@@ -38,7 +37,6 @@ export const tapleafPsbt = async (inscriptionData: any, tapScript: Array<any>, s
         redeem,
     });
     const address: string = ordinal_p2tr.address ?? "";
-
     let res: any = {};
     if (inscriptionData.reinscriptionId) {
         res = await reinscriptionAndUTXOSend(inscriptionData.reinscriptionId, address, inscriptionData.feeRate, sendUTXOSize)

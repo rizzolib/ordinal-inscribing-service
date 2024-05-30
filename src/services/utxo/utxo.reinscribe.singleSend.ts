@@ -9,7 +9,7 @@ import { WIFWallet } from '../wallet/WIFWallet'
 import { getSendBTCUTXOArray } from "./utxo.management";
 import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
-import { getInscriptionInfo } from "../../utils/unisat.api";
+import { getBtcUtxoInfo, getInscriptionInfo } from "../../utils/unisat.api";
 import { IUtxo } from "../../utils/types";
 
 
@@ -28,12 +28,12 @@ if (networkConfig.walletType == WIF) {
 }
 
 export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address: string, feeRate: number, amount: number) => {
-
+  
   const reinscriptionUTXO: IUtxo = await getInscriptionInfo(reinscriptionId, networkConfig.networkType)
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
-  const utxos = await getUtxos(wallet.address, networkType);
+  const utxos = await getBtcUtxoInfo(wallet.address, networkType)
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };

@@ -98,6 +98,7 @@ InscriptionRouter.post(
                 const metadata: JSON = JSON.parse(req.body.metadata);
                 const delegateIds: Array<string> = req.body.delegateId.split(',');
                 const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
+                
                 await DelegateInscribeController(delegateInscriptionData, res)
             }
         } catch (error: any) {

@@ -250,7 +250,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -259,7 +259,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
       required:
         - receiveAddress
         - contents
@@ -273,7 +273,7 @@ components:
           example: tb1ppx220ln489s5wqu8mqgezm7twwpj0avcvle3vclpdkpqvdg3mwqsvydajn
         feeRate:
           type: number
-          example: 50
+          example: 130
         files:
           type: array
           items:
@@ -284,7 +284,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -293,7 +293,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
       required:
         - receiveAddress
         - feeRate
@@ -309,7 +309,7 @@ components:
           type: array
           items:
             type: string
-            example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+            example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
         feeRate:
           type: number
           example: 130
@@ -318,7 +318,7 @@ components:
           example: 546
         parentId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei3
         metadata:
           type: string
           example: '{"type":"dog","size":"medium"}'
@@ -327,7 +327,7 @@ components:
           example: bitmap.community
         reinscriptionId:
           type: string
-          example: 5dcd700686f1732482b6f3530f03b040bc83ac457550ae8c5d5698534fa69802i0
+          example: f984a855960a203395facb062f173700143f3d19e48b6918bde5dc29f445a3fei2
       required:
         - receiveAddress
         - delegateId
