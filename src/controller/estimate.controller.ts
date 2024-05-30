@@ -5,7 +5,7 @@ import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
 import { DELEGATE_CONTENT, FILE_CONTENT, TEXT_CONTENT } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
-import tapleafPsbt from "../services/psbt/TapLeafPsbt";
+import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
 import { toInteger } from "../utils/math";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import { setUtxoFlag } from "../utils/mutex";

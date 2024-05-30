@@ -10,7 +10,7 @@ import networkConfig from "../config/network.config";
 import { pushBTCpmt } from "../utils/mempool";
 import { setUtxoFlag } from "../utils/mutex";
 import { splitUTXO } from "../services/utxo/utxo.split";
-import tapleafPsbt from "../services/psbt/TapLeafPsbt";
+import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
     "target": "ES6",
     "module": "CommonJS",
     "lib": [
@@ -13,11 +12,12 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "baseUrl": "./",
+    "moduleResolution": "node",
+    "baseUrl": ".",
     "paths": {
-      "alias/*": ["./src/*"]
+      "*": ["src/*", "node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
