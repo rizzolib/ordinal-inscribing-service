@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
 import { DelegateEstimateFeeController, FileEstimateFeeController, TextEstimateFeeController } from "../controller/estimate.controller";
-import { isValidBitcoinAddress } from "utils/validationAddress";
+import { isValidBitcoinAddress } from "../utils/validationAddress";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();

@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { IFile, ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
 import { TextInscribeController, DelegateInscribeController, FileInscribeController, } from "../controller/inscribe.controller";
-import { isValidBitcoinAddress } from "utils/validationAddress";
+import { isValidBitcoinAddress } from "../utils/validationAddress";
 
 // Create a new instance of the Inscription Router
 export const InscriptionRouter = Router();
