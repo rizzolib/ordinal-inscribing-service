@@ -9,6 +9,8 @@ import { getSendBTCUTXOArray } from "./utxo.management";
 import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
 import { getBtcUtxoInfo } from "../../utils/unisat.api";
+import { getUtxos } from "../../utils/mempool";
+import { IUtxo } from "../../utils/types";
 
 
 dotenv.config();
@@ -29,7 +31,11 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
-  const utxos = await getBtcUtxoInfo(wallet.address, networkType);
+  
+  // const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+  let utxos = await getUtxos(wallet.address, networkType)
+  utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
+
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };

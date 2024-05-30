@@ -61,3 +61,4 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
     
     return utxos;
   };
+  

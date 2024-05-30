@@ -33,7 +33,11 @@ export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address:
 
   await waitUtxoFlag();
   await setUtxoFlag(1);
-  const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+
+  // const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+  let utxos = await getUtxos(wallet.address, networkType)
+  utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
+
   let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
@@ -47,7 +51,7 @@ export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address:
   if (!response.isSuccess) {
     return { isSuccess: false, data: 'No enough balance on admin wallet.' };
   }
-
+  console.log(response.data)
   let psbt = ReinscribeAndUtxoSendPsbt(wallet, response.data, networkType, redeemFee, address, amount, reinscriptionUTXO);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
   const tx = signedPsbt.extractTransaction();
