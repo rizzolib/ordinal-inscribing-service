@@ -5,12 +5,12 @@ import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
 import { DELEGATE_CONTENT, FILE_CONTENT, TEXT_CONTENT } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
-import tapleafPsbt from "../services/psbt/TapLeafPsbt";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import networkConfig from "../config/network.config";
 import { pushBTCpmt } from "../utils/mempool";
 import { setUtxoFlag } from "../utils/mutex";
 import { splitUTXO } from "../services/utxo/utxo.split";
+import tapleafPsbt from "../services/psbt/TapLeafPsbt";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {
