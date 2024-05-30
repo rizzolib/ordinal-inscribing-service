@@ -44,9 +44,16 @@ export const textTapScript = async (inscriptionData: ITextInscription) => {
     const parts = inscriptionData.parentId.split('i');
     const parentInscriptionTransactionID = parts[0];
     const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, 'hex').reverse();
+
+    let parentInscriptionBuffer: Buffer;
     const index = parts[1];
-    const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
-    const parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+
+    if(index) {
+        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
+        parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+    } else {
+        parentInscriptionBuffer = inscriptionTransactionBuffer;
+    }
 
     for (let i = 0; i < inscriptionData.contents.length; i++) {
         const contentBuffer = Buffer.from(inscriptionData.contents[i]);
