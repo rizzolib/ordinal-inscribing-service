@@ -9,6 +9,7 @@ import { tapleafPsbt } from "../services/psbt/tapleafpsbt";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import networkConfig from "../config/network.config";
 import { pushBTCpmt } from "../utils/mempool";
+import { setUtxoFlag } from "../utils/mutex";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {
@@ -48,6 +49,7 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
         });
 
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
         return res.status(400).send({ error });
     }
@@ -91,6 +93,7 @@ export const FileInscribeController = async (inscriptionData: IFileInscription, 
         });
 
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
         return res.status(400).send({ error });
     }
@@ -135,8 +138,8 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
         });
 
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
-        console.log('here')
         return res.status(400).send({ error });
     }
 }

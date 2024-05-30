@@ -8,6 +8,7 @@ import { Transaction } from "bitcoinjs-lib";
 import { tapleafPsbt } from "../services/psbt/tapleafpsbt";
 import { toInteger } from "../utils/math";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
+import { setUtxoFlag } from "../utils/mutex";
 
 export const TextEstimateFeeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {
@@ -35,6 +36,7 @@ export const TextEstimateFeeController = async (inscriptionData: ITextInscriptio
             feeBySize: toInteger(totalFee / 20)
         });
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
         return res.status(400).send({ error });
     }
@@ -66,6 +68,7 @@ export const FileEstimateFeeController = async (inscriptionData: IFileInscriptio
             feeBySize: toInteger(totalFee / 20)
         });
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
         return res.status(400).send({ error });
     }
@@ -97,6 +100,7 @@ export const DelegateEstimateFeeController = async (inscriptionData: IDelegateIn
             feeBySize: toInteger(totalFee / 20)
         });
     } catch (error) {
+        await setUtxoFlag(0);
         console.log(error);
         return res.status(400).send({ error });
     }
