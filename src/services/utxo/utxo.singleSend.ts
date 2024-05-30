@@ -47,7 +47,7 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
   for (let i = 0; i < 3; i++) {
     let redeemPsbt: Bitcoin.Psbt = redeemSingleSendUTXOPsbt(wallet, selectedUtxos, networkType, amount, redeemFee);
     redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-    redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+    redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
 
     response = getSendBTCUTXOArray(utxos, amount + redeemFee);
 
@@ -59,7 +59,7 @@ export const singleSendUTXO = async (address: string, feeRate: number, amount: n
 
   let psbt = singleSendUTXOPsbt(wallet, selectedUtxos, networkType, redeemFee, address, amount);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
-  const tx = signedPsbt.extractTransaction();
+  const tx = signedPsbt.extractTransaction(true);
 
   await setUtxoFlag(0);
   

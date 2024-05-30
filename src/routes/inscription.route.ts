@@ -27,7 +27,7 @@ InscriptionRouter.post(
                 }
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
-                const metadata: JSON = JSON.parse(req.body.metadata);
+                const metadata: string = req.body.metadata;
                 const contents: Array<string> = req.body.contents.split(',');
                 const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
 
@@ -72,7 +72,7 @@ InscriptionRouter.post(
                 })
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
-                const metadata: JSON = JSON.parse(req.body.metadata);
+                const metadata: string = req.body.metadata;
                 const fileInscriptionData: IFileInscription = { ...req.body, feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata };
 
                 await FileInscribeController(fileInscriptionData, res)
@@ -105,7 +105,7 @@ InscriptionRouter.post(
                 }
                 const feeRate: number = +req.body.feeRate;
                 const padding: number = +req.body.padding;
-                const metadata: JSON = JSON.parse(req.body.metadata);
+                const metadata: string = req.body.metadata;
                 const delegateIds: Array<string> = req.body.delegateId.split(',');
                 const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
                 

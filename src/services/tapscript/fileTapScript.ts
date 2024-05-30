@@ -78,7 +78,7 @@ export const fileTapScript = async (inscriptionData: IFileInscription) => {
             subScript.push(
                 1,
                 5,
-                cbor.encode(inscriptionData.metadata)
+                cbor.encode(JSON.parse(inscriptionData.metadata))
             )
         }
 

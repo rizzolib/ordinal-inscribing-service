@@ -85,7 +85,7 @@ export const delegateTapScript = async (inscriptionData: IDelegateInscription) =
             subScript.push(
                 1,
                 5,
-                cbor.encode(inscriptionData.metadata)
+                cbor.encode(JSON.parse(inscriptionData.metadata))
             )
         }
 

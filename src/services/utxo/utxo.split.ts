@@ -41,11 +41,11 @@ export const splitUTXO = async () => {
 
     let redeemPsbt: Bitcoin.Psbt = redeemUtxoSplitPsbt(wallet, filteredUtxos, networkType);
     redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-    let redeemFee = redeemPsbt.extractTransaction().virtualSize() * splitFeeRate;
+    let redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * splitFeeRate;
     let psbt = utxoSplitPsbt(wallet, filteredUtxos, networkType, redeemFee);
     let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
 
-    const txHex = signedPsbt.extractTransaction().toHex();
+    const txHex = signedPsbt.extractTransaction(true).toHex();
 
     const txId = await pushBTCpmt(txHex, networkType);
 

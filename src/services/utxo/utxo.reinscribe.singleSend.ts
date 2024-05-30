@@ -48,7 +48,7 @@ export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address:
   for (let i = 0; i < 3; i++) {
     let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(wallet, selectedUtxos, networkType, amount, reinscriptionUTXO, redeemFee);
     redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-    redeemFee = redeemPsbt.extractTransaction().virtualSize() * feeRate;
+    redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
 
     response = getSendBTCUTXOArray(utxos, amount + redeemFee);
 
@@ -60,7 +60,7 @@ export const reinscriptionAndUTXOSend = async (reinscriptionId: string, address:
 
   let psbt = ReinscribeAndUtxoSendPsbt(wallet, selectedUtxos, networkType, redeemFee, address, amount, reinscriptionUTXO);
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
-  const tx = signedPsbt.extractTransaction();
+  const tx = signedPsbt.extractTransaction(true);
 
   await setUtxoFlag(0);
 

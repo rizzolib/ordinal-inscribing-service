@@ -107,7 +107,7 @@ export const inscriptionPsbt = async (contentType: string, inscriptionData: any,
     }
     
     psbt.finalizeAllInputs();
-    const tx = psbt.extractTransaction();
+    const tx = psbt.extractTransaction(true);
 
     return tx;
 }
