@@ -32,26 +32,31 @@ export const getInscriptionInfo = async (inscriptionid: string, networkType: str
     }
 };
 
-
-export const getBtcUtxoInfo = async (address: string, networkType: string): Promise<any> => {
-    try {
-        const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/address/${address}/utxo-data`;
-        const res = await axios.get(url,
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
-                },
-            });
-        const response = res.data;
-        const utxoInfo = response.data.utxo.map((utxo: any, index: number) => {
-            return {
-                txid: utxo.txid,
-                vout: utxo.vout,
-                value: utxo.satoshi
-            }
+// Get BTC UTXO
+export const getBtcUtxoInfo = async (address: string, networkType: string) => {
+    const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/address/${address}/utxo-data`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
+      },
+    };
+    let cursor = 0;
+    const size = 5000;
+    const utxos: IUtxo[] = [];
+    while (1) {
+      const res = await axios.get(url, { ...config, params: { cursor, size } });
+      if (res.data.code === -1) throw "Invalid Address";
+      utxos.push(
+        ...(res.data.data.utxo as any[]).map((utxo) => {
+          return {
+            txid: utxo.txid,
+            value: utxo.satoshi,
+            vout: utxo.vout,
+          };
         })
-        return utxoInfo;
-    } catch (err: any) {
-        console.log('Get Utxos Error')
+      );
+      cursor += res.data.data.utxo.length;
+      if (cursor >= res.data.data.total - res.data.data.totalRunes) break;
     }
-};
+    return utxos;
+  };

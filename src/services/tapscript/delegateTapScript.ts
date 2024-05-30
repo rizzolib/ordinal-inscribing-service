@@ -55,9 +55,6 @@ export const delegateTapScript = async (inscriptionData: IDelegateInscription) =
             opcodes.OP_FALSE,
             opcodes.OP_IF,
             Buffer.from("ord", "utf8"),
-            1,
-            1,
-            Buffer.from('text/plain', "utf8")
         );
 
         subScript.push(
