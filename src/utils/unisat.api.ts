@@ -59,23 +59,5 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
       if (cursor >= res.data.data.total - res.data.data.totalRunes) break;
     }
     
-    const confirmedUtxos: IUtxo[] = [];
-    const unConfirmedUtxos: IUtxo[] = [];
-
-    utxos.forEach((utxoData: any) => {
-      if (utxoData.status.confirmed) {
-        confirmedUtxos.push({
-          txid: utxoData.txid,
-          vout: utxoData.vout,
-          value: utxoData.value,
-        });
-      } else {
-        unConfirmedUtxos.push({
-          txid: utxoData.txid,
-          vout: utxoData.vout,
-          value: utxoData.value,
-        });
-      }
-    });
-    return [...confirmedUtxos, ...unConfirmedUtxos];
+    return utxos;
   };
