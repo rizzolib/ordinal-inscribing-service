@@ -13,9 +13,9 @@ import networkConfig, { SEND_UTXO_FEE_LIMIT, TESTNET } from "../../config/networ
 import wallet from "../wallet/initializeWallet";
 import * as ecc from "tiny-secp256k1";
 import { ECPairFactory, ECPairAPI } from "ecpair";
-import { getUtxos } from "utils/mempool";
-import { getSendBTCUTXOArray } from "services/utxo/utxo.management";
-import { OrdinalsUtxoSendPsbt } from "services/utxo/utxo.ordinalsSendPsbt";
+import { getUtxos } from "../../utils/mempool";
+import { getSendBTCUTXOArray } from "../../services/utxo/utxo.management";
+import { OrdinalsUtxoSendPsbt } from "../../services/utxo/utxo.ordinalsSendPsbt";
 
 initEccLib(ecc as any);
 const ECPair: ECPairAPI = ECPairFactory(ecc);

@@ -17,7 +17,7 @@ const fileTapScript_1 = require("../services/tapscript/fileTapScript");
 const textTapScript_1 = require("../services/tapscript/textTapScript");
 const inscriptionPsbt_1 = require("../services/psbt/inscriptionPsbt");
 const network_config_1 = require("../config/network.config");
-const TapLeafPsbt_1 = __importDefault(require("../services/psbt/TapLeafPsbt"));
+const TapLeafPsbtCreate_1 = __importDefault(require("../services/psbt/TapLeafPsbtCreate"));
 const math_1 = require("../utils/math");
 const delegateTapScript_1 = require("../services/tapscript/delegateTapScript");
 const mutex_1 = require("../utils/mutex");
@@ -32,7 +32,7 @@ const TextEstimateFeeController = (inscriptionData, res) => __awaiter(void 0, vo
         const contentType = network_config_1.TEXT_CONTENT;
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
-        const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData = yield (0, TapLeafPsbtCreate_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
             satsInItem: inscriptionData.padding * inscriptionData.contents.length,
@@ -59,7 +59,7 @@ const FileEstimateFeeController = (inscriptionData, res) => __awaiter(void 0, vo
         const contentType = network_config_1.FILE_CONTENT;
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
-        const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData = yield (0, TapLeafPsbtCreate_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
             satsInItem: inscriptionData.padding * inscriptionData.files.length,
@@ -86,7 +86,7 @@ const DelegateEstimateFeeController = (inscriptionData, res) => __awaiter(void 0
         const contentType = network_config_1.DELEGATE_CONTENT;
         const inscriptionTxData = yield (0, inscriptionPsbt_1.inscriptionPsbt)(contentType, inscriptionData, tapScript, sentUtxo);
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
-        const tapleafTxData = yield (0, TapLeafPsbt_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
+        const tapleafTxData = yield (0, TapLeafPsbtCreate_1.default)(contentType, inscriptionData, tapScript, sendUTXOSize);
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
         return res.status(200).send({
             satsInItem: inscriptionData.padding * inscriptionData.delegateIds.length,

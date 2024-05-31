@@ -43,9 +43,15 @@ const textTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, fun
     const parts = inscriptionData.parentId.split('i');
     const parentInscriptionTransactionID = parts[0];
     const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, 'hex').reverse();
+    let parentInscriptionBuffer;
     const index = parts[1];
-    const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
-    const parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+    if (parseInt(index, 10) != 0) {
+        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
+        parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+    }
+    else {
+        parentInscriptionBuffer = inscriptionTransactionBuffer;
+    }
     for (let i = 0; i < inscriptionData.contents.length; i++) {
         const contentBuffer = Buffer.from(inscriptionData.contents[i]);
         const contentBufferArray = (0, buffer_1.splitBuffer)(contentBuffer, 450);
@@ -54,7 +60,7 @@ const textTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, fun
         subScript.push(1, 2, pointerBuffer[i]);
         subScript.push(1, 3, parentInscriptionBuffer);
         if (inscriptionData.metadata) {
-            subScript.push(1, 5, cbor_1.default.encode(inscriptionData.metadata));
+            subScript.push(1, 5, cbor_1.default.encode(JSON.parse(inscriptionData.metadata)));
         }
         if (inscriptionData.metaprotocol) {
             subScript.push(1, 7, Buffer.from(inscriptionData.metaprotocol, "utf8"));

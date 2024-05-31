@@ -27,9 +27,8 @@ exports.singleSendUTXOPsbt = exports.redeemSingleSendUTXOPsbt = void 0;
 const Bitcoin = __importStar(require("bitcoinjs-lib"));
 const ecc = __importStar(require("tiny-secp256k1"));
 const network_config_1 = require("../../config/network.config");
-const network_config_2 = require("../../config/network.config");
 Bitcoin.initEccLib(ecc);
-const redeemSingleSendUTXOPsbt = (wallet, inputUtxoArray, networkType, amount) => {
+const redeemSingleSendUTXOPsbt = (wallet, inputUtxoArray, networkType, amount, fee) => {
     const psbt = new Bitcoin.Psbt({
         network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
@@ -51,7 +50,7 @@ const redeemSingleSendUTXOPsbt = (wallet, inputUtxoArray, networkType, amount) =
     });
     psbt.addOutput({
         address: wallet.address,
-        value: inputUtxoSumValue - network_config_2.SEND_UTXO_FEE_LIMIT - amount,
+        value: inputUtxoSumValue - fee - amount,
     });
     return psbt;
 };

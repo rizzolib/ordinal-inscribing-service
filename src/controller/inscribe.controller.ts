@@ -11,7 +11,7 @@ import { pushBTCpmt } from "../utils/mempool";
 import { setUtxoFlag } from "../utils/mutex";
 import { splitUTXO } from "../services/utxo/utxo.split";
 import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
-import { sendOrdinalBTCPsbt } from "services/psbt/sendOrdinalPsbt";
+import { sendOrdinalBTCPsbt } from "../services/psbt/sendOrdinalPsbt";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {

@@ -47,7 +47,6 @@ const mutex_1 = require("../../utils/mutex");
 const network_config_2 = require("../../config/network.config");
 const mempool_2 = require("../../utils/mempool");
 const utxo_splitPsbt_1 = require("./utxo.splitPsbt");
-const unisat_api_1 = require("../../utils/unisat.api");
 dotenv_1.default.config();
 Bitcoin.initEccLib(ecc);
 const networkType = network_config_1.default.networkType;
@@ -65,15 +64,17 @@ const splitUTXO = () => __awaiter(void 0, void 0, void 0, function* () {
     const splitFeeRate = recomFeeRate.fastestFee * 1.1;
     yield (0, mutex_1.waitUtxoFlag)();
     yield (0, mutex_1.setUtxoFlag)(1);
-    const utxos = yield (0, unisat_api_1.getBtcUtxoInfo)(wallet.address, networkType);
+    // const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+    let utxos = yield (0, mempool_1.getUtxos)(wallet.address, networkType);
+    utxos = utxos.filter((utxo, index) => utxo.value > 5000);
     const filteredUtxos = utxos.filter((utxo) => utxo.value > network_config_1.SEND_UTXO_FEE_LIMIT);
     if (filteredUtxos.length) {
         let redeemPsbt = (0, utxo_splitPsbt_1.redeemUtxoSplitPsbt)(wallet, filteredUtxos, networkType);
         redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
-        let redeemFee = redeemPsbt.extractTransaction().virtualSize() * splitFeeRate;
+        let redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * splitFeeRate;
         let psbt = (0, utxo_splitPsbt_1.utxoSplitPsbt)(wallet, filteredUtxos, networkType, redeemFee);
         let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
-        const txHex = signedPsbt.extractTransaction().toHex();
+        const txHex = signedPsbt.extractTransaction(true).toHex();
         const txId = yield (0, mempool_1.pushBTCpmt)(txHex, networkType);
         yield (0, mutex_1.setUtxoFlag)(0);
         return { isSuccess: true, data: txId };

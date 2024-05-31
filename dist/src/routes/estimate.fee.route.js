@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EstimateFeeRouter = void 0;
 const express_1 = require("express");
 const estimate_controller_1 = require("../controller/estimate.controller");
+const validationAddress_1 = require("../utils/validationAddress");
 // Create a new instance of the Estimation Fee Router
 exports.EstimateFeeRouter = (0, express_1.Router)();
 // @route    POST api/estimate/text
@@ -36,9 +37,12 @@ exports.EstimateFeeRouter.post("/text", (req, res) => __awaiter(void 0, void 0, 
             res.status(400).send({ error: { type: 0, data: error } });
         }
         else {
+            if (!(0, validationAddress_1.isValidBitcoinAddress)(req.body.receiveAddress)) {
+                res.status(400).send({ type: 2, data: 'This address is not valid address.' });
+            }
             const feeRate = +req.body.feeRate;
             const padding = +req.body.padding;
-            const metadata = JSON.parse(req.body.metadata);
+            const metadata = req.body.metadata;
             const contents = req.body.contents.split(',');
             const textInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, metadata: metadata, contents: contents });
             yield (0, estimate_controller_1.TextEstimateFeeController)(textInscriptionData, res);
@@ -72,6 +76,9 @@ exports.EstimateFeeRouter.post("/file", (req, res) => __awaiter(void 0, void 0, 
             res.status(400).send({ error: { type: 0, data: error } });
         }
         else {
+            if (!(0, validationAddress_1.isValidBitcoinAddress)(req.body.receiveAddress)) {
+                res.status(400).send({ type: 2, data: 'This address is not valid address.' });
+            }
             let fileData = (_c = req.files) === null || _c === void 0 ? void 0 : _c.files;
             if (!Array.isArray(fileData)) {
                 fileData = [fileData];
@@ -84,7 +91,7 @@ exports.EstimateFeeRouter.post("/file", (req, res) => __awaiter(void 0, void 0, 
             });
             const feeRate = +req.body.feeRate;
             const padding = +req.body.padding;
-            const metadata = JSON.parse(req.body.metadata);
+            const metadata = req.body.metadata;
             const fileInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata });
             yield (0, estimate_controller_1.FileEstimateFeeController)(fileInscriptionData, res);
         }
@@ -116,9 +123,12 @@ exports.EstimateFeeRouter.post("/delegate", (req, res) => __awaiter(void 0, void
             res.status(400).send({ error: { type: 0, data: error } });
         }
         else {
+            if (!(0, validationAddress_1.isValidBitcoinAddress)(req.body.receiveAddress)) {
+                res.status(400).send({ type: 2, data: 'This address is not valid address.' });
+            }
             const feeRate = +req.body.feeRate;
             const padding = +req.body.padding;
-            const metadata = JSON.parse(req.body.metadata);
+            const metadata = req.body.metadata;
             const delegateIds = req.body.delegateId.split(',');
             const delegateInscriptionData = Object.assign(Object.assign({}, req.body), { feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds });
             yield (0, estimate_controller_1.DelegateEstimateFeeController)(delegateInscriptionData, res);

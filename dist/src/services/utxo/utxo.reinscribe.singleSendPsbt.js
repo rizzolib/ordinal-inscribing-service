@@ -27,9 +27,8 @@ exports.ReinscribeAndUtxoSendPsbt = exports.redeemReinscribeAndUtxoSendPsbt = vo
 const Bitcoin = __importStar(require("bitcoinjs-lib"));
 const ecc = __importStar(require("tiny-secp256k1"));
 const network_config_1 = require("../../config/network.config");
-const network_config_2 = require("../../config/network.config");
 Bitcoin.initEccLib(ecc);
-const redeemReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, amount, reinscriptionUTXO) => {
+const redeemReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, amount, reinscriptionUTXO, fee) => {
     const psbt = new Bitcoin.Psbt({
         network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
@@ -60,7 +59,7 @@ const redeemReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, am
     });
     psbt.addOutput({
         address: wallet.address,
-        value: inputUtxoSumValue + reinscriptionUTXO.value - network_config_2.SEND_UTXO_FEE_LIMIT - amount,
+        value: inputUtxoSumValue + reinscriptionUTXO.value - fee - amount,
     });
     return psbt;
 };

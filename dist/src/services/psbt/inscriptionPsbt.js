@@ -128,7 +128,7 @@ const inscriptionPsbt = (contentType, inscriptionData, tapScript, sentUtxo) => _
         psbt.signInput(0, keyPair);
     }
     psbt.finalizeAllInputs();
-    const tx = psbt.extractTransaction();
+    const tx = psbt.extractTransaction(true);
     return tx;
 });
 exports.inscriptionPsbt = inscriptionPsbt;

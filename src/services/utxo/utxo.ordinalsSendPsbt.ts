@@ -1,10 +1,10 @@
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import networkConfig, { TESTNET } from "../../config/network.config";
-import { ISendingOrdinalData } from "utils/types";
-import { getInscriptionInfo } from "utils/unisat.api";
+import { ISendingOrdinalData } from "../../utils/types";
+import { getInscriptionInfo } from "../../utils/unisat.api";
 import wallet from "../wallet/initializeWallet";
-import { toXOnly } from "utils/buffer";
+import { toXOnly } from "../../utils/buffer";
 
 Bitcoin.initEccLib(ecc);
 
