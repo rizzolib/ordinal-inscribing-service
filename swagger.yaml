@@ -1,8 +1,8 @@
 openapi: 3.0.1
 
 info:
-  title: Oxnome
-  description: "Oxnome Inscription Service"
+  title: Bitmap
+  description: "Bitmap Inscription Service"
   version: 0.0.1
 
 servers:
