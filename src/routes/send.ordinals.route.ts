@@ -10,7 +10,7 @@ export const SendOrdinalRouter = Router();
 // @desc     Inscribe Text Inscription
 // @access   Private
 SendOrdinalRouter.post(
-    "/getSendingOrdinalPsbt",
+    "/getSendingOrdinalBtcPsbt",
     async (req: Request, res: Response) => {
         try {
             if (!(req.body.receiveAddress && (req.body.parentId || req.body.reinscriptionId) && req.body.feeRate && req.body.btcAmount && req.body.publicKey)) {
@@ -47,7 +47,6 @@ SendOrdinalRouter.post(
                     btcAmount: btcAmount,
                     publicKey: publicKey
                 }
-
                 await SendingOrdinalController(sendOrdinalRequestData, res)
             }
         } catch (error: any) {

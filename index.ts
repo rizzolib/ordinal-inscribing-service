@@ -9,7 +9,7 @@ import { InscriptionRouter } from "./src/routes/inscription.route";
 import { StatusNetworkRoute } from "./src/routes/status.network.route";
 import { WalletManageRoute } from "./src/routes/wallet.management.route";
 import { EstimateFeeRouter } from "./src/routes/estimate.fee.route";
-
+import { SendOrdinalRouter } from "./src/routes/send.ordinals.route"; 
 import http from "http";
 const { Mutex } = require('async-mutex');
 
@@ -46,6 +46,7 @@ app.use('/api/inscribe', InscriptionRouter)
 app.use('/api/estimate', EstimateFeeRouter)
 app.use('/api/status', StatusNetworkRoute)
 app.use('/api/wallet', WalletManageRoute)
+app.use('/api/sendOrdinal', SendOrdinalRouter)
 
 app.use(
   "/api-docs",

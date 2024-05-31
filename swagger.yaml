@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 servers:
-  - url: "https://file-inscription-backend.onrender.com/api"
   - url: "http://localhost:8081/api"
+  - url: "https://file-inscription-backend.onrender.com/api"
 
 tags:
   - name: Status
@@ -157,6 +157,29 @@ paths:
             application/json:
               schema:
                 type: string
+  /sendOrdinal/getSendingOrdinalBtcPsbt:
+    post:
+      summary: Get new Sending Ordinals Psbt
+      tags:
+        - Inscribe
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/SendingOrdialBtcPsbt"
+      responses:
+        "200":
+          description: Get new Sending Ordinals Psbt Success!
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Get new Sending Ordinals Psbt Failed!
+          content:
+            application/json:
+              schema:
+                type: string
         
   
   /estimate/text:
@@ -205,7 +228,6 @@ paths:
             application/json:
               schema:
                 type: string
-
   /estimate/delegate:
     post:
       summary: Estimate Delegate Inscription
@@ -229,6 +251,7 @@ paths:
             application/json:
               schema:
                 type: string
+
 components:
   schemas:
     TextInscription:
@@ -333,3 +356,29 @@ components:
         - delegateId
         - feeRate
         - padding
+    SendingOrdialBtcPsbt:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          example: tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3
+        feeRate:
+          type: number
+          example: 130
+        parentId:
+          type: string
+          example: b01e86b038b50152ef9f881a5a00e789c6f662cb8918867cb3c9016683e235bai0
+        reinscriptionId:
+          type: string
+          example: 37f99b351cc636a98b476e3f333695cc5442064141cda10a61f5729600c52893i0
+        btcAmount:
+          type: number
+          example: 100000
+        publicKey:
+          type: string
+          example: 03cd6f1283151e05d2c0a2ad6faa38c43e807d7039a68356df950c489957e4c754
+      required:
+        - receiveAddress
+        - feeRate
+        - btcAmount
+        - publicKey
