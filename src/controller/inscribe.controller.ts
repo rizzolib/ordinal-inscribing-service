@@ -159,7 +159,7 @@ export const SendingOrdinalController = async (sendingOrdinalData: ISendingOrdin
     try {
         const response = await sendOrdinalBTCPsbt(sendingOrdinalData);
         
-        return res.status(200).send({psbt: response})
+        return res.status(200).send({psbt: response.toHex()})
     } catch (error) {
         return res.status(400).send({ error });
     }

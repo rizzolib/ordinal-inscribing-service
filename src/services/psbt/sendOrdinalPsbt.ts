@@ -56,6 +56,5 @@ export const sendOrdinalBTCPsbt = async (sendingOrdinalData: ISendingOrdinalData
     }
 
     let psbt = await OrdinalsUtxoSendPsbt(selectedUtxos, networkConfig.networkType, sendingOrdinalData, redeemFee);
-    
     return psbt;
 }
