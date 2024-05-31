@@ -1,5 +1,5 @@
-import { ITextInscription, IFileInscription, IDelegateInscription } from "../utils/types";
-import { Response } from "express";
+import { ITextInscription, IFileInscription, IDelegateInscription, ISendingOrdinalData } from "../utils/types";
+import e, { Response } from "express";
 import { fileTapScript } from "../services/tapscript/fileTapScript";
 import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
@@ -11,6 +11,7 @@ import { pushBTCpmt } from "../utils/mempool";
 import { setUtxoFlag } from "../utils/mutex";
 import { splitUTXO } from "../services/utxo/utxo.split";
 import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
+import { sendOrdinalBTCPsbt } from "services/psbt/sendOrdinalPsbt";
 
 export const TextInscribeController = async (inscriptionData: ITextInscription, res: Response) => {
     try {
@@ -47,7 +48,7 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
 
         const response = await splitUTXO()
         console.log(response)
-        
+
         return res.status(200).send({
             tx: realInscriptiontxId
         });
@@ -94,7 +95,7 @@ export const FileInscribeController = async (inscriptionData: IFileInscription, 
 
         const response = await splitUTXO()
         console.log(response)
-        
+
         return res.status(200).send({
             tx: realInscriptiontxId
         });
@@ -150,6 +151,16 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
     } catch (error) {
         await setUtxoFlag(0);
         console.log(error);
+        return res.status(400).send({ error });
+    }
+}
+
+export const SendingOrdinalController = async (sendingOrdinalData: ISendingOrdinalData, res: Response) => {
+    try {
+        const response = await sendOrdinalBTCPsbt(sendingOrdinalData);
+        
+        return res.status(200).send({psbt: response})
+    } catch (error) {
         return res.status(400).send({ error });
     }
 }

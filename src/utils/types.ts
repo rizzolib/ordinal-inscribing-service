@@ -42,3 +42,12 @@ export interface IDelegateInscription {
     metaprotocol: string,
     reinscriptionId: string,
 }
+
+export interface ISendingOrdinalData {
+    receiveAddress: string,
+    parentId: string,
+    reinscriptionId: string,
+    feeRate: number,
+    btcAmount: number,
+    publicKey: string
+}

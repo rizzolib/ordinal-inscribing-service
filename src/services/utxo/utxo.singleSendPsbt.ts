@@ -14,7 +14,9 @@ export const redeemSingleSendUTXOPsbt = (wallet: any, inputUtxoArray: Array<IUtx
     const psbt = new Bitcoin.Psbt({
         network: networkType == TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
     });
+
     let inputUtxoSumValue: number = inputUtxoArray.reduce((accumulator:number, currentValue: IUtxo) => accumulator + currentValue.value, 0);
+    
     inputUtxoArray.forEach(utxo => {
         psbt.addInput({
             hash: utxo.txid,
