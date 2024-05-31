@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 servers:
-  - url: "http://localhost:8081/api"
   - url: "https://file-inscription-backend.onrender.com/api"
+  - url: "http://localhost:8081/api"
 
 tags:
   - name: Status
