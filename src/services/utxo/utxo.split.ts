@@ -32,9 +32,9 @@ export const splitUTXO = async () => {
   await waitUtxoFlag();
   await setUtxoFlag(1);
 
-  // const utxos = await getBtcUtxoInfo(wallet.address, networkType)
-  let utxos = await getUtxos(wallet.address, networkType)
-  utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
+  const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+  // let utxos = await getUtxos(wallet.address, networkType)
+  // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
   const filteredUtxos = utxos.filter((utxo: any) => utxo.value > SEND_UTXO_FEE_LIMIT);
   if (filteredUtxos.length) {

@@ -16,6 +16,7 @@ import { ECPairFactory, ECPairAPI } from "ecpair";
 import { getUtxos } from "../../utils/mempool";
 import { getSendBTCUTXOArray } from "../../services/utxo/utxo.management";
 import { OrdinalsUtxoSendPsbt, RedeemOrdinalsUtxoSendPsbt } from "../../services/utxo/utxo.ordinalsSendPsbt";
+import { getBtcUtxoInfo } from "../../utils/unisat.api";
 
 initEccLib(ecc as any);
 const ECPair: ECPairAPI = ECPairFactory(ecc);
@@ -25,9 +26,9 @@ export const sendOrdinalBTCPsbt = async (sendingOrdinalData: ISendingOrdinalData
     const network = networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
     const keyPair = wallet.ecPair;
 
-    // const utxos = await getBtcUtxoInfo(wallet.address, networkType)
-    let utxos = await getUtxos(sendingOrdinalData.receiveAddress, networkConfig.networkType)
-    utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
+    const utxos = await getBtcUtxoInfo(wallet.address, networkConfig.networkType)
+    // let utxos = await getUtxos(sendingOrdinalData.receiveAddress, networkConfig.networkType)
+    // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
     let response = getSendBTCUTXOArray(utxos, sendingOrdinalData.btcAmount + SEND_UTXO_FEE_LIMIT);
 

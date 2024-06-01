@@ -2,6 +2,8 @@ import { Request, Response, Router } from "express";
 import { ISendingOrdinalData } from "../utils/types";
 import { SendingOrdinalController } from "../controller/inscribe.controller";
 import { isValidBitcoinAddress } from "../utils/validationAddress";
+import { getBtcUtxoInfo } from "../utils/unisat.api";
+import { TESTNET } from "../config/network.config";
 
 // Create a new instance of the Inscription Router
 export const SendOrdinalRouter = Router();
@@ -55,3 +57,17 @@ SendOrdinalRouter.post(
         }
     }
 );
+
+SendOrdinalRouter.get(
+    "/test",
+    async (req: Request, res: Response) => {
+        try {
+            const data = await getBtcUtxoInfo('tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3', TESTNET);
+            
+            res.status(200).send({
+                data: data
+            })
+        } catch (error: any) {
+            console.log({ error })
+        }
+    })
