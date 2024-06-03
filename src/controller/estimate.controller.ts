@@ -25,6 +25,8 @@ export const TextEstimateFeeController = async (inscriptionData: ITextInscriptio
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
 
+        console.log(sendUTXOSize)
+
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
@@ -56,6 +58,8 @@ export const FileEstimateFeeController = async (inscriptionData: IFileInscriptio
         const inscriptionTxData: Transaction = await inscriptionPsbt(contentType, inscriptionData, tapScript, sentUtxo);
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
+
+        console.log(sendUTXOSize)
 
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
@@ -89,6 +93,8 @@ export const DelegateEstimateFeeController = async (inscriptionData: IDelegateIn
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
 
+        console.log(sendUTXOSize)
+        
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const totalFee = tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;

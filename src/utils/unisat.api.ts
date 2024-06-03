@@ -13,6 +13,9 @@ dotenv.config();
 export const getInscriptionInfo = async (inscriptionid: string, networkType: string): Promise<any> => {
   try {
     const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
+
+    console.log(url)
+
     const res = await axios.get(url,
       {
         headers: {
@@ -35,6 +38,9 @@ export const getInscriptionInfo = async (inscriptionid: string, networkType: str
 // Get BTC UTXO
 export const getBtcUtxoInfo = async (address: string, networkType: string) => {
   const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/address/${address}/utxo-data`;
+
+  console.log(url)
+
   const config = {
     headers: {
       Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,

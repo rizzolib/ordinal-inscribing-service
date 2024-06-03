@@ -5,6 +5,7 @@ dotenv.config();
 export const WIF = 'WIF';
 export const SEED = 'SEED';
 export const TESTNET = 'testnet';
+export const MAINNET = 'mainnet';
 
 export const MAXIMUMFEERATE = 100000;
 export const SEND_UTXO_FEE_LIMIT = 100000;

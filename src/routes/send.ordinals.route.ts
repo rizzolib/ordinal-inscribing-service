@@ -27,29 +27,30 @@ SendOrdinalRouter.post(
             } else {
                 if (!isValidBitcoinAddress(req.body.receiveAddress)) {
                     res.status(400).send({ type: 2, data: 'This address is not valid address.' })
+                } else {
+                    const feeRate: number = +req.body.feeRate;
+                    const btcAmount: number = +req.body.btcAmount;
+                    const publicKey: string = req.body.publicKey;
+                    let parentId: string = '';
+                    let reinscriptionId: string = '';
+    
+                    if (req.body.parentId) {
+                        parentId = req.body.parentId;
+                    }
+                    if (req.body.reinscriptionId) {
+                        reinscriptionId = req.body.reinscriptionId;
+                    }
+    
+                    const sendOrdinalRequestData: ISendingOrdinalData = {
+                        receiveAddress: req.body.receiveAddress,
+                        parentId: parentId,
+                        reinscriptionId: reinscriptionId,
+                        feeRate: feeRate,
+                        btcAmount: btcAmount,
+                        publicKey: publicKey
+                    }
+                    await SendingOrdinalController(sendOrdinalRequestData, res)
                 }
-                const feeRate: number = +req.body.feeRate;
-                const btcAmount: number = +req.body.btcAmount;
-                const publicKey: string = req.body.publicKey;
-                let parentId: string = '';
-                let reinscriptionId: string = '';
-
-                if (req.body.parentId) {
-                    parentId = req.body.parentId;
-                }
-                if (req.body.reinscriptionId) {
-                    reinscriptionId = req.body.reinscriptionId;
-                }
-
-                const sendOrdinalRequestData: ISendingOrdinalData = {
-                    receiveAddress: req.body.receiveAddress,
-                    parentId: parentId,
-                    reinscriptionId: reinscriptionId,
-                    feeRate: feeRate,
-                    btcAmount: btcAmount,
-                    publicKey: publicKey
-                }
-                await SendingOrdinalController(sendOrdinalRequestData, res)
             }
         } catch (error: any) {
             console.error(error);

@@ -24,14 +24,15 @@ InscriptionRouter.post(
             } else {
                 if (!isValidBitcoinAddress(req.body.receiveAddress)) {
                     res.status(400).send({ type: 2, data: 'This address is not valid address.' })
-                }
-                const feeRate: number = +req.body.feeRate;
-                const padding: number = +req.body.padding;
-                const metadata: string = req.body.metadata;
-                const contents: Array<string> = req.body.contents.split(',');
-                const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
+                } else {
+                    const feeRate: number = +req.body.feeRate;
+                    const padding: number = +req.body.padding;
+                    const metadata: string = req.body.metadata;
+                    const contents: Array<string> = req.body.contents.split(',');
+                    const textInscriptionData: ITextInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, contents: contents }
 
-                await TextInscribeController(textInscriptionData, res)
+                    await TextInscribeController(textInscriptionData, res)
+                }
             }
         } catch (error: any) {
             console.error(error);
@@ -58,24 +59,25 @@ InscriptionRouter.post(
             } else {
                 if (!isValidBitcoinAddress(req.body.receiveAddress)) {
                     res.status(400).send({ type: 2, data: 'This address is not valid address.' })
-                }
-                let fileData = req.files?.files as any;
-                if (!Array.isArray(fileData)) {
-                    fileData = [fileData];
-                }
-
-                const fileArray: Array<IFile> = fileData.map((item: any) => {
-                    return {
-                        mimetype: item.mimetype,
-                        data: item.data
+                } else {
+                    let fileData = req.files?.files as any;
+                    if (!Array.isArray(fileData)) {
+                        fileData = [fileData];
                     }
-                })
-                const feeRate: number = +req.body.feeRate;
-                const padding: number = +req.body.padding;
-                const metadata: string = req.body.metadata;
-                const fileInscriptionData: IFileInscription = { ...req.body, feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata };
 
-                await FileInscribeController(fileInscriptionData, res)
+                    const fileArray: Array<IFile> = fileData.map((item: any) => {
+                        return {
+                            mimetype: item.mimetype,
+                            data: item.data
+                        }
+                    })
+                    const feeRate: number = +req.body.feeRate;
+                    const padding: number = +req.body.padding;
+                    const metadata: string = req.body.metadata;
+                    const fileInscriptionData: IFileInscription = { ...req.body, feeRate: feeRate, padding: padding, files: fileArray, metadata: metadata };
+
+                    await FileInscribeController(fileInscriptionData, res)
+                }
             }
         } catch (error: any) {
             console.error(error);
@@ -102,14 +104,15 @@ InscriptionRouter.post(
             } else {
                 if (!isValidBitcoinAddress(req.body.receiveAddress)) {
                     res.status(400).send({ type: 2, data: 'This address is not valid address.' })
+                } else {
+                    const feeRate: number = +req.body.feeRate;
+                    const padding: number = +req.body.padding;
+                    const metadata: string = req.body.metadata;
+                    const delegateIds: Array<string> = req.body.delegateId.split(',');
+                    const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
+
+                    await DelegateInscribeController(delegateInscriptionData, res)
                 }
-                const feeRate: number = +req.body.feeRate;
-                const padding: number = +req.body.padding;
-                const metadata: string = req.body.metadata;
-                const delegateIds: Array<string> = req.body.delegateId.split(',');
-                const delegateInscriptionData: IDelegateInscription = { ...req.body, feeRate: feeRate, padding: padding, metadata: metadata, delegateIds: delegateIds }
-                
-                await DelegateInscribeController(delegateInscriptionData, res)
             }
         } catch (error: any) {
             console.error(error);

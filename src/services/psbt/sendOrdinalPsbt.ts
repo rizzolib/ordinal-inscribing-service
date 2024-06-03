@@ -31,7 +31,7 @@ export const sendOrdinalBTCPsbt = async (sendingOrdinalData: ISendingOrdinalData
     // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
     let response = getSendBTCUTXOArray(utxos, sendingOrdinalData.btcAmount + SEND_UTXO_FEE_LIMIT);
-
+    
     if (!response.isSuccess) {
         return { isSuccess: false, data: 'No enough balance on admin wallet.' };
     }
@@ -57,5 +57,5 @@ export const sendOrdinalBTCPsbt = async (sendingOrdinalData: ISendingOrdinalData
     }
 
     let psbt = await OrdinalsUtxoSendPsbt(selectedUtxos, networkConfig.networkType, sendingOrdinalData, redeemFee);
-    return psbt;
+    return { isSuccess: true, data: psbt };
 }

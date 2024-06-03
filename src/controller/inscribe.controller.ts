@@ -28,6 +28,8 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.contents.length * inscriptionData.padding;
 
+        console.log(sendUTXOSize)
+
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const txid = await pushBTCpmt(tapleafTxData.toHex(), networkConfig.networkType);
@@ -47,6 +49,7 @@ export const TextInscribeController = async (inscriptionData: ITextInscription, 
         console.log('Successfully Inscribed Tx Id => ', realInscriptiontxId)
 
         const response = await splitUTXO()
+
         console.log(response)
 
         return res.status(200).send({
@@ -74,6 +77,8 @@ export const FileInscribeController = async (inscriptionData: IFileInscription, 
         const inscriptionTxData: Transaction = await inscriptionPsbt(contentType, inscriptionData, tapScript, sentUtxo);
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.files.length * inscriptionData.padding;
+
+        console.log(sendUTXOSize)
 
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
@@ -123,6 +128,8 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
 
         const sendUTXOSize = inscriptionTxData.virtualSize() * inscriptionData.feeRate + inscriptionData.delegateIds.length * inscriptionData.padding;
 
+        console.log(sendUTXOSize)
+
         const tapleafTxData: Transaction = await tapleafPsbt(contentType, inscriptionData, tapScript, sendUTXOSize);
 
         const txid = await pushBTCpmt(tapleafTxData.toHex(), networkConfig.networkType);
@@ -158,8 +165,11 @@ export const DelegateInscribeController = async (inscriptionData: IDelegateInscr
 export const SendingOrdinalController = async (sendingOrdinalData: ISendingOrdinalData, res: Response) => {
     try {
         const response = await sendOrdinalBTCPsbt(sendingOrdinalData);
-        
-        return res.status(200).send({psbt: response.toHex()})
+        if (!response.isSuccess) {
+            return res.status(400).send({ data: response.data })
+        } else {
+            return res.status(200).send({ data: response.toHex() })
+        }
     } catch (error) {
         return res.status(400).send({ error });
     }
