@@ -168,7 +168,7 @@ export const SendingOrdinalController = async (sendingOrdinalData: ISendingOrdin
         if (!response.isSuccess) {
             return res.status(400).send({ data: response.data })
         } else {
-            return res.status(200).send({ data: response.toHex() })
+            return res.status(200).send({ data: response.data.toHex() })
         }
     } catch (error) {
         return res.status(400).send({ error });
