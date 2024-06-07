@@ -1,10 +1,12 @@
-import networkConfig, { SEND_UTXO_FEE_LIMIT } from "../../config/network.config";
+import networkConfig, {
+  SEND_UTXO_FEE_LIMIT,
+} from "../../config/network.config";
 import { getUtxos, pushBTCpmt } from "../../utils/mempool";
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import dotenv from "dotenv";
 import { SeedWallet } from "../wallet/SeedWallet";
-import { WIFWallet } from '../wallet/WIFWallet'
+import { WIFWallet } from "../wallet/WIFWallet";
 import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
 import { getRecommendedFeeRate } from "../../utils/mempool";
@@ -32,18 +34,24 @@ export const splitUTXO = async () => {
   await waitUtxoFlag();
   await setUtxoFlag(1);
 
-  const utxos = await getBtcUtxoInfo(wallet.address, networkType)
+  const utxos = await getBtcUtxoInfo(wallet.address, networkType);
   // let utxos = await getUtxos(wallet.address, networkType)
   // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
-  const filteredUtxos = utxos.filter((utxo: any) => utxo.value > SEND_UTXO_FEE_LIMIT);
+  const filteredUtxos = utxos.filter(
+    (utxo: any) => utxo.value > SEND_UTXO_FEE_LIMIT
+  );
   if (filteredUtxos.length) {
-
-    let redeemPsbt: Bitcoin.Psbt = redeemUtxoSplitPsbt(wallet, filteredUtxos, networkType);
-    redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair)
-    let redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * splitFeeRate;
+    let redeemPsbt: Bitcoin.Psbt = redeemUtxoSplitPsbt(
+      wallet,
+      filteredUtxos,
+      networkType
+    );
+    redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
+    let redeemFee =
+      redeemPsbt.extractTransaction(true).virtualSize() * splitFeeRate;
     let psbt = utxoSplitPsbt(wallet, filteredUtxos, networkType, redeemFee);
-    let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair)
+    let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
 
     const txHex = signedPsbt.extractTransaction(true).toHex();
 
@@ -54,6 +62,6 @@ export const splitUTXO = async () => {
     return { isSuccess: true, data: txId };
   } else {
     await setUtxoFlag(0);
-    return { isSuccess: false, data: 'Wallet UTXO split is failed!' };
+    return { isSuccess: false, data: "Wallet UTXO split is failed!" };
   }
-}
+};

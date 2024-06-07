@@ -1,3 +1,3 @@
 export const toInteger = (x: number) => {
-    return Math.floor(x);
-}
+  return Math.floor(x);
+};

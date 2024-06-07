@@ -8,9 +8,14 @@ interface IUtxo {
   value: number;
 }
 
-export const getUtxos = async (address: string, networkType: string): Promise<any> => {
+export const getUtxos = async (
+  address: string,
+  networkType: string
+): Promise<any> => {
   try {
-    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/address/${address}/utxo`;
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }api/address/${address}/utxo`;
     const res = await axios.get(url);
     const confirmedUtxos: IUtxo[] = [];
     const unConfirmedUtxos: IUtxo[] = [];
@@ -32,17 +37,17 @@ export const getUtxos = async (address: string, networkType: string): Promise<an
     });
     return [...confirmedUtxos, ...unConfirmedUtxos];
   } catch (err: any) {
-    console.log('Get Utxos Error')
+    console.log("Get Utxos Error");
   }
 };
 
 export const pushBTCpmt = async (rawtx: any, networkType: string) => {
   const txid = await postData(
-    `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/tx`,
+    `https://mempool.space/${networkType == TESTNET ? "testnet/" : ""}api/tx`,
     rawtx
   );
   return txid;
-}
+};
 
 const postData = async (
   url: string,
@@ -59,61 +64,65 @@ const postData = async (
     });
     return res.data as string;
   } catch (err: any) {
-    console.log('Push Transaction Error')
-    console.log(err.response.data)
+    console.log("Push Transaction Error");
+    console.log(err.response.data);
   }
-}
+};
 
 export const getPrice = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/prices`;
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }api/v1/prices`;
     const res: any = await axios.get(url);
     return res.data;
   } catch (error: any) {
-    console.log("Get Price Error!")
+    console.log("Get Price Error!");
   }
-}
+};
 
 export const getBlockHeight = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}/api/blocks/tip/height`;
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }/api/blocks/tip/height`;
     const res = await axios.get(url);
     return res.data;
   } catch (error: any) {
-    console.log("Get Price Error!")
+    console.log("Get Price Error!");
   }
-}
+};
 
 export const getFeeRate = async (networkType: string, response: Response) => {
   try {
     const height = await getBlockHeight(networkType);
-    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/blocks/${height}`;
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }api/v1/blocks/${height}`;
     const blockData: any = await axios.get(url);
     const feeRateData = blockData.data.map((item: any) => {
-      return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate }
-    })
+      return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate };
+    });
 
     return response.status(200).send({ feeRateData });
-
   } catch (error: any) {
-
     return response.status(400).send({
       type: 1,
-      data: 'Get Fee Rate Error!'
-    })
-
+      data: "Get Fee Rate Error!",
+    });
   }
-}
+};
 
 export const getRecommendedFeeRate = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${networkType == TESTNET ? 'testnet/' : ''}api/v1/fees/recommended`;
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }api/v1/fees/recommended`;
     const response: any = await axios.get(url);
     const recommendFeeRate = response.data;
 
     return recommendFeeRate;
   } catch (error: any) {
-
-    console.log('Get Recommend Fee Rate Error!')
+    console.log("Get Recommend Fee Rate Error!");
   }
-}
+};

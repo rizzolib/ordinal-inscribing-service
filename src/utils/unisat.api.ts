@@ -1,6 +1,6 @@
 import axios, { type AxiosError } from "axios";
 import { TESTNET } from "../config/network.config";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 interface IUtxo {
   txid: string;
@@ -10,36 +10,42 @@ interface IUtxo {
 
 dotenv.config();
 
-export const getInscriptionInfo = async (inscriptionid: string, networkType: string): Promise<any> => {
+export const getInscriptionInfo = async (
+  inscriptionid: string,
+  networkType: string
+): Promise<any> => {
   try {
-    const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
+    const url = `https://open-api${
+      networkType == TESTNET ? "-testnet" : ""
+    }.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
 
-    console.log(url)
+    console.log(url);
 
-    const res = await axios.get(url,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
-        },
-      });
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
+      },
+    });
     const inscriptionInfo = res.data;
     const info: IUtxo = {
       txid: inscriptionInfo.data.utxo.txid,
       vout: inscriptionInfo.data.utxo.vout,
-      value: inscriptionInfo.data.utxo.satoshi
-    }
+      value: inscriptionInfo.data.utxo.satoshi,
+    };
 
     return info;
   } catch (err: any) {
-    console.log('Get Utxos Error')
+    console.log("Get Utxos Error");
   }
 };
 
 // Get BTC UTXO
 export const getBtcUtxoInfo = async (address: string, networkType: string) => {
-  const url = `https://open-api${networkType == TESTNET ? '-testnet' : ''}.unisat.io/v1/indexer/address/${address}/utxo-data`;
+  const url = `https://open-api${
+    networkType == TESTNET ? "-testnet" : ""
+  }.unisat.io/v1/indexer/address/${address}/utxo-data`;
 
-  console.log(url)
+  console.log(url);
 
   const config = {
     headers: {
@@ -67,7 +73,6 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
 
     if (cursor >= res.data.data.total - res.data.data.totalRunes) break;
   }
-
 
   return utxos;
 };

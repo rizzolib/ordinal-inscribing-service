@@ -19,8 +19,6 @@ initEccLib(ecc);
 const ECPair = ECPairFactory(ecc);
 const bip32 = BIP32Factory(ecc);
 
-
-
 export class SeedWallet {
   private hdPath = "m/86'/0'/0'/0/0";
   private network: bitcoin.networks.Network;
@@ -53,7 +51,7 @@ export class SeedWallet {
       { network: this.network }
     );
 
-    this.secret = this.ecPair.privateKey?.toString('hex');
+    this.secret = this.ecPair.privateKey?.toString("hex");
     this.seckey = new SecretKey(this.secret, { type: "taproot" });
     this.pubkey = this.seckey.pub;
 

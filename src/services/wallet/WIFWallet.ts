@@ -18,8 +18,6 @@ initEccLib(ecc);
 const ECPair = ECPairFactory(ecc);
 const bip32 = BIP32Factory(ecc);
 
-
-
 export class WIFWallet {
   private network: bitcoin.networks.Network;
   public ecPair: ECPairInterface;
@@ -29,7 +27,7 @@ export class WIFWallet {
   public seckey?: SecretKey;
   public secret: any;
   public pubkey: PublicKey;
-  
+
   constructor(walletParam: IWIFWallet) {
     if (walletParam.networkType == TESTNET) {
       this.network = networks.testnet;
@@ -39,7 +37,7 @@ export class WIFWallet {
 
     this.ecPair = ECPair.fromWIF(walletParam.privateKey, this.network);
 
-    this.secret = this.ecPair.privateKey?.toString('hex');
+    this.secret = this.ecPair.privateKey?.toString("hex");
     this.seckey = new SecretKey(this.secret, { type: "taproot" });
     this.pubkey = this.seckey.pub;
 

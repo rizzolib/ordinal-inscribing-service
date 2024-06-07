@@ -180,8 +180,7 @@ paths:
             application/json:
               schema:
                 type: string
-        
-  
+
   /estimate/text:
     post:
       summary: Estimate Text Inscription
