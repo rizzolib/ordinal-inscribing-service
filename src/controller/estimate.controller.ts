@@ -45,10 +45,17 @@ export const TextEstimateFeeController = async (
 
     console.log(sendUTXOSize);
 
+    const userUtxo = {
+      txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
+      vout: 0,
+      value: 10 * 10 ** 8,
+    };
+
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
       inscriptionData,
       tapScript,
+      userUtxo,
       sendUTXOSize
     );
 
@@ -95,10 +102,17 @@ export const FileEstimateFeeController = async (
 
     console.log(sendUTXOSize);
 
+    const userUtxo = {
+      txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
+      vout: 0,
+      value: 10 * 10 ** 8,
+    };
+
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
       inscriptionData,
       tapScript,
+      userUtxo,
       sendUTXOSize
     );
 
@@ -145,10 +159,17 @@ export const DelegateEstimateFeeController = async (
 
     console.log(sendUTXOSize);
 
+    const userUtxo = {
+      txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
+      vout: 0,
+      value: 10 * 10 ** 8,
+    };
+
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
       inscriptionData,
       tapScript,
+      userUtxo,
       sendUTXOSize
     );
 

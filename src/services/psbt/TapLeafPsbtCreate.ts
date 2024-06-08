@@ -17,6 +17,7 @@ import * as ecc from "tiny-secp256k1";
 import wallet from "../wallet/initializeWallet";
 import { reinscriptionAndUTXOSend } from "../utxo/utxo.reinscribe.singleSend";
 import { singleSendUTXO } from "../utxo/utxo.singleSend";
+import { IUtxo } from "utils/types";
 
 initEccLib(ecc as any);
 
@@ -28,7 +29,8 @@ export const tapleafPsbt = async (
   contentType: string,
   inscriptionData: any,
   tapScript: Array<any>,
-  sendUTXOSize: number
+  userUtxo: IUtxo,
+  amount: number
 ): Promise<Transaction> => {
   const ordinal_script = script.compile(tapScript);
 
@@ -63,10 +65,17 @@ export const tapleafPsbt = async (
       inscriptionData.reinscriptionId,
       address,
       inscriptionData.feeRate,
-      sendUTXOSize
+      userUtxo,
+      amount
     );
   } else {
-    res = await singleSendUTXO(address, inscriptionData.feeRate, sendUTXOSize);
+    res = await singleSendUTXO(
+      address,
+      inscriptionData.feeRate,
+      userUtxo,
+      amount
+    );
+    console.log("here");
   }
 
   if (!res.isSuccess) {

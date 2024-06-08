@@ -8,7 +8,7 @@ export const TESTNET = "testnet";
 export const MAINNET = "mainnet";
 
 export const MAXIMUMFEERATE = 100000;
-export const SEND_UTXO_FEE_LIMIT = 100000;
+export const SEND_UTXO_FEE_LIMIT = 10000;
 
 export const DELEGATE_CONTENT = "Delegate";
 export const FILE_CONTENT = "File";

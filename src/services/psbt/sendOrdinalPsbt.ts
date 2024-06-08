@@ -30,11 +30,10 @@ const ECPair: ECPairAPI = ECPairFactory(ecc);
 export const sendOrdinalBTCPsbt = async (
   sendingOrdinalData: ISendingOrdinalData
 ): Promise<any> => {
-  const network =
-    networkConfig.networkType == TESTNET ? networks.testnet : networks.bitcoin;
-  const keyPair = wallet.ecPair;
-
-  const utxos = await getBtcUtxoInfo(wallet.address, networkConfig.networkType);
+  const utxos = await getBtcUtxoInfo(
+    sendingOrdinalData.receiveAddress,
+    networkConfig.networkType
+  );
   // let utxos = await getUtxos(sendingOrdinalData.receiveAddress, networkConfig.networkType)
   // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
@@ -82,5 +81,9 @@ export const sendOrdinalBTCPsbt = async (
     sendingOrdinalData,
     redeemFee
   );
+
+  console.log(psbt.txInputs);
+  console.log(psbt.txOutputs);
+
   return { isSuccess: true, data: psbt };
 };

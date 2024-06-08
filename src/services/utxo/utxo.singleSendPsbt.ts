@@ -12,7 +12,7 @@ interface IUtxo {
 
 export const redeemSingleSendUTXOPsbt = (
   wallet: any,
-  inputUtxoArray: Array<IUtxo>,
+  userUtxo: IUtxo,
   networkType: string,
   amount: number,
   fee: number
@@ -24,23 +24,16 @@ export const redeemSingleSendUTXOPsbt = (
         : Bitcoin.networks.bitcoin,
   });
 
-  let inputUtxoSumValue: number = inputUtxoArray.reduce(
-    (accumulator: number, currentValue: IUtxo) =>
-      accumulator + currentValue.value,
-    0
-  );
-
-  inputUtxoArray.forEach((utxo) => {
-    psbt.addInput({
-      hash: utxo.txid,
-      index: utxo.vout,
-      witnessUtxo: {
-        value: utxo.value,
-        script: wallet.output,
-      },
-      tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-    });
+  psbt.addInput({
+    hash: userUtxo.txid,
+    index: userUtxo.vout,
+    witnessUtxo: {
+      value: userUtxo.value,
+      script: wallet.output,
+    },
+    tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
   });
+
   psbt.addOutput({
     address: wallet.address,
     value: amount,
@@ -48,7 +41,7 @@ export const redeemSingleSendUTXOPsbt = (
 
   psbt.addOutput({
     address: wallet.address,
-    value: inputUtxoSumValue - fee - amount,
+    value: userUtxo.value - fee - amount,
   });
 
   return psbt;
@@ -56,7 +49,7 @@ export const redeemSingleSendUTXOPsbt = (
 
 export const singleSendUTXOPsbt = (
   wallet: any,
-  inputUtxoArray: Array<IUtxo>,
+  userUtxo: IUtxo,
   networkType: string,
   fee: number,
   address: string,
@@ -68,22 +61,15 @@ export const singleSendUTXOPsbt = (
         ? Bitcoin.networks.testnet
         : Bitcoin.networks.bitcoin,
   });
-  let inputUtxoSumValue: number = inputUtxoArray.reduce(
-    (accumulator: number, currentValue: IUtxo) =>
-      accumulator + currentValue.value,
-    0
-  );
 
-  inputUtxoArray.forEach((utxo) => {
-    psbt.addInput({
-      hash: utxo.txid,
-      index: utxo.vout,
-      witnessUtxo: {
-        value: utxo.value,
-        script: wallet.output,
-      },
-      tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-    });
+  psbt.addInput({
+    hash: userUtxo.txid,
+    index: userUtxo.vout,
+    witnessUtxo: {
+      value: userUtxo.value,
+      script: wallet.output,
+    },
+    tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
   });
 
   psbt.addOutput({
@@ -93,7 +79,7 @@ export const singleSendUTXOPsbt = (
 
   psbt.addOutput({
     address: wallet.address,
-    value: inputUtxoSumValue - fee - amount,
+    value: userUtxo.value - fee - amount,
   });
 
   return psbt;

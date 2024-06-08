@@ -35,6 +35,7 @@ export const reinscriptionAndUTXOSend = async (
   reinscriptionId: string,
   address: string,
   feeRate: number,
+  userUtxo: IUtxo,
   amount: number
 ) => {
   const reinscriptionUTXO: IUtxo = await getInscriptionInfo(
@@ -42,44 +43,22 @@ export const reinscriptionAndUTXOSend = async (
     networkConfig.networkType
   );
 
-  await waitUtxoFlag();
-  await setUtxoFlag(1);
-
-  const utxos = await getBtcUtxoInfo(wallet.address, networkType);
-  // let utxos = await getUtxos(wallet.address, networkType)
-  // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
-
-  let response = getSendBTCUTXOArray(utxos, amount + SEND_UTXO_FEE_LIMIT);
-  if (!response.isSuccess) {
-    return { isSuccess: false, data: "No enough balance on admin wallet." };
-  }
-
-  let selectedUtxos = response.data;
   let redeemFee = SEND_UTXO_FEE_LIMIT;
 
-  for (let i = 0; i < 3; i++) {
-    let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(
-      wallet,
-      selectedUtxos,
-      networkType,
-      amount,
-      reinscriptionUTXO,
-      redeemFee
-    );
-    redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
-    redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
-
-    response = getSendBTCUTXOArray(utxos, amount + redeemFee);
-
-    if (!response.isSuccess) {
-      return { isSuccess: false, data: "No enough balance on admin wallet." };
-    }
-    selectedUtxos = response.data;
-  }
+  let redeemPsbt: Bitcoin.Psbt = redeemReinscribeAndUtxoSendPsbt(
+    wallet,
+    userUtxo,
+    networkType,
+    amount,
+    reinscriptionUTXO,
+    redeemFee
+  );
+  redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
+  redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
 
   let psbt = ReinscribeAndUtxoSendPsbt(
     wallet,
-    selectedUtxos,
+    userUtxo,
     networkType,
     redeemFee,
     address,
@@ -88,8 +67,6 @@ export const reinscriptionAndUTXOSend = async (
   );
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
   const tx = signedPsbt.extractTransaction(true);
-
-  await setUtxoFlag(0);
 
   return { isSuccess: true, data: tx };
 };
