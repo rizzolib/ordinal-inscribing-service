@@ -34,8 +34,6 @@ export const sendOrdinalBTCPsbt = async (
     sendingOrdinalData.receiveAddress,
     networkConfig.networkType
   );
-  // let utxos = await getUtxos(sendingOrdinalData.receiveAddress, networkConfig.networkType)
-  // utxos = utxos.filter((utxo: IUtxo, index: number) => utxo.value > 5000)
 
   let response = getSendBTCUTXOArray(
     utxos,
@@ -71,7 +69,6 @@ export const sendOrdinalBTCPsbt = async (
     if (!response.isSuccess) {
       return { isSuccess: false, data: "No enough balance on admin wallet." };
     }
-
     selectedUtxos = response.data;
   }
 

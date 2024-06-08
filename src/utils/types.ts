@@ -43,10 +43,13 @@ export interface IDelegateInscription {
 }
 
 export interface ISendingOrdinalData {
+  ordinalsAddress: string;
+  ordinalsPublicKey: string;
+  paymentAddress: string;
+  paymentPublicKey: string;
   receiveAddress: string;
   parentId: string;
   reinscriptionId: string;
   feeRate: number;
   btcAmount: number;
-  publicKey: string;
 }

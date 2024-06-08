@@ -19,9 +19,12 @@ SendOrdinalRouter.post(
         !(
           req.body.receiveAddress &&
           (req.body.parentId || req.body.reinscriptionId) &&
-          req.body.feeRate &&
-          req.body.btcAmount &&
-          req.body.publicKey
+          req.body.networkFee &&
+          req.body.paymentAddress &&
+          req.body.paymentPublicKey &&
+          req.body.ordinalsAddress &&
+          req.body.ordinalsPublicKey &&
+          req.body.btcAmount
         )
       ) {
         let error = [];
@@ -29,16 +32,28 @@ SendOrdinalRouter.post(
           error.push({ receiveAddress: "ReceiveAddress is required" });
         }
         if (!(req.body.parentId || req.body.reinscriptionId)) {
-          error.push({ inscriptionId: "inscriptionId is required" });
+          error.push({ inscriptionId: "InscriptionId is required" });
         }
-        if (!req.body.feeRate) {
+        if (!req.body.networkFee) {
           error.push({ feeRate: "FeeRate is required" });
         }
         if (!req.body.btcAmount) {
-          error.push({ btcAmount: "BtcAmount is required" });
+          error.push({ btcAmount: "btcAmount is required" });
         }
-        if (!req.body.publicKey) {
-          error.push({ publicKey: "PublicKey is required" });
+        if (!req.body.paymentAddress) {
+          error.push({ publicKey: "Payment Address is required" });
+        }
+
+        if (!req.body.paymentPublicKey) {
+          error.push({ publicKey: "Payment PublicKey is required" });
+        }
+
+        if (!req.body.ordinalsAddress) {
+          error.push({ publicKey: "Ordinals Address is required" });
+        }
+
+        if (!req.body.ordinalsPublicKey) {
+          error.push({ publicKey: "Ordinals Public Key is required" });
         }
 
         res.status(400).send({ error: { type: 0, data: error } });
@@ -48,9 +63,7 @@ SendOrdinalRouter.post(
             .status(400)
             .send({ type: 2, data: "This address is not valid address." });
         } else {
-          const feeRate: number = +req.body.feeRate;
-          const btcAmount: number = +req.body.btcAmount;
-          const publicKey: string = req.body.publicKey;
+          const feeRate: number = +req.body.networkFee;
           let parentId: string = "";
           let reinscriptionId: string = "";
 
@@ -62,12 +75,15 @@ SendOrdinalRouter.post(
           }
 
           const sendOrdinalRequestData: ISendingOrdinalData = {
+            paymentAddress: req.body.paymentAddress,
+            paymentPublicKey: req.body.paymentPublicKey,
+            ordinalsAddress: req.body.ordinalsAddress,
+            ordinalsPublicKey: req.body.ordinalsPublicKey,
             receiveAddress: req.body.receiveAddress,
             parentId: parentId,
             reinscriptionId: reinscriptionId,
             feeRate: feeRate,
-            btcAmount: btcAmount,
-            publicKey: publicKey,
+            btcAmount: req.body.btcAmount,
           };
           await SendingOrdinalController(sendOrdinalRequestData, res);
         }

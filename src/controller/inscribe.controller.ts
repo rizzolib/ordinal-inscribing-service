@@ -122,8 +122,6 @@ export const FileInscribeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.files.length * inscriptionData.padding;
 
-    console.log(sendUTXOSize);
-
     // const tapleafTxData: Transaction = await tapleafPsbt(
     //   contentType,
     //   inscriptionData,
@@ -195,8 +193,6 @@ export const DelegateInscribeController = async (
     const sendUTXOSize =
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.delegateIds.length * inscriptionData.padding;
-
-    console.log(sendUTXOSize);
 
     // const tapleafTxData: Transaction = await tapleafPsbt(
     //   contentType,

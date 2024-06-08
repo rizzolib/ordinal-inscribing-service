@@ -75,7 +75,6 @@ export const tapleafPsbt = async (
       userUtxo,
       amount
     );
-    console.log("here");
   }
 
   if (!res.isSuccess) {

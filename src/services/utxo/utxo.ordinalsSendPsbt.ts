@@ -38,16 +38,22 @@ export const RedeemOrdinalsUtxoSendPsbt = async (
     0
   );
 
-  let parentInscriptionUTXO: IUtxo = await getInscriptionInfo(
-    sendingOrdinalData.parentId,
-    networkConfig.networkType
-  );
-  let reInscriptionUTXO: IUtxo = await getInscriptionInfo(
-    sendingOrdinalData.reinscriptionId,
-    networkConfig.networkType
-  );
+  let parentInscriptionUTXO: IUtxo = {
+    value: 0,
+    txid: "",
+    vout: 0,
+  };
+  let reinscriptionUTXO: IUtxo = {
+    value: 0,
+    txid: "",
+    vout: 0,
+  };
 
   if (sendingOrdinalData.parentId) {
+    parentInscriptionUTXO = await getInscriptionInfo(
+      sendingOrdinalData.parentId,
+      networkConfig.networkType
+    );
     psbt.addInput({
       hash: parentInscriptionUTXO.txid,
       index: parentInscriptionUTXO.vout,
@@ -59,11 +65,15 @@ export const RedeemOrdinalsUtxoSendPsbt = async (
     });
   }
   if (sendingOrdinalData.reinscriptionId) {
+    reinscriptionUTXO = await getInscriptionInfo(
+      sendingOrdinalData.reinscriptionId,
+      networkConfig.networkType
+    );
     psbt.addInput({
-      hash: reInscriptionUTXO.txid,
-      index: reInscriptionUTXO.vout,
+      hash: reinscriptionUTXO.txid,
+      index: reinscriptionUTXO.vout,
       witnessUtxo: {
-        value: parentInscriptionUTXO.value,
+        value: reinscriptionUTXO.value,
         script: wallet.output,
       },
       tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
@@ -92,7 +102,7 @@ export const RedeemOrdinalsUtxoSendPsbt = async (
   if (sendingOrdinalData.reinscriptionId) {
     psbt.addOutput({
       address: wallet.address,
-      value: reInscriptionUTXO.value,
+      value: reinscriptionUTXO.value,
     });
   }
 
@@ -132,17 +142,22 @@ export const OrdinalsUtxoSendPsbt = async (
       accumulator + currentValue.value,
     0
   );
-
-  let parentInscriptionUTXO: IUtxo = await getInscriptionInfo(
-    sendingOrdinalData.parentId,
-    networkConfig.networkType
-  );
-  let reInscriptionUTXO: IUtxo = await getInscriptionInfo(
-    sendingOrdinalData.reinscriptionId,
-    networkConfig.networkType
-  );
+  let parentInscriptionUTXO: IUtxo = {
+    txid: "",
+    vout: 0,
+    value: 0,
+  };
+  let reInscriptionUTXO: IUtxo = {
+    txid: "",
+    vout: 0,
+    value: 0,
+  };
 
   if (sendingOrdinalData.parentId) {
+    parentInscriptionUTXO = await getInscriptionInfo(
+      sendingOrdinalData.parentId,
+      networkConfig.networkType
+    );
     psbt.addInput({
       hash: parentInscriptionUTXO.txid,
       index: parentInscriptionUTXO.vout,
@@ -153,21 +168,26 @@ export const OrdinalsUtxoSendPsbt = async (
           network
         ),
       },
-      tapInternalKey: toXOnly(Buffer.from(sendingOrdinalData.publicKey, "hex")),
+      tapInternalKey: Buffer.from(sendingOrdinalData.ordinalsPublicKey, "hex"),
     });
   }
   if (sendingOrdinalData.reinscriptionId) {
+    reInscriptionUTXO = await getInscriptionInfo(
+      sendingOrdinalData.reinscriptionId,
+      networkConfig.networkType
+    );
+
     psbt.addInput({
       hash: reInscriptionUTXO.txid,
       index: reInscriptionUTXO.vout,
       witnessUtxo: {
         value: reInscriptionUTXO.value,
         script: Bitcoin.address.toOutputScript(
-          sendingOrdinalData.receiveAddress as string,
+          sendingOrdinalData.ordinalsAddress as string,
           network
         ),
       },
-      tapInternalKey: toXOnly(Buffer.from(sendingOrdinalData.publicKey, "hex")),
+      tapInternalKey: Buffer.from(sendingOrdinalData.ordinalsPublicKey, "hex"),
     });
   }
 
@@ -178,11 +198,11 @@ export const OrdinalsUtxoSendPsbt = async (
       witnessUtxo: {
         value: utxo.value,
         script: Bitcoin.address.toOutputScript(
-          sendingOrdinalData.receiveAddress as string,
+          sendingOrdinalData.paymentAddress as string,
           network
         ),
       },
-      tapInternalKey: toXOnly(Buffer.from(sendingOrdinalData.publicKey, "hex")),
+      tapInternalKey: Buffer.from(sendingOrdinalData.paymentPublicKey, "hex"),
     });
   });
 
@@ -206,7 +226,7 @@ export const OrdinalsUtxoSendPsbt = async (
   });
 
   psbt.addOutput({
-    address: wallet.address,
+    address: sendingOrdinalData.paymentAddress,
     value: inputUtxoSumValue - redeemFee - sendingOrdinalData.btcAmount,
   });
 

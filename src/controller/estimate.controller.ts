@@ -43,8 +43,6 @@ export const TextEstimateFeeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.contents.length * inscriptionData.padding;
 
-    console.log(sendUTXOSize);
-
     const userUtxo = {
       txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
       vout: 0,
@@ -61,12 +59,17 @@ export const TextEstimateFeeController = async (
 
     const totalFee =
       tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
-
+    const total =
+      inscriptionData.padding * inscriptionData.contents.length +
+      totalFee +
+      toInteger(totalFee / 50) +
+      toInteger(totalFee / 20);
     return res.status(200).send({
       satsInItem: inscriptionData.padding * inscriptionData.contents.length,
       fee: totalFee,
       serviceFee: toInteger(totalFee / 50),
       feeBySize: toInteger(totalFee / 20),
+      total: total,
     });
   } catch (error) {
     await setUtxoFlag(0);
@@ -100,8 +103,6 @@ export const FileEstimateFeeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.files.length * inscriptionData.padding;
 
-    console.log(sendUTXOSize);
-
     const userUtxo = {
       txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
       vout: 0,
@@ -118,12 +119,17 @@ export const FileEstimateFeeController = async (
 
     const totalFee =
       tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
-
+    const total =
+      inscriptionData.padding * inscriptionData.files.length +
+      totalFee +
+      toInteger(totalFee / 50) +
+      toInteger(totalFee / 20);
     return res.status(200).send({
       satsInItem: inscriptionData.padding * inscriptionData.files.length,
       fee: totalFee,
       serviceFee: toInteger(totalFee / 50),
       feeBySize: toInteger(totalFee / 20),
+      total: total,
     });
   } catch (error) {
     await setUtxoFlag(0);
@@ -157,8 +163,6 @@ export const DelegateEstimateFeeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.delegateIds.length * inscriptionData.padding;
 
-    console.log(sendUTXOSize);
-
     const userUtxo = {
       txid: "7402984dae838f6700b561f425aacac82b91bc5924fb853631af65f0431cc76a",
       vout: 0,
@@ -175,12 +179,17 @@ export const DelegateEstimateFeeController = async (
 
     const totalFee =
       tapleafTxData.virtualSize() * inscriptionData.feeRate + sendUTXOSize;
-
+    const total =
+      inscriptionData.padding * inscriptionData.delegateIds.length +
+      totalFee +
+      toInteger(totalFee / 50) +
+      toInteger(totalFee / 20);
     return res.status(200).send({
       satsInItem: inscriptionData.padding * inscriptionData.delegateIds.length,
       fee: totalFee,
       serviceFee: toInteger(totalFee / 50),
       feeBySize: toInteger(totalFee / 20),
+      total: total,
     });
   } catch (error) {
     await setUtxoFlag(0);

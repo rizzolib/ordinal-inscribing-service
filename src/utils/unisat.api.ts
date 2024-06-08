@@ -19,8 +19,6 @@ export const getInscriptionInfo = async (
       networkType == TESTNET ? "-testnet" : ""
     }.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
 
-    console.log(url);
-
     const res = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
@@ -35,7 +33,7 @@ export const getInscriptionInfo = async (
 
     return info;
   } catch (err: any) {
-    console.log("Get Utxos Error");
+    console.log("Get Inscription Utxo Error");
   }
 };
 
@@ -44,8 +42,6 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
   const url = `https://open-api${
     networkType == TESTNET ? "-testnet" : ""
   }.unisat.io/v1/indexer/address/${address}/utxo-data`;
-
-  console.log(url);
 
   const config = {
     headers: {

@@ -52,7 +52,7 @@ EstimateFeeRouter.post("/text", async (req: Request, res: Response) => {
         const feeRate: number = +req.body.feeRate;
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
-        const contents: Array<string> = req.body.contents.split(",");
+        const contents: Array<string> = JSON.parse(req.body.contents).data;
         const textInscriptionData: ITextInscription = {
           ...req.body,
           feeRate: feeRate,
