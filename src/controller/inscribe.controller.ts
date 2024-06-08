@@ -250,6 +250,8 @@ export const SendingOrdinalController = async (
     if (!response.isSuccess) {
       return res.status(400).send({ data: response.data });
     } else {
+      console.log(response.data.toHex());
+
       return res.status(200).send({ data: response.data.toHex() });
     }
   } catch (error) {
