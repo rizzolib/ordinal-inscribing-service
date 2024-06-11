@@ -79,7 +79,9 @@ export const textTapScript = async (inscriptionData: ITextInscription) => {
 
     subScript.push(1, 2, pointerBuffer[i]);
 
-    subScript.push(1, 3, parentInscriptionBuffer);
+    if (inscriptionData.parentId) {
+      subScript.push(1, 3, parentInscriptionBuffer);
+    }
 
     if (inscriptionData.metadata) {
       subScript.push(1, 5, cbor.encode(JSON.parse(inscriptionData.metadata)));

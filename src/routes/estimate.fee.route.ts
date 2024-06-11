@@ -11,6 +11,8 @@ import {
   TextEstimateFeeController,
 } from "../controller/estimate.controller";
 import { isValidBitcoinAddress } from "../utils/validationAddress";
+import { getInscriptionInfo } from "../utils/unisat.api";
+import networkConfig from "../config/network.config";
 
 // Create a new instance of the Estimation Fee Router
 export const EstimateFeeRouter = Router();
@@ -41,9 +43,42 @@ EstimateFeeRouter.post("/text", async (req: Request, res: Response) => {
       if (!req.body.padding) {
         error.push({ padding: "Padding is required" });
       }
-
       res.status(400).send({ error: { type: 0, data: error } });
     } else {
+      if (req.body.reinscriptionId || req.body.parentId) {
+        let reinscriptionIdInfo: any = {};
+        let parentIdInfo: any = {};
+        if (req.body.reinscriptionId) {
+          reinscriptionIdInfo = await getInscriptionInfo(
+            req.body.reinscriptionId,
+            networkConfig.networkType
+          );
+          if (!reinscriptionIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Reinscription Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+        if (req.body.parentId) {
+          parentIdInfo = await getInscriptionInfo(
+            req.body.parentId,
+            networkConfig.networkType
+          );
+          if (!parentIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Parent Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+        if (req.body.reinscriptionId === req.body.parentId) {
+          return res.status(400).send({
+            type: 4,
+            data: `Reinscription id should not be same with parent inscription id.`,
+          });
+        }
+      }
       if (!isValidBitcoinAddress(req.body.receiveAddress)) {
         res
           .status(400)
@@ -99,6 +134,40 @@ EstimateFeeRouter.post("/file", async (req: Request, res: Response) => {
 
       res.status(400).send({ error: { type: 0, data: error } });
     } else {
+      if (req.body.reinscriptionId || req.body.parentId) {
+        let reinscriptionIdInfo: any = {};
+        let parentIdInfo: any = {};
+        if (req.body.reinscriptionId) {
+          reinscriptionIdInfo = await getInscriptionInfo(
+            req.body.reinscriptionId,
+            networkConfig.networkType
+          );
+          if (!reinscriptionIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Reinscription Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+        if (req.body.parentId) {
+          parentIdInfo = await getInscriptionInfo(
+            req.body.parentId,
+            networkConfig.networkType
+          );
+          if (!parentIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Parent Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+        if (req.body.reinscriptionId === req.body.parentId) {
+          return res.status(400).send({
+            type: 4,
+            data: `Reinscription id should not be same with parent inscription id.`,
+          });
+        }
+      }
       if (!isValidBitcoinAddress(req.body.receiveAddress)) {
         res
           .status(400)
@@ -164,6 +233,41 @@ EstimateFeeRouter.post("/delegate", async (req: Request, res: Response) => {
 
       res.status(400).send({ error: { type: 0, data: error } });
     } else {
+      if (req.body.reinscriptionId || req.body.parentId) {
+        let reinscriptionIdInfo: any = {};
+        let parentIdInfo: any = {};
+        if (req.body.reinscriptionId) {
+          reinscriptionIdInfo = await getInscriptionInfo(
+            req.body.reinscriptionId,
+            networkConfig.networkType
+          );
+          if (!reinscriptionIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Reinscription Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+
+        if (req.body.parentId) {
+          parentIdInfo = await getInscriptionInfo(
+            req.body.parentId,
+            networkConfig.networkType
+          );
+          if (!parentIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Parent Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+        if (req.body.reinscriptionId === req.body.parentId) {
+          return res.status(400).send({
+            type: 4,
+            data: `Reinscription id should not be same with parent inscription id.`,
+          });
+        }
+      }
       if (!isValidBitcoinAddress(req.body.receiveAddress)) {
         res
           .status(400)
