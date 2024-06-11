@@ -79,8 +79,5 @@ export const sendOrdinalBTCPsbt = async (
     redeemFee
   );
 
-  console.log(psbt.txInputs);
-  console.log(psbt.txOutputs);
-
   return { isSuccess: true, data: psbt };
 };

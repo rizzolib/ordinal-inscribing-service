@@ -47,8 +47,6 @@ export const TextInscribeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.contents.length * inscriptionData.padding;
 
-    console.log(sendUTXOSize);
-
     // const tapleafTxData: Transaction = await tapleafPsbt(
     //   contentType,
     //   inscriptionData,

@@ -236,6 +236,8 @@ EstimateFeeRouter.post("/delegate", async (req: Request, res: Response) => {
       if (req.body.reinscriptionId || req.body.parentId) {
         let reinscriptionIdInfo: any = {};
         let parentIdInfo: any = {};
+        let delegateIdInfo: any = {};
+
         if (req.body.reinscriptionId) {
           reinscriptionIdInfo = await getInscriptionInfo(
             req.body.reinscriptionId,
@@ -261,6 +263,20 @@ EstimateFeeRouter.post("/delegate", async (req: Request, res: Response) => {
             });
           }
         }
+
+        if (req.body.delegateId) {
+          delegateIdInfo = await getInscriptionInfo(
+            req.body.delegateId as string,
+            networkConfig.networkType
+          );
+          if (!delegateIdInfo) {
+            return res.status(400).send({
+              type: 3,
+              data: `Delegate Id is not vaild on ${networkConfig.networkType}`,
+            });
+          }
+        }
+
         if (req.body.reinscriptionId === req.body.parentId) {
           return res.status(400).send({
             type: 4,

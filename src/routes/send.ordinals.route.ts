@@ -2,13 +2,17 @@ import { Request, Response, Router } from "express";
 import { ISendingOrdinalData } from "../utils/types";
 import { SendingOrdinalController } from "../controller/inscribe.controller";
 import { isValidBitcoinAddress } from "../utils/validationAddress";
-import { getBtcUtxoInfo } from "../utils/unisat.api";
-import { TESTNET } from "../config/network.config";
+import {
+  getBtcUtxoInfo,
+  getInscriptionInfo,
+  isContainOrdinal,
+} from "../utils/unisat.api";
+import networkConfig, { TESTNET } from "../config/network.config";
 
 // Create a new instance of the Inscription Router
 export const SendOrdinalRouter = Router();
 
-// @route    POST api/inscribe/text
+// @route    POST api/inscribe/getSendingOrdinalBtcPsbt
 // @desc     Inscribe Text Inscription
 // @access   Private
 SendOrdinalRouter.post(
@@ -18,7 +22,6 @@ SendOrdinalRouter.post(
       if (
         !(
           req.body.receiveAddress &&
-          (req.body.parentId || req.body.reinscriptionId) &&
           req.body.networkFee &&
           req.body.paymentAddress &&
           req.body.paymentPublicKey &&
@@ -30,9 +33,6 @@ SendOrdinalRouter.post(
         let error = [];
         if (!req.body.receiveAddress) {
           error.push({ receiveAddress: "ReceiveAddress is required" });
-        }
-        if (!(req.body.parentId || req.body.reinscriptionId)) {
-          error.push({ inscriptionId: "InscriptionId is required" });
         }
         if (!req.body.networkFee) {
           error.push({ feeRate: "FeeRate is required" });
@@ -68,10 +68,36 @@ SendOrdinalRouter.post(
           let reinscriptionId: string = "";
 
           if (req.body.parentId) {
-            parentId = req.body.parentId;
+            const isContainOrdinalStatus = await isContainOrdinal(
+              req.body.parentId,
+              req.body.ordinalsAddress,
+              networkConfig.networkType
+            );
+
+            if (!isContainOrdinalStatus) {
+              return res.status(400).send({
+                type: 5,
+                data: `Parent Id does not contain on ${req.body.ordinalsAddress}`,
+              });
+            } else {
+              parentId = req.body.parentId;
+            }
           }
           if (req.body.reinscriptionId) {
-            reinscriptionId = req.body.reinscriptionId;
+            const isContainOrdinalStatus = await isContainOrdinal(
+              req.body.reinscriptionId,
+              req.body.ordinalsAddress,
+              networkConfig.networkType
+            );
+
+            if (!isContainOrdinalStatus) {
+              return res.status(400).send({
+                type: 5,
+                data: `Reinscription Id does not contain on ${req.body.ordinalsAddress}`,
+              });
+            } else {
+              reinscriptionId = req.body.reinscriptionId;
+            }
           }
 
           const sendOrdinalRequestData: ISendingOrdinalData = {

@@ -37,6 +37,32 @@ export const getInscriptionInfo = async (
   }
 };
 
+export const isContainOrdinal = async (
+  inscriptionid: string,
+  address: string,
+  networkType: string
+): Promise<any> => {
+  try {
+    const url = `https://open-api${
+      networkType == TESTNET ? "-testnet" : ""
+    }.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
+
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
+      },
+    });
+    const inscriptionInfo = res.data;
+
+    if (address == inscriptionInfo.data.utxo.address) {
+      return true;
+    }
+    return false;
+  } catch (err: any) {
+    console.log("Get Inscription Utxo Error");
+  }
+};
+
 // Get BTC UTXO
 export const getBtcUtxoInfo = async (address: string, networkType: string) => {
   const url = `https://open-api${

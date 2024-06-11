@@ -164,7 +164,7 @@ export const OrdinalsUtxoSendPsbt = async (
       witnessUtxo: {
         value: parentInscriptionUTXO.value,
         script: Bitcoin.address.toOutputScript(
-          sendingOrdinalData.receiveAddress as string,
+          sendingOrdinalData.ordinalsAddress as string,
           network
         ),
       },
