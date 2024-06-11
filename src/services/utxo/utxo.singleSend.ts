@@ -60,7 +60,5 @@ export const singleSendUTXO = async (
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
   const tx = signedPsbt.extractTransaction(true);
 
-  await setUtxoFlag(0);
-
   return { isSuccess: true, data: tx };
 };

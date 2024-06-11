@@ -72,6 +72,7 @@ export const ReinscribeAndUtxoSendPsbt = (
         : Bitcoin.networks.bitcoin,
   });
 
+  console.log(reinscriptionUTXO);
   psbt.addInput({
     hash: reinscriptionUTXO.txid,
     index: reinscriptionUTXO.vout,

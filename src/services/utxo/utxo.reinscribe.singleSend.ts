@@ -11,8 +11,6 @@ import {
 } from "./utxo.reinscribe.singleSendPsbt";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from "../wallet/WIFWallet";
-import { getSendBTCUTXOArray } from "./utxo.management";
-import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
 import { getBtcUtxoInfo, getInscriptionInfo } from "../../utils/unisat.api";
 import { IUtxo } from "../../utils/types";

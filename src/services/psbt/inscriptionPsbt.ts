@@ -84,7 +84,7 @@ export const inscriptionPsbt = async (
   });
   if (inscriptionData.parentId) {
     psbt.addOutput({
-      address: inscriptionData.receiveAddress,
+      address: inscriptionData.ordinalsAddress,
       value: inscriptionData.padding,
     });
   }

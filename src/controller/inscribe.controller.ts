@@ -3,24 +3,22 @@ import {
   IFileInscription,
   IDelegateInscription,
   ISendingOrdinalData,
+  IUtxo,
 } from "../utils/types";
 import e, { Response } from "express";
 import { fileTapScript } from "../services/tapscript/fileTapScript";
 import { textTapScript } from "../services/tapscript/textTapScript";
 import { inscriptionPsbt } from "../services/psbt/inscriptionPsbt";
-import {
+import networkConfig, {
   DELEGATE_CONTENT,
   FILE_CONTENT,
   TEXT_CONTENT,
 } from "../config/network.config";
 import { Transaction } from "bitcoinjs-lib";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
-import networkConfig from "../config/network.config";
-import { pushBTCpmt } from "../utils/mempool";
-import { setUtxoFlag } from "../utils/mutex";
-import { splitUTXO } from "../services/utxo/utxo.split";
 import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
 import { sendOrdinalBTCPsbt } from "../services/psbt/sendOrdinalPsbt";
+import { pushBTCpmt } from "../utils/mempool";
 
 export const TextInscribeController = async (
   inscriptionData: ITextInscription,
@@ -47,49 +45,51 @@ export const TextInscribeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.contents.length * inscriptionData.padding;
 
-    // const tapleafTxData: Transaction = await tapleafPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendUTXOSize
-    // );
+    const userUtxo: IUtxo = {
+      txid: inscriptionData.sendBtcTxId,
+      vout: inscriptionData.txIndex,
+      value: inscriptionData.btcAmount,
+    };
 
-    // const txid = await pushBTCpmt(
-    //   tapleafTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const tapleafTxData: Transaction = await tapleafPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      userUtxo,
+      sendUTXOSize
+    );
 
-    // const sendingUtxo = {
-    //   txid: txid,
-    //   vout: 0,
-    //   value: sendUTXOSize,
-    // };
+    const txid = await pushBTCpmt(
+      tapleafTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // console.log("Sent Utxo for inscribing => ", sendingUtxo);
+    const sendingUtxo = {
+      txid: txid,
+      vout: 0,
+      value: sendUTXOSize,
+    };
 
-    // const realInscriptionTxData: Transaction = await inscriptionPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendingUtxo
-    // );
+    console.log("Sent Utxo for inscribing => ", sendingUtxo);
 
-    // const realInscriptiontxId = await pushBTCpmt(
-    //   realInscriptionTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const realInscriptionTxData: Transaction = await inscriptionPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      sendingUtxo
+    );
 
-    // console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
+    const realInscriptiontxId = await pushBTCpmt(
+      realInscriptionTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // const response = await splitUTXO();
+    console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
 
-    // console.log(response);
-
-    // return res.status(200).send({
-    //   tx: realInscriptiontxId,
-    // });
+    return res.status(200).send({
+      tx: realInscriptiontxId,
+    });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }
@@ -120,48 +120,51 @@ export const FileInscribeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.files.length * inscriptionData.padding;
 
-    // const tapleafTxData: Transaction = await tapleafPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendUTXOSize
-    // );
+    const userUtxo: IUtxo = {
+      txid: inscriptionData.sendBtcTxId,
+      vout: inscriptionData.txIndex,
+      value: inscriptionData.btcAmount,
+    };
 
-    // const txid = await pushBTCpmt(
-    //   tapleafTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const tapleafTxData: Transaction = await tapleafPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      userUtxo,
+      sendUTXOSize
+    );
 
-    // const sendingUtxo = {
-    //   txid: txid,
-    //   vout: 0,
-    //   value: sendUTXOSize,
-    // };
+    const txid = await pushBTCpmt(
+      tapleafTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // console.log("Sent Utxo for inscribing => ", sendingUtxo);
+    const sendingUtxo = {
+      txid: txid,
+      vout: 0,
+      value: sendUTXOSize,
+    };
 
-    // const realInscriptionTxData: Transaction = await inscriptionPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendingUtxo
-    // );
+    console.log("Sent Utxo for inscribing => ", sendingUtxo);
 
-    // const realInscriptiontxId = await pushBTCpmt(
-    //   realInscriptionTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const realInscriptionTxData: Transaction = await inscriptionPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      sendingUtxo
+    );
 
-    // console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
+    const realInscriptiontxId = await pushBTCpmt(
+      realInscriptionTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // const response = await splitUTXO();
-    // console.log(response);
+    console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
 
-    // return res.status(200).send({
-    //   tx: realInscriptiontxId,
-    // });
+    return res.status(200).send({
+      tx: realInscriptiontxId,
+    });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }
@@ -192,48 +195,51 @@ export const DelegateInscribeController = async (
       inscriptionTxData.virtualSize() * inscriptionData.feeRate +
       inscriptionData.delegateIds.length * inscriptionData.padding;
 
-    // const tapleafTxData: Transaction = await tapleafPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendUTXOSize
-    // );
+    const userUtxo: IUtxo = {
+      txid: inscriptionData.sendBtcTxId,
+      vout: inscriptionData.txIndex,
+      value: inscriptionData.btcAmount,
+    };
 
-    // const txid = await pushBTCpmt(
-    //   tapleafTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const tapleafTxData: Transaction = await tapleafPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      userUtxo,
+      sendUTXOSize
+    );
 
-    // const sendingUtxo = {
-    //   txid: txid,
-    //   vout: 0,
-    //   value: sendUTXOSize,
-    // };
+    const txid = await pushBTCpmt(
+      tapleafTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // console.log("Sent Utxo for inscribing => ", sendingUtxo);
+    const sendingUtxo = {
+      txid: txid,
+      vout: 0,
+      value: sendUTXOSize,
+    };
 
-    // const realInscriptionTxData: Transaction = await inscriptionPsbt(
-    //   contentType,
-    //   inscriptionData,
-    //   tapScript,
-    //   sendingUtxo
-    // );
+    console.log("Sent Utxo for inscribing => ", sendingUtxo);
 
-    // const realInscriptiontxId = await pushBTCpmt(
-    //   realInscriptionTxData.toHex(),
-    //   networkConfig.networkType
-    // );
+    const realInscriptionTxData: Transaction = await inscriptionPsbt(
+      contentType,
+      inscriptionData,
+      tapScript,
+      sendingUtxo
+    );
 
-    // console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
+    const realInscriptiontxId = await pushBTCpmt(
+      realInscriptionTxData.toHex(),
+      networkConfig.networkType
+    );
 
-    // const response = await splitUTXO();
-    // console.log(response);
+    console.log("Successfully Inscribed Tx Id => ", realInscriptiontxId);
 
-    // return res.status(200).send({
-    //   tx: realInscriptiontxId,
-    // });
+    return res.status(200).send({
+      tx: realInscriptiontxId,
+    });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }

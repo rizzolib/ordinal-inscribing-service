@@ -31,8 +31,6 @@ if (networkConfig.walletType == WIF) {
 export const splitUTXO = async () => {
   const recomFeeRate = await getRecommendedFeeRate(networkType);
   const splitFeeRate = recomFeeRate.fastestFee * 1.1;
-  await waitUtxoFlag();
-  await setUtxoFlag(1);
 
   const utxos = await getBtcUtxoInfo(wallet.address, networkType);
   // let utxos = await getUtxos(wallet.address, networkType)
@@ -57,11 +55,8 @@ export const splitUTXO = async () => {
 
     const txId = await pushBTCpmt(txHex, networkType);
 
-    await setUtxoFlag(0);
-
     return { isSuccess: true, data: txId };
   } else {
-    await setUtxoFlag(0);
     return { isSuccess: false, data: "Wallet UTXO split is failed!" };
   }
 };

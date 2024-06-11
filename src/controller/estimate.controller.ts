@@ -16,7 +16,6 @@ import { Transaction } from "bitcoinjs-lib";
 import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
 import { toInteger } from "../utils/math";
 import { delegateTapScript } from "../services/tapscript/delegateTapScript";
-import { setUtxoFlag } from "../utils/mutex";
 
 export const TextEstimateFeeController = async (
   inscriptionData: ITextInscription,
@@ -32,9 +31,20 @@ export const TextEstimateFeeController = async (
     };
     const contentType = TEXT_CONTENT;
 
+    const redeemInscriptionData = {
+      ...inscriptionData,
+      ordinalsAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      ordinalsPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+      paymentAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      paymentPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+    };
     const inscriptionTxData: Transaction = await inscriptionPsbt(
       contentType,
-      inscriptionData,
+      redeemInscriptionData,
       tapScript,
       sentUtxo
     );
@@ -48,7 +58,6 @@ export const TextEstimateFeeController = async (
       vout: 0,
       value: 10 * 10 ** 8,
     };
-
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
       inscriptionData,
@@ -72,7 +81,6 @@ export const TextEstimateFeeController = async (
       total: total,
     });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }
@@ -92,9 +100,20 @@ export const FileEstimateFeeController = async (
     };
     const contentType = FILE_CONTENT;
 
+    const redeemInscriptionData = {
+      ...inscriptionData,
+      ordinalsAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      ordinalsPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+      paymentAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      paymentPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+    };
     const inscriptionTxData: Transaction = await inscriptionPsbt(
       contentType,
-      inscriptionData,
+      redeemInscriptionData,
       tapScript,
       sentUtxo
     );
@@ -132,7 +151,6 @@ export const FileEstimateFeeController = async (
       total: total,
     });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }
@@ -152,9 +170,20 @@ export const DelegateEstimateFeeController = async (
     };
     const contentType = DELEGATE_CONTENT;
 
+    const redeemInscriptionData = {
+      ...inscriptionData,
+      ordinalsAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      ordinalsPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+      paymentAddress:
+        "tb1p0sd5xq6sz0eg3r9j5df0qk38pgnuqreav2qqtq5jfvwpk3yhzuxqjyttjy",
+      paymentPublicKey:
+        "cde4d7fa3f66b13c61279a3a78fd3623428bc69d7e65c770a0fdfd6ea3b0758d",
+    };
     const inscriptionTxData: Transaction = await inscriptionPsbt(
       contentType,
-      inscriptionData,
+      redeemInscriptionData,
       tapScript,
       sentUtxo
     );
@@ -192,7 +221,6 @@ export const DelegateEstimateFeeController = async (
       total: total,
     });
   } catch (error) {
-    await setUtxoFlag(0);
     console.log(error);
     return res.status(400).send({ error });
   }

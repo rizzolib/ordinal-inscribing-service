@@ -18,6 +18,13 @@ export interface ITextInscription {
   metadata: string;
   metaprotocol: string;
   reinscriptionId: string;
+  btcAmount: number;
+  sendBtcTxId: string;
+  txIndex: number;
+  ordinalsAddress: string;
+  ordinalsPublicKey: string;
+  paymentAddress: string;
+  paymentPublicKey: string;
 }
 
 export interface IFileInscription {
@@ -29,6 +36,13 @@ export interface IFileInscription {
   metadata: string;
   metaprotocol: string;
   reinscriptionId: string;
+  btcAmount: number;
+  sendBtcTxId: string;
+  txIndex: number;
+  ordinalsAddress: string;
+  ordinalsPublicKey: string;
+  paymentAddress: string;
+  paymentPublicKey: string;
 }
 
 export interface IDelegateInscription {
@@ -40,6 +54,13 @@ export interface IDelegateInscription {
   metadata: string;
   metaprotocol: string;
   reinscriptionId: string;
+  btcAmount: number;
+  sendBtcTxId: string;
+  txIndex: number;
+  ordinalsAddress: string;
+  ordinalsPublicKey: string;
+  paymentAddress: string;
+  paymentPublicKey: string;
 }
 
 export interface ISendingOrdinalData {

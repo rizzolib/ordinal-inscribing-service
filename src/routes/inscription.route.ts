@@ -23,8 +23,8 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
     if (
       !(
         req.body.receiveAddress &&
-        req.body.contents &&
-        req.body.feeRate &&
+        req.body.textContent &&
+        req.body.networkFee &&
         req.body.padding
       )
     ) {
@@ -32,10 +32,10 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
       if (!req.body.receiveAddress) {
         error.push({ receiveAddress: "ReceiveAddress is required" });
       }
-      if (!req.body.contents) {
+      if (!req.body.textContent) {
         error.push({ contents: "Content is required" });
       }
-      if (!req.body.feeRate) {
+      if (!req.body.networkFee) {
         error.push({ feeRate: "FeeRate is required" });
       }
       if (!req.body.padding) {
@@ -49,16 +49,26 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
           .status(400)
           .send({ type: 2, data: "This address is not valid address." });
       } else {
-        const feeRate: number = +req.body.feeRate;
+        const feeRate: number = +req.body.networkFee;
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
-        const contents: Array<string> = req.body.contents.split(",");
+        const contents: Array<string> = req.body.textContent.split("\n");
+
+        let txIndex = 0;
+        if (req.body.parentId) {
+          txIndex++;
+        }
+        if (req.body.reinscriptionId) {
+          txIndex++;
+        }
+
         const textInscriptionData: ITextInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           metadata: metadata,
           contents: contents,
+          txIndex: txIndex,
         };
 
         await TextInscribeController(textInscriptionData, res);
@@ -79,7 +89,7 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
       !(
         req.body.receiveAddress &&
         req.files?.files &&
-        req.body.feeRate &&
+        req.body.networkFee &&
         req.body.padding
       )
     ) {
@@ -90,7 +100,7 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
       if (!req.files?.files) {
         error.push({ file: "File is required" });
       }
-      if (!req.body.feeRate) {
+      if (!req.body.networkFee) {
         error.push({ feeRate: "FeeRate is required" });
       }
       if (!req.body.padding) {
@@ -115,15 +125,25 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
             data: item.data,
           };
         });
-        const feeRate: number = +req.body.feeRate;
+        const feeRate: number = +req.body.networkFee;
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
+
+        let txIndex = 0;
+        if (req.body.parentId) {
+          txIndex++;
+        }
+        if (req.body.reinscriptionId) {
+          txIndex++;
+        }
+
         const fileInscriptionData: IFileInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           files: fileArray,
           metadata: metadata,
+          txIndex: txIndex,
         };
 
         await FileInscribeController(fileInscriptionData, res);
@@ -144,7 +164,7 @@ InscriptionRouter.post("/delegate", async (req: Request, res: Response) => {
       !(
         req.body.receiveAddress &&
         req.body.delegateId &&
-        req.body.feeRate &&
+        req.body.networkFee &&
         req.body.padding
       )
     ) {
@@ -155,7 +175,7 @@ InscriptionRouter.post("/delegate", async (req: Request, res: Response) => {
       if (!req.body.delegateId) {
         error.push({ delegateId: "DelegateId is required" });
       }
-      if (!req.body.feeRate) {
+      if (!req.body.networkFee) {
         error.push({ feeRate: "FeeRate is required" });
       }
       if (!req.body.padding) {
@@ -169,16 +189,26 @@ InscriptionRouter.post("/delegate", async (req: Request, res: Response) => {
           .status(400)
           .send({ type: 2, data: "This address is not valid address." });
       } else {
-        const feeRate: number = +req.body.feeRate;
+        const feeRate: number = +req.body.networkFee;
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
         const delegateIds: Array<string> = req.body.delegateId.split(",");
+
+        let txIndex = 0;
+        if (req.body.parentId) {
+          txIndex++;
+        }
+        if (req.body.reinscriptionId) {
+          txIndex++;
+        }
+
         const delegateInscriptionData: IDelegateInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           metadata: metadata,
           delegateIds: delegateIds,
+          txIndex: txIndex,
         };
 
         await DelegateInscribeController(delegateInscriptionData, res);

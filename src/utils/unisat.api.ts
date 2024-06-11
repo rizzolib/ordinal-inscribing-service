@@ -1,6 +1,7 @@
 import axios, { type AxiosError } from "axios";
 import { TESTNET } from "../config/network.config";
 import dotenv from "dotenv";
+import { setUtxoFlag, waitUtxoFlag } from "./mutex";
 
 interface IUtxo {
   txid: string;
@@ -19,11 +20,16 @@ export const getInscriptionInfo = async (
       networkType == TESTNET ? "-testnet" : ""
     }.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
 
+    await waitUtxoFlag();
+    await setUtxoFlag(1);
+
     const res = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
       },
     });
+
+    await setUtxoFlag(0);
     const inscriptionInfo = res.data;
     const info: IUtxo = {
       txid: inscriptionInfo.data.utxo.txid,
@@ -47,11 +53,17 @@ export const isContainOrdinal = async (
       networkType == TESTNET ? "-testnet" : ""
     }.unisat.io/v1/indexer/inscription/info/${inscriptionid}`;
 
+    await waitUtxoFlag();
+    await setUtxoFlag(1);
+
     const res = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${process.env.OPENAPI_UNISAT_TOKEN}`,
       },
     });
+
+    await setUtxoFlag(0);
+
     const inscriptionInfo = res.data;
 
     if (address == inscriptionInfo.data.utxo.address) {
@@ -78,6 +90,10 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
   const size = 5000;
   let data = {};
   let utxos: IUtxo[] = [];
+
+  await waitUtxoFlag();
+  await setUtxoFlag(1);
+
   while (1) {
     const res = await axios.get(url, { ...config, params: { cursor, size } });
     if (res.data.code === -1) throw "Invalid Address";
@@ -95,6 +111,8 @@ export const getBtcUtxoInfo = async (address: string, networkType: string) => {
 
     if (cursor >= res.data.data.total - res.data.data.totalRunes) break;
   }
+
+  await setUtxoFlag(0);
 
   return utxos;
 };
