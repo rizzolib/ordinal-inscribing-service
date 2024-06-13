@@ -31,7 +31,7 @@ export const sendOrdinalBTCPsbt = async (
   sendingOrdinalData: ISendingOrdinalData
 ): Promise<any> => {
   const utxos = await getBtcUtxoInfo(
-    sendingOrdinalData.receiveAddress,
+    sendingOrdinalData.paymentAddress,
     networkConfig.networkType
   );
 
@@ -54,7 +54,6 @@ export const sendOrdinalBTCPsbt = async (
       sendingOrdinalData,
       redeemFee
     );
-
     redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
 
     redeemFee =
@@ -65,7 +64,6 @@ export const sendOrdinalBTCPsbt = async (
       utxos,
       sendingOrdinalData.btcAmount + redeemFee
     );
-
     if (!response.isSuccess) {
       return { isSuccess: false, data: "No enough balance on admin wallet." };
     }

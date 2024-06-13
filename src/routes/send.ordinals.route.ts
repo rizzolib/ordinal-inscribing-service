@@ -6,6 +6,7 @@ import {
   getBtcUtxoInfo,
   getInscriptionInfo,
   isContainOrdinal,
+  testUnisatAPI,
 } from "../utils/unisat.api";
 import networkConfig, { TESTNET } from "../config/network.config";
 
@@ -123,8 +124,8 @@ SendOrdinalRouter.post(
 
 SendOrdinalRouter.get("/test", async (req: Request, res: Response) => {
   try {
-    const data = await getBtcUtxoInfo(
-      "tb1prapjugegwv9safaremcuprnzt4q3gwz6wdh4qf7qfst7jxt3x6wq2cznt3",
+    const data = await testUnisatAPI(
+      "tb1pymgsee4syh7ez4g9pm7gu0ax8wfj4wukwlxykfwnn6gx2tcr4r7quhsdlh",
       TESTNET
     );
 

@@ -15,6 +15,7 @@ import { TESTNET } from "./src/config/network.config";
 const { Mutex } = require("async-mutex");
 
 export const flagMutex = new Mutex();
+export const iterator = new Mutex();
 
 /*
  * Load up and parse configuration details from
@@ -60,7 +61,7 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, { explorer: true })
 );
-
+app.locals.iterator = 0;
 /* Start the Express app and listen
  for incoming requests on the specified port */
 server.listen(port, () => {

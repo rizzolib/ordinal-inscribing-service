@@ -1,4 +1,4 @@
-import { flagMutex } from "../..";
+import { flagMutex, iterator } from "../..";
 import { app } from "../..";
 
 export const setUtxoFlag = async (value: number) => {
@@ -28,3 +28,13 @@ export async function waitUtxoFlag() {
     intervalId = setInterval(checkForUtxo, 200);
   });
 }
+
+export const setApiIterator = async (value: number) => {
+  const release = await iterator.acquire();
+  try {
+    // Perform actions with the flag variable
+    app.locals.iterator = value;
+  } finally {
+    release();
+  }
+};

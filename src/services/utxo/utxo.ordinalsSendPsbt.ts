@@ -190,21 +190,55 @@ export const OrdinalsUtxoSendPsbt = async (
       tapInternalKey: Buffer.from(sendingOrdinalData.ordinalsPublicKey, "hex"),
     });
   }
-
-  selectedUtxos.forEach((utxo) => {
-    psbt.addInput({
-      hash: utxo.txid,
-      index: utxo.vout,
-      witnessUtxo: {
-        value: utxo.value,
-        script: Bitcoin.address.toOutputScript(
-          sendingOrdinalData.paymentAddress as string,
-          network
-        ),
-      },
-      tapInternalKey: Buffer.from(sendingOrdinalData.paymentPublicKey, "hex"),
+  if (sendingOrdinalData.ordinalsAddress == sendingOrdinalData.paymentAddress) {
+    selectedUtxos.forEach((utxo) => {
+      psbt.addInput({
+        hash: utxo.txid,
+        index: utxo.vout,
+        witnessUtxo: {
+          value: utxo.value,
+          script: Bitcoin.address.toOutputScript(
+            sendingOrdinalData.paymentAddress as string,
+            network
+          ),
+        },
+        tapInternalKey: Buffer.from(sendingOrdinalData.paymentPublicKey, "hex"),
+      });
     });
-  });
+  } else {
+    // Here is your given Bitcoin payment address
+    const bitcoinAddress = sendingOrdinalData.paymentAddress;
+
+    // Decode the address
+    const decodeAddress = Bitcoin.address.fromBase58Check(bitcoinAddress);
+
+    // Checking the version to determine the type of address
+    const { hash } = decodeAddress;
+
+    // Constructing the scriptPubKey for P2SH
+    const scriptPubKey = Bitcoin.script.compile([
+      Bitcoin.opcodes.OP_HASH160,
+      hash,
+      Bitcoin.opcodes.OP_EQUAL,
+    ]);
+
+    // Converting the scriptPubKey to a human-readable hex format
+    const scriptPubKeyHex = scriptPubKey.toString("hex");
+
+    selectedUtxos.forEach((utxo) => {
+      psbt.addInput({
+        hash: utxo.txid,
+        index: utxo.vout,
+        witnessUtxo: {
+          value: utxo.value,
+          script: Buffer.from(scriptPubKeyHex, "hex"),
+        },
+        tapInternalKey: toXOnly(
+          Buffer.from(sendingOrdinalData.paymentPublicKey, "hex")
+        ),
+      });
+    });
+  }
 
   if (sendingOrdinalData.parentId) {
     psbt.addOutput({
