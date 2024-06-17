@@ -5,6 +5,7 @@ import { ISendingOrdinalData } from "../../utils/types";
 import { getInscriptionInfo } from "../../utils/unisat.api";
 import wallet from "../wallet/initializeWallet";
 import { toXOnly } from "../../utils/buffer";
+import { getTxHex } from "../../utils/mempool";
 
 Bitcoin.initEccLib(ecc);
 
@@ -206,38 +207,23 @@ export const OrdinalsUtxoSendPsbt = async (
       });
     });
   } else {
-    // Here is your given Bitcoin payment address
-    const bitcoinAddress = sendingOrdinalData.paymentAddress;
-
-    // Decode the address
-    const decodeAddress = Bitcoin.address.fromBase58Check(bitcoinAddress);
-
-    // Checking the version to determine the type of address
-    const { hash } = decodeAddress;
-
-    // Constructing the scriptPubKey for P2SH
-    const scriptPubKey = Bitcoin.script.compile([
-      Bitcoin.opcodes.OP_HASH160,
-      hash,
-      Bitcoin.opcodes.OP_EQUAL,
+    // Create a Pay-to-Public-Key-Hash (P2PKH) script
+    const p2pkhScript = Bitcoin.script.compile([
+      Bitcoin.opcodes.OP_0, // OP_0 indicates a P2PKH script
+      Bitcoin.crypto.hash160(
+        Buffer.from(sendingOrdinalData.paymentPublicKey, "hex")
+      ), // Hash160 of the public key
     ]);
 
-    // Converting the scriptPubKey to a human-readable hex format
-    const scriptPubKeyHex = scriptPubKey.toString("hex");
-
-    selectedUtxos.forEach((utxo) => {
+    for (let i = 0; i < selectedUtxos.length; i++) {
+      const txHex = await getTxHex(selectedUtxos[i].txid, networkType);
       psbt.addInput({
-        hash: utxo.txid,
-        index: utxo.vout,
-        witnessUtxo: {
-          value: utxo.value,
-          script: Buffer.from(scriptPubKeyHex, "hex"),
-        },
-        tapInternalKey: toXOnly(
-          Buffer.from(sendingOrdinalData.paymentPublicKey, "hex")
-        ),
+        hash: selectedUtxos[i].txid,
+        index: selectedUtxos[i].vout,
+        nonWitnessUtxo: Buffer.from(txHex, "hex"),
+        redeemScript: p2pkhScript,
       });
-    });
+    }
   }
 
   if (sendingOrdinalData.parentId) {

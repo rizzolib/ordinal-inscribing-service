@@ -126,3 +126,20 @@ export const getRecommendedFeeRate = async (networkType: string) => {
     console.log("Get Recommend Fee Rate Error!");
   }
 };
+
+export const getTxHex = async (
+  txid: string,
+  networkType: string
+): Promise<any> => {
+  try {
+    const url = `https://mempool.space/${
+      networkType == TESTNET ? "testnet/" : ""
+    }api/tx/${txid}/hex`;
+    const res = await axios.get(url);
+
+    const data = res.data;
+    return data;
+  } catch (err: any) {
+    console.log("Get Tx Hex Error");
+  }
+};
