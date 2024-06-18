@@ -1,7 +1,6 @@
 import networkConfig, {
   SEND_UTXO_FEE_LIMIT,
 } from "../../config/network.config";
-import { getUtxos, pushBTCpmt } from "../../utils/mempool";
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import dotenv from "dotenv";
@@ -12,7 +11,7 @@ import {
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from "../wallet/WIFWallet";
 import { WIF, SEED } from "../../config/network.config";
-import { getBtcUtxoInfo, getInscriptionInfo } from "../../utils/unisat.api";
+import { delay, getInscriptionInfo } from "../../utils/unisat.api";
 import { IUtxo } from "../../utils/types";
 
 dotenv.config();
@@ -36,10 +35,14 @@ export const reinscriptionAndUTXOSend = async (
   userUtxo: IUtxo,
   amount: number
 ) => {
+  console.log("reinscriptionId => ", reinscriptionId);
+
   const reinscriptionUTXO: IUtxo = await getInscriptionInfo(
     reinscriptionId,
     networkConfig.networkType
   );
+
+  console.log("reinscriptionUTXO => ", reinscriptionUTXO);
 
   let redeemFee = SEND_UTXO_FEE_LIMIT;
 

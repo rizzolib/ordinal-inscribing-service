@@ -19,6 +19,7 @@ import { delegateTapScript } from "../services/tapscript/delegateTapScript";
 import tapleafPsbt from "../services/psbt/TapLeafPsbtCreate";
 import { sendOrdinalBTCPsbt } from "../services/psbt/sendOrdinalPsbt";
 import { pushBTCpmt } from "../utils/mempool";
+import { delay } from "../utils/unisat.api";
 
 export const TextInscribeController = async (
   inscriptionData: ITextInscription,
@@ -50,6 +51,10 @@ export const TextInscribeController = async (
       vout: inscriptionData.txIndex,
       value: inscriptionData.btcAmount,
     };
+
+    console.log("Starting Waiting 5s!");
+
+    await delay(5000);
 
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
@@ -123,8 +128,12 @@ export const FileInscribeController = async (
     const userUtxo: IUtxo = {
       txid: inscriptionData.sendBtcTxId,
       vout: inscriptionData.txIndex,
-      value: inscriptionData.btcAmount,
+      value: +inscriptionData.btcAmount as number,
     };
+
+    console.log("Starting Waiting 5s!");
+
+    await delay(5000);
 
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,
@@ -145,6 +154,7 @@ export const FileInscribeController = async (
       value: sendUTXOSize,
     };
 
+    console.log("here5");
     console.log("Sent Utxo for inscribing => ", sendingUtxo);
 
     const realInscriptionTxData: Transaction = await inscriptionPsbt(
@@ -200,6 +210,10 @@ export const DelegateInscribeController = async (
       vout: inscriptionData.txIndex,
       value: inscriptionData.btcAmount,
     };
+
+    console.log("Starting Waiting 5s!");
+
+    await delay(5000);
 
     const tapleafTxData: Transaction = await tapleafPsbt(
       contentType,

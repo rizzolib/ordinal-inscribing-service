@@ -110,6 +110,7 @@ EstimateFeeRouter.post("/text", async (req: Request, res: Response) => {
 // @access   Private
 EstimateFeeRouter.post("/file", async (req: Request, res: Response) => {
   try {
+    console.log(req.files);
     if (
       !(
         req.body.receiveAddress &&

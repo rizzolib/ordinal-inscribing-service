@@ -85,20 +85,10 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
 // @access   Private
 InscriptionRouter.post("/file", async (req: Request, res: Response) => {
   try {
-    if (
-      !(
-        req.body.receiveAddress &&
-        req.files?.files &&
-        req.body.networkFee &&
-        req.body.padding
-      )
-    ) {
+    if (!(req.body.receiveAddress && req.body.networkFee && req.body.padding)) {
       let error = [];
       if (!req.body.receiveAddress) {
         error.push({ receiveAddress: "ReceiveAddress is required" });
-      }
-      if (!req.files?.files) {
-        error.push({ file: "File is required" });
       }
       if (!req.body.networkFee) {
         error.push({ feeRate: "FeeRate is required" });
@@ -114,11 +104,12 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
           .status(400)
           .send({ type: 2, data: "This address is not valid address." });
       } else {
-        let fileData = req.files?.files as any;
+        let files = req.files as any;
+        let fileData = files["files[]"];
+
         if (!Array.isArray(fileData)) {
           fileData = [fileData];
         }
-
         const fileArray: Array<IFile> = fileData.map((item: any) => {
           return {
             mimetype: item.mimetype,

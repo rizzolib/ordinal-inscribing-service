@@ -14,6 +14,10 @@ dotenv.config();
 
 const apiArray = JSON.parse(process.env.OPENAPI_UNISAT_TOKEN ?? "");
 
+export function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const getInscriptionInfo = async (
   inscriptionid: string,
   networkType: string
@@ -35,8 +39,7 @@ export const getInscriptionInfo = async (
         Authorization: `Bearer ${apiArray[app.locals.iterator] as string}`,
       },
     };
-
-    const res = await axios.get(url, config);
+    let res = await axios.get(url, config);
 
     let iterator = app.locals.iterator + 1;
     await setApiIterator(iterator);

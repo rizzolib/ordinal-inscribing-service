@@ -23,7 +23,6 @@ export const redeemSingleSendUTXOPsbt = (
         ? Bitcoin.networks.testnet
         : Bitcoin.networks.bitcoin,
   });
-
   psbt.addInput({
     hash: userUtxo.txid,
     index: userUtxo.vout,
