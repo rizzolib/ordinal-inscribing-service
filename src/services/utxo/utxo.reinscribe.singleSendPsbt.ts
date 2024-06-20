@@ -1,6 +1,7 @@
 import * as Bitcoin from "bitcoinjs-lib";
 import * as ecc from "tiny-secp256k1";
 import { TESTNET } from "../../config/network.config";
+import { BlobOptions } from "buffer";
 
 Bitcoin.initEccLib(ecc);
 
@@ -16,7 +17,8 @@ export const redeemReinscribeAndUtxoSendPsbt = (
   networkType: string,
   amount: number,
   reinscriptionUTXO: IUtxo,
-  fee: number
+  fee: number,
+  holderStatus: boolean
 ): Bitcoin.Psbt => {
   const psbt = new Bitcoin.Psbt({
     network:
@@ -47,11 +49,12 @@ export const redeemReinscribeAndUtxoSendPsbt = (
     address: wallet.address,
     value: amount,
   });
-
-  psbt.addOutput({
-    address: wallet.address,
-    value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
-  });
+  if (!holderStatus) {
+    psbt.addOutput({
+      address: wallet.address,
+      value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
+    });
+  }
 
   return psbt;
 };
@@ -63,7 +66,8 @@ export const ReinscribeAndUtxoSendPsbt = (
   fee: number,
   address: string,
   amount: number,
-  reinscriptionUTXO: IUtxo
+  reinscriptionUTXO: IUtxo,
+  holderStatus: boolean
 ): Bitcoin.Psbt => {
   const psbt = new Bitcoin.Psbt({
     network:
@@ -97,10 +101,11 @@ export const ReinscribeAndUtxoSendPsbt = (
     value: amount,
   });
 
-  psbt.addOutput({
-    address: wallet.address,
-    value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
-  });
-
+  if (!holderStatus) {
+    psbt.addOutput({
+      address: wallet.address,
+      value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
+    });
+  }
   return psbt;
 };

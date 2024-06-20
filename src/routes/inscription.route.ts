@@ -62,6 +62,8 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
           txIndex++;
         }
 
+        const holderStatus: boolean = req.body.holderStatus ?? false;
+
         const textInscriptionData: ITextInscription = {
           ...req.body,
           feeRate: feeRate,
@@ -69,6 +71,7 @@ InscriptionRouter.post("/text", async (req: Request, res: Response) => {
           metadata: metadata,
           contents: contents,
           txIndex: txIndex,
+          holderStatus: holderStatus,
         };
 
         await TextInscribeController(textInscriptionData, res);
@@ -128,6 +131,7 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
           txIndex++;
         }
 
+        const holderStatus: boolean = req.body.holderStatus ?? false;
         const fileInscriptionData: IFileInscription = {
           ...req.body,
           feeRate: feeRate,
@@ -135,6 +139,7 @@ InscriptionRouter.post("/file", async (req: Request, res: Response) => {
           files: fileArray,
           metadata: metadata,
           txIndex: txIndex,
+          holderStatus: holderStatus,
         };
 
         await FileInscribeController(fileInscriptionData, res);
@@ -193,6 +198,8 @@ InscriptionRouter.post("/delegate", async (req: Request, res: Response) => {
           txIndex++;
         }
 
+        const holderStatus: boolean = req.body.holderStatus ?? false;
+
         const delegateInscriptionData: IDelegateInscription = {
           ...req.body,
           feeRate: feeRate,
@@ -200,6 +207,7 @@ InscriptionRouter.post("/delegate", async (req: Request, res: Response) => {
           metadata: metadata,
           delegateIds: delegateIds,
           txIndex: txIndex,
+          holderStatus: holderStatus,
         };
 
         await DelegateInscribeController(delegateInscriptionData, res);

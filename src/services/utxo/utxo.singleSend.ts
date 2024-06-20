@@ -10,11 +10,7 @@ import {
 } from "./utxo.singleSendPsbt";
 import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from "../wallet/WIFWallet";
-import { getSendBTCUTXOArray } from "./utxo.management";
-import { setUtxoFlag, waitUtxoFlag } from "../../utils/mutex";
 import { WIF, SEED } from "../../config/network.config";
-import { getBtcUtxoInfo } from "../../utils/unisat.api";
-import { getUtxos } from "../../utils/mempool";
 import { IUtxo } from "../../utils/types";
 
 dotenv.config();
@@ -35,7 +31,8 @@ export const singleSendUTXO = async (
   address: string,
   feeRate: number,
   userUtxo: IUtxo,
-  amount: number
+  amount: number,
+  holderStatus: boolean
 ) => {
   let redeemFee = SEND_UTXO_FEE_LIMIT;
 
@@ -44,7 +41,8 @@ export const singleSendUTXO = async (
     userUtxo,
     networkType,
     amount,
-    redeemFee
+    redeemFee,
+    holderStatus
   );
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
   redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
@@ -55,7 +53,8 @@ export const singleSendUTXO = async (
     networkType,
     redeemFee,
     address,
-    amount
+    amount,
+    holderStatus
   );
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
   const tx = signedPsbt.extractTransaction(true);

@@ -15,7 +15,8 @@ export const redeemSingleSendUTXOPsbt = (
   userUtxo: IUtxo,
   networkType: string,
   amount: number,
-  fee: number
+  fee: number,
+  holderStatus: boolean
 ): Bitcoin.Psbt => {
   const psbt = new Bitcoin.Psbt({
     network:
@@ -37,11 +38,12 @@ export const redeemSingleSendUTXOPsbt = (
     address: wallet.address,
     value: amount,
   });
-
-  psbt.addOutput({
-    address: wallet.address,
-    value: userUtxo.value - fee - amount,
-  });
+  if (!holderStatus) {
+    psbt.addOutput({
+      address: wallet.address,
+      value: userUtxo.value - fee - amount,
+    });
+  }
 
   return psbt;
 };
@@ -52,7 +54,8 @@ export const singleSendUTXOPsbt = (
   networkType: string,
   fee: number,
   address: string,
-  amount: number
+  amount: number,
+  holderStatus: boolean
 ): Bitcoin.Psbt => {
   const psbt = new Bitcoin.Psbt({
     network:
@@ -76,10 +79,11 @@ export const singleSendUTXOPsbt = (
     value: amount,
   });
 
-  psbt.addOutput({
-    address: wallet.address,
-    value: userUtxo.value - fee - amount,
-  });
-
+  if (!holderStatus) {
+    psbt.addOutput({
+      address: wallet.address,
+      value: userUtxo.value - fee - amount,
+    });
+  }
   return psbt;
 };

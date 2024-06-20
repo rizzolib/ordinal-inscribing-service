@@ -25,6 +25,7 @@ export interface ITextInscription {
   ordinalsPublicKey: string;
   paymentAddress: string;
   paymentPublicKey: string;
+  holderStatus: string;
 }
 
 export interface IFileInscription {
@@ -43,6 +44,7 @@ export interface IFileInscription {
   ordinalsPublicKey: string;
   paymentAddress: string;
   paymentPublicKey: string;
+  holderStatus: string;
 }
 
 export interface IDelegateInscription {
@@ -61,6 +63,7 @@ export interface IDelegateInscription {
   ordinalsPublicKey: string;
   paymentAddress: string;
   paymentPublicKey: string;
+  holderStatus: string;
 }
 
 export interface ISendingOrdinalData {

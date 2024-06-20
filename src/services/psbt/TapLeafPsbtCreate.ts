@@ -66,14 +66,16 @@ export const tapleafPsbt = async (
       address,
       inscriptionData.feeRate,
       userUtxo,
-      amount
+      amount,
+      inscriptionData.holderStatus
     );
   } else {
     res = await singleSendUTXO(
       address,
       inscriptionData.feeRate,
       userUtxo,
-      amount
+      amount,
+      inscriptionData.holderStatus
     );
   }
 

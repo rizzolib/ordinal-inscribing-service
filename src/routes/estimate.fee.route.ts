@@ -88,12 +88,15 @@ EstimateFeeRouter.post("/text", async (req: Request, res: Response) => {
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
         const contents: Array<string> = JSON.parse(req.body.contents).data;
+        const holderStatus: boolean = req.body.holderStatus ?? false;
+
         const textInscriptionData: ITextInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           metadata: metadata,
           contents: contents,
+          holderStatus: holderStatus,
         };
 
         await TextEstimateFeeController(textInscriptionData, res);
@@ -188,12 +191,16 @@ EstimateFeeRouter.post("/file", async (req: Request, res: Response) => {
         const feeRate: number = +req.body.feeRate;
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
+
+        const holderStatus: boolean = req.body.holderStatus ?? false;
+
         const fileInscriptionData: IFileInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           files: fileArray,
           metadata: metadata,
+          holderStatus: holderStatus,
         };
 
         await FileEstimateFeeController(fileInscriptionData, res);
@@ -294,12 +301,16 @@ EstimateFeeRouter.post("/delegate", async (req: Request, res: Response) => {
         const padding: number = +req.body.padding;
         const metadata: string = req.body.metadata;
         const delegateIds: Array<string> = req.body.delegateId.split(",");
+
+        const holderStatus: boolean = req.body.holderStatus ?? false;
+
         const delegateInscriptionData: IDelegateInscription = {
           ...req.body,
           feeRate: feeRate,
           padding: padding,
           metadata: metadata,
           delegateIds: delegateIds,
+          holderStatus: holderStatus,
         };
         await DelegateEstimateFeeController(delegateInscriptionData, res);
       }

@@ -33,7 +33,8 @@ export const reinscriptionAndUTXOSend = async (
   address: string,
   feeRate: number,
   userUtxo: IUtxo,
-  amount: number
+  amount: number,
+  holderStatus: boolean
 ) => {
   console.log("reinscriptionId => ", reinscriptionId);
 
@@ -52,7 +53,8 @@ export const reinscriptionAndUTXOSend = async (
     networkType,
     amount,
     reinscriptionUTXO,
-    redeemFee
+    redeemFee,
+    holderStatus
   );
   redeemPsbt = wallet.signPsbt(redeemPsbt, wallet.ecPair);
   redeemFee = redeemPsbt.extractTransaction(true).virtualSize() * feeRate;
@@ -64,7 +66,8 @@ export const reinscriptionAndUTXOSend = async (
     redeemFee,
     address,
     amount,
-    reinscriptionUTXO
+    reinscriptionUTXO,
+    holderStatus
   );
   let signedPsbt = wallet.signPsbt(psbt, wallet.ecPair);
   const tx = signedPsbt.extractTransaction(true);
