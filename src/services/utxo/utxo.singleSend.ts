@@ -2,14 +2,13 @@ import networkConfig, {
   SEND_UTXO_FEE_LIMIT,
 } from "../../config/network.config";
 import * as Bitcoin from "bitcoinjs-lib";
-import * as ecc from "tiny-secp256k1";
+import ecc from "@bitcoinerlab/secp256k1";
 import dotenv from "dotenv";
 import {
   redeemSingleSendUTXOPsbt,
   singleSendUTXOPsbt,
 } from "./utxo.singleSendPsbt";
 import { WIFWallet } from "../wallet/WIFWallet";
-import { WIF, SEED } from "../../config/network.config";
 import { IUtxo } from "../../utils/types";
 
 dotenv.config();

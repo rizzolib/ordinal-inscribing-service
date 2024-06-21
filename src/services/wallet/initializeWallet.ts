@@ -1,5 +1,5 @@
 import networkConfig from "../../config/network.config";
-import * as ecc from "tiny-secp256k1";
+import ecc from "@bitcoinerlab/secp256k1";
 import { initEccLib } from "bitcoinjs-lib";
 import { WIFWallet } from "./WIFWallet";
 initEccLib(ecc as any);

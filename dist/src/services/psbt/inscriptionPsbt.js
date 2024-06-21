@@ -41,10 +41,10 @@ const buffer_1 = require("../../utils/buffer");
 const network_config_1 = __importStar(require("../../config/network.config"));
 const initializeWallet_1 = __importDefault(require("../wallet/initializeWallet"));
 const unisat_api_1 = require("../../utils/unisat.api");
-const ecc = __importStar(require("tiny-secp256k1"));
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const ecpair_1 = require("ecpair");
-(0, bitcoinjs_lib_1.initEccLib)(ecc);
-const ECPair = (0, ecpair_1.ECPairFactory)(ecc);
+(0, bitcoinjs_lib_1.initEccLib)(secp256k1_1.default);
+const ECPair = (0, ecpair_1.ECPairFactory)(secp256k1_1.default);
 const inscriptionPsbt = (contentType, inscriptionData, tapScript, sentUtxo) => __awaiter(void 0, void 0, void 0, function* () {
     const network = network_config_1.default.networkType == network_config_1.TESTNET ? bitcoinjs_lib_1.networks.testnet : bitcoinjs_lib_1.networks.bitcoin;
     const keyPair = initializeWallet_1.default.ecPair;
@@ -138,9 +138,9 @@ function tweakSigner(signer, opts = {}) {
         throw new Error("Private key is required for tweaking signer!");
     }
     if (signer.publicKey[0] === 3) {
-        privateKey = ecc.privateNegate(privateKey);
+        privateKey = secp256k1_1.default.privateNegate(privateKey);
     }
-    const tweakedPrivateKey = ecc.privateAdd(privateKey, tapTweakHash((0, buffer_1.toXOnly)(signer.publicKey), opts.tweakHash));
+    const tweakedPrivateKey = secp256k1_1.default.privateAdd(privateKey, tapTweakHash((0, buffer_1.toXOnly)(signer.publicKey), opts.tweakHash));
     if (!tweakedPrivateKey) {
         throw new Error("Invalid tweaked private key!");
     }

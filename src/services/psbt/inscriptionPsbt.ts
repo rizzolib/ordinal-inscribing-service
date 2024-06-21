@@ -17,7 +17,7 @@ import networkConfig, {
 } from "../../config/network.config";
 import wallet from "../wallet/initializeWallet";
 import { getInscriptionInfo } from "../../utils/unisat.api";
-import * as ecc from "tiny-secp256k1";
+import ecc from "@bitcoinerlab/secp256k1";
 import { ECPairFactory, ECPairAPI } from "ecpair";
 
 initEccLib(ecc as any);

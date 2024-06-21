@@ -1,7 +1,6 @@
 import * as Bitcoin from "bitcoinjs-lib";
-import * as ecc from "tiny-secp256k1";
+import ecc from "@bitcoinerlab/secp256k1";
 import { TESTNET } from "../../config/network.config";
-import { BlobOptions } from "buffer";
 
 Bitcoin.initEccLib(ecc);
 

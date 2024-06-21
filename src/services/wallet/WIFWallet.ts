@@ -1,7 +1,6 @@
 import * as bitcoin from "bitcoinjs-lib";
 import { initEccLib, networks } from "bitcoinjs-lib";
-import * as ecc from "tiny-secp256k1";
-import BIP32Factory, { type BIP32Interface } from "bip32";
+import ecc from "@bitcoinerlab/secp256k1";
 import ECPairFactory, { type ECPairInterface } from "ecpair";
 import dotenv from "dotenv";
 import { type PublicKey, SecretKey } from "@cmdcode/crypto-utils";
@@ -16,7 +15,6 @@ dotenv.config();
 initEccLib(ecc);
 
 const ECPair = ECPairFactory(ecc);
-const bip32 = BIP32Factory(ecc);
 
 export class WIFWallet {
   private network: bitcoin.networks.Network;

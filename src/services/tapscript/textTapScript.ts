@@ -1,17 +1,8 @@
 import { ITextInscription, IUtxo } from "../../utils/types";
 import wallet from "../wallet/initializeWallet";
-import {
-  script,
-  Psbt,
-  initEccLib,
-  networks,
-  Signer as BTCSigner,
-  opcodes,
-  crypto,
-  payments,
-} from "bitcoinjs-lib";
+import { opcodes } from "bitcoinjs-lib";
 import { getInscriptionInfo } from "../../utils/unisat.api";
-import networkConfig, { TESTNET } from "../../config/network.config";
+import networkConfig from "../../config/network.config";
 import cbor from "cbor";
 import { splitBuffer } from "../../utils/buffer";
 import { toXOnly } from "../../utils/buffer";

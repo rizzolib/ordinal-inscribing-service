@@ -1,22 +1,10 @@
-import {
-  Psbt,
-  networks,
-  payments,
-  script,
-  initEccLib,
-  crypto,
-  address as Address,
-} from "bitcoinjs-lib";
-import { ISendingOrdinalData, IUtxo } from "../../utils/types";
-import { toXOnly } from "../../utils/buffer";
+import { Psbt, initEccLib } from "bitcoinjs-lib";
+import { ISendingOrdinalData } from "../../utils/types";
 import networkConfig, {
   SEND_UTXO_FEE_LIMIT,
-  TESTNET,
 } from "../../config/network.config";
 import wallet from "../wallet/initializeWallet";
-import * as ecc from "tiny-secp256k1";
-import { ECPairFactory, ECPairAPI } from "ecpair";
-import { getUtxos } from "../../utils/mempool";
+import ecc from "@bitcoinerlab/secp256k1";
 import { getSendBTCUTXOArray } from "../../services/utxo/utxo.management";
 import {
   OrdinalsUtxoSendPsbt,
@@ -25,8 +13,6 @@ import {
 import { getBtcUtxoInfo } from "../../utils/unisat.api";
 
 initEccLib(ecc as any);
-const ECPair: ECPairAPI = ECPairFactory(ecc);
-
 export const sendOrdinalBTCPsbt = async (
   sendingOrdinalData: ISendingOrdinalData
 ): Promise<any> => {

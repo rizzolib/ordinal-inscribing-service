@@ -39,13 +39,11 @@ exports.sendOrdinalBTCPsbt = void 0;
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const network_config_1 = __importStar(require("../../config/network.config"));
 const initializeWallet_1 = __importDefault(require("../wallet/initializeWallet"));
-const ecc = __importStar(require("tiny-secp256k1"));
-const ecpair_1 = require("ecpair");
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const utxo_management_1 = require("../../services/utxo/utxo.management");
 const utxo_ordinalsSendPsbt_1 = require("../../services/utxo/utxo.ordinalsSendPsbt");
 const unisat_api_1 = require("../../utils/unisat.api");
-(0, bitcoinjs_lib_1.initEccLib)(ecc);
-const ECPair = (0, ecpair_1.ECPairFactory)(ecc);
+(0, bitcoinjs_lib_1.initEccLib)(secp256k1_1.default);
 const sendOrdinalBTCPsbt = (sendingOrdinalData) => __awaiter(void 0, void 0, void 0, function* () {
     const utxos = yield (0, unisat_api_1.getBtcUtxoInfo)(sendingOrdinalData.paymentAddress, network_config_1.default.networkType);
     let response = (0, utxo_management_1.getSendBTCUTXOArray)(utxos, sendingOrdinalData.btcAmount + network_config_1.SEND_UTXO_FEE_LIMIT);

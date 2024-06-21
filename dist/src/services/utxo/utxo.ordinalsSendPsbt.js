@@ -37,12 +37,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdinalsUtxoSendPsbt = exports.RedeemOrdinalsUtxoSendPsbt = void 0;
 const Bitcoin = __importStar(require("bitcoinjs-lib"));
-const ecc = __importStar(require("tiny-secp256k1"));
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const network_config_1 = __importStar(require("../../config/network.config"));
 const unisat_api_1 = require("../../utils/unisat.api");
 const initializeWallet_1 = __importDefault(require("../wallet/initializeWallet"));
 const mempool_1 = require("../../utils/mempool");
-Bitcoin.initEccLib(ecc);
+Bitcoin.initEccLib(secp256k1_1.default);
 const RedeemOrdinalsUtxoSendPsbt = (selectedUtxos, networkType, sendingOrdinalData, redeemFee) => __awaiter(void 0, void 0, void 0, function* () {
     const psbt = new Bitcoin.Psbt({
         network: networkType == network_config_1.TESTNET

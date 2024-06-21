@@ -22,13 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.utxoSplitPsbt = exports.redeemUtxoSplitPsbt = void 0;
 const Bitcoin = __importStar(require("bitcoinjs-lib"));
-const ecc = __importStar(require("tiny-secp256k1"));
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const network_config_1 = require("../../config/network.config");
 const network_config_2 = require("../../config/network.config");
-Bitcoin.initEccLib(ecc);
+Bitcoin.initEccLib(secp256k1_1.default);
 const redeemUtxoSplitPsbt = (wallet, inputUtxoArray, networkType) => {
     const psbt = new Bitcoin.Psbt({
         network: networkType == network_config_1.TESTNET

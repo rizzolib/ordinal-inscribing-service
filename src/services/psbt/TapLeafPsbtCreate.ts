@@ -13,7 +13,7 @@ import networkConfig, {
   TESTNET,
   TEXT_CONTENT,
 } from "../../config/network.config";
-import * as ecc from "tiny-secp256k1";
+import ecc from "@bitcoinerlab/secp256k1";
 import wallet from "../wallet/initializeWallet";
 import { reinscriptionAndUTXOSend } from "../utxo/utxo.reinscribe.singleSend";
 import { singleSendUTXO } from "../utxo/utxo.singleSend";

@@ -29,16 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WIFWallet = void 0;
 const bitcoin = __importStar(require("bitcoinjs-lib"));
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
-const ecc = __importStar(require("tiny-secp256k1"));
-const bip32_1 = __importDefault(require("bip32"));
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const ecpair_1 = __importDefault(require("ecpair"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_utils_1 = require("@cmdcode/crypto-utils");
 const network_config_1 = require("../../config/network.config");
 dotenv_1.default.config();
-(0, bitcoinjs_lib_1.initEccLib)(ecc);
-const ECPair = (0, ecpair_1.default)(ecc);
-const bip32 = (0, bip32_1.default)(ecc);
+(0, bitcoinjs_lib_1.initEccLib)(secp256k1_1.default);
+const ECPair = (0, ecpair_1.default)(secp256k1_1.default);
 class WIFWallet {
     constructor(walletParam) {
         var _a;

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.1.1",
     "@cmdcode/buff-utils": "^1.7.6",
     "@cmdcode/crypto-utils": "^1.9.8",
     "@cmdcode/tapscript": "^1.4.4",

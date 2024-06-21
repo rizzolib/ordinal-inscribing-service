@@ -2,12 +2,7 @@ import { Request, Response, Router } from "express";
 import { ISendingOrdinalData } from "../utils/types";
 import { SendingOrdinalController } from "../controller/inscribe.controller";
 import { isValidBitcoinAddress } from "../utils/validationAddress";
-import {
-  getBtcUtxoInfo,
-  getInscriptionInfo,
-  isContainOrdinal,
-  testUnisatAPI,
-} from "../utils/unisat.api";
+import { isContainOrdinal, testUnisatAPI } from "../utils/unisat.api";
 import networkConfig, { TESTNET } from "../config/network.config";
 
 // Create a new instance of the Inscription Router

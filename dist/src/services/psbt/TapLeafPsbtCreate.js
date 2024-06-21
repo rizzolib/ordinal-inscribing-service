@@ -39,11 +39,11 @@ exports.tapleafPsbt = void 0;
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const buffer_1 = require("../../utils/buffer");
 const network_config_1 = __importStar(require("../../config/network.config"));
-const ecc = __importStar(require("tiny-secp256k1"));
+const secp256k1_1 = __importDefault(require("@bitcoinerlab/secp256k1"));
 const initializeWallet_1 = __importDefault(require("../wallet/initializeWallet"));
 const utxo_reinscribe_singleSend_1 = require("../utxo/utxo.reinscribe.singleSend");
 const utxo_singleSend_1 = require("../utxo/utxo.singleSend");
-(0, bitcoinjs_lib_1.initEccLib)(ecc);
+(0, bitcoinjs_lib_1.initEccLib)(secp256k1_1.default);
 const network = network_config_1.default.networkType == network_config_1.TESTNET ? bitcoinjs_lib_1.networks.testnet : bitcoinjs_lib_1.networks.bitcoin;
 const keyPair = initializeWallet_1.default.ecPair;
 const tapleafPsbt = (contentType, inscriptionData, tapScript, userUtxo, amount) => __awaiter(void 0, void 0, void 0, function* () {
