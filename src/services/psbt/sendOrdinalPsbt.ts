@@ -41,7 +41,7 @@ export const sendOrdinalBTCPsbt = async (
   );
 
   if (!response.isSuccess) {
-    return { isSuccess: false, data: "No enough balance on admin wallet." };
+    return { isSuccess: false, data: "No enough balance on your wallet." };
   }
 
   let selectedUtxos = response.data;
@@ -65,7 +65,7 @@ export const sendOrdinalBTCPsbt = async (
       sendingOrdinalData.btcAmount + redeemFee
     );
     if (!response.isSuccess) {
-      return { isSuccess: false, data: "No enough balance on admin wallet." };
+      return { isSuccess: false, data: "No enough balance on your wallet." };
     }
     selectedUtxos = response.data;
   }

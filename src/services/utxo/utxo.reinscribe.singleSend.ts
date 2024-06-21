@@ -8,7 +8,6 @@ import {
   redeemReinscribeAndUtxoSendPsbt,
   ReinscribeAndUtxoSendPsbt,
 } from "./utxo.reinscribe.singleSendPsbt";
-import { SeedWallet } from "../wallet/SeedWallet";
 import { WIFWallet } from "../wallet/WIFWallet";
 import { WIF, SEED } from "../../config/network.config";
 import { delay, getInscriptionInfo } from "../../utils/unisat.api";
@@ -18,15 +17,10 @@ dotenv.config();
 Bitcoin.initEccLib(ecc);
 
 const networkType: string = networkConfig.networkType;
-let wallet: SeedWallet | WIFWallet;
+let wallet: WIFWallet;
 
-if (networkConfig.walletType == WIF) {
-  const privateKey: string = process.env.PRIVATE_KEY as string;
-  wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
-} else if (networkConfig.walletType == SEED) {
-  const seed: string = process.env.MNEMONIC as string;
-  wallet = new SeedWallet({ networkType: networkType, seed: seed });
-}
+const privateKey: string = process.env.PRIVATE_KEY as string;
+wallet = new WIFWallet({ networkType: networkType, privateKey: privateKey });
 
 export const reinscriptionAndUTXOSend = async (
   reinscriptionId: string,
