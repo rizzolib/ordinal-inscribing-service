@@ -49,7 +49,7 @@ class WIFWallet {
             this.network = bitcoinjs_lib_1.networks.bitcoin;
         }
         this.ecPair = ECPair.fromWIF(walletParam.privateKey, this.network);
-        this.secret = (_a = this.ecPair.privateKey) === null || _a === void 0 ? void 0 : _a.toString('hex');
+        this.secret = (_a = this.ecPair.privateKey) === null || _a === void 0 ? void 0 : _a.toString("hex");
         this.seckey = new crypto_utils_1.SecretKey(this.secret, { type: "taproot" });
         this.pubkey = this.seckey.pub;
         const { address, output } = bitcoin.payments.p2tr({

@@ -12,7 +12,7 @@ import { EstimateFeeRouter } from "./src/routes/estimate.fee.route";
 import { SendOrdinalRouter } from "./src/routes/send.ordinals.route";
 import http from "http";
 import { TESTNET } from "./src/config/network.config";
-const { Mutex } = require("async-mutex");
+import { Mutex } from "async-mutex";
 
 export const flagMutex = new Mutex();
 export const iterator = new Mutex();

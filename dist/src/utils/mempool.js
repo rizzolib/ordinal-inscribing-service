@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecommendedFeeRate = exports.getFeeRate = exports.getBlockHeight = exports.getPrice = exports.pushBTCpmt = exports.getUtxos = void 0;
+exports.getTxHex = exports.getRecommendedFeeRate = exports.getFeeRate = exports.getBlockHeight = exports.getPrice = exports.pushBTCpmt = exports.getUtxos = void 0;
 const axios_1 = __importDefault(require("axios"));
 const network_config_1 = require("../config/network.config");
 const getUtxos = (address, networkType) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}api/address/${address}/utxo`;
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/address/${address}/utxo`;
         const res = yield axios_1.default.get(url);
         const confirmedUtxos = [];
         const unConfirmedUtxos = [];
@@ -40,12 +40,12 @@ const getUtxos = (address, networkType) => __awaiter(void 0, void 0, void 0, fun
         return [...confirmedUtxos, ...unConfirmedUtxos];
     }
     catch (err) {
-        console.log('Get Utxos Error');
+        console.log("Get Utxos Error");
     }
 });
 exports.getUtxos = getUtxos;
 const pushBTCpmt = (rawtx, networkType) => __awaiter(void 0, void 0, void 0, function* () {
-    const txid = yield postData(`https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}api/tx`, rawtx);
+    const txid = yield postData(`https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/tx`, rawtx);
     return txid;
 });
 exports.pushBTCpmt = pushBTCpmt;
@@ -62,13 +62,13 @@ const postData = (url, json, content_type = "text/plain", apikey = "") => __awai
         return res.data;
     }
     catch (err) {
-        console.log('Push Transaction Error');
+        console.log("Push Transaction Error");
         console.log(err.response.data);
     }
 });
 const getPrice = (networkType) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}api/v1/prices`;
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/v1/prices`;
         const res = yield axios_1.default.get(url);
         return res.data;
     }
@@ -79,7 +79,7 @@ const getPrice = (networkType) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getPrice = getPrice;
 const getBlockHeight = (networkType) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}/api/blocks/tip/height`;
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}/api/blocks/tip/height`;
         const res = yield axios_1.default.get(url);
         return res.data;
     }
@@ -91,7 +91,7 @@ exports.getBlockHeight = getBlockHeight;
 const getFeeRate = (networkType, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const height = yield (0, exports.getBlockHeight)(networkType);
-        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}api/v1/blocks/${height}`;
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/v1/blocks/${height}`;
         const blockData = yield axios_1.default.get(url);
         const feeRateData = blockData.data.map((item) => {
             return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate };
@@ -101,20 +101,32 @@ const getFeeRate = (networkType, response) => __awaiter(void 0, void 0, void 0, 
     catch (error) {
         return response.status(400).send({
             type: 1,
-            data: 'Get Fee Rate Error!'
+            data: "Get Fee Rate Error!",
         });
     }
 });
 exports.getFeeRate = getFeeRate;
 const getRecommendedFeeRate = (networkType) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? 'testnet/' : ''}api/v1/fees/recommended`;
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/v1/fees/recommended`;
         const response = yield axios_1.default.get(url);
         const recommendFeeRate = response.data;
         return recommendFeeRate;
     }
     catch (error) {
-        console.log('Get Recommend Fee Rate Error!');
+        console.log("Get Recommend Fee Rate Error!");
     }
 });
 exports.getRecommendedFeeRate = getRecommendedFeeRate;
+const getTxHex = (txid, networkType) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const url = `https://mempool.space/${networkType == network_config_1.TESTNET ? "testnet/" : ""}api/tx/${txid}/hex`;
+        const res = yield axios_1.default.get(url);
+        const data = res.data;
+        return data;
+    }
+    catch (err) {
+        console.log("Get Tx Hex Error");
+    }
+});
+exports.getTxHex = getTxHex;

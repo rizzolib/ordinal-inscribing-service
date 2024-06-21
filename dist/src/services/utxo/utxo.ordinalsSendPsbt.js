@@ -35,73 +35,183 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrdinalsUtxoSendPsbt = void 0;
+exports.OrdinalsUtxoSendPsbt = exports.RedeemOrdinalsUtxoSendPsbt = void 0;
 const Bitcoin = __importStar(require("bitcoinjs-lib"));
 const ecc = __importStar(require("tiny-secp256k1"));
 const network_config_1 = __importStar(require("../../config/network.config"));
 const unisat_api_1 = require("../../utils/unisat.api");
 const initializeWallet_1 = __importDefault(require("../wallet/initializeWallet"));
-const buffer_1 = require("../../utils/buffer");
+const mempool_1 = require("../../utils/mempool");
 Bitcoin.initEccLib(ecc);
-const OrdinalsUtxoSendPsbt = (selectedUtxos, networkType, sendingOrdinalData, redeemFee) => __awaiter(void 0, void 0, void 0, function* () {
+const RedeemOrdinalsUtxoSendPsbt = (selectedUtxos, networkType, sendingOrdinalData, redeemFee) => __awaiter(void 0, void 0, void 0, function* () {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
-    const network = networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin;
+    const network = networkType == network_config_1.TESTNET
+        ? Bitcoin.networks.testnet
+        : Bitcoin.networks.bitcoin;
     let inputUtxoSumValue = selectedUtxos.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
-    let parentInscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.parentId, network_config_1.default.networkType);
-    let reInscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.reinscriptionId, network_config_1.default.networkType);
+    let parentInscriptionUTXO = {
+        value: 0,
+        txid: "",
+        vout: 0,
+    };
+    let reinscriptionUTXO = {
+        value: 0,
+        txid: "",
+        vout: 0,
+    };
     if (sendingOrdinalData.parentId) {
+        parentInscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.parentId, network_config_1.default.networkType);
         psbt.addInput({
             hash: parentInscriptionUTXO.txid,
             index: parentInscriptionUTXO.vout,
             witnessUtxo: {
                 value: parentInscriptionUTXO.value,
-                script: Bitcoin.address.toOutputScript(sendingOrdinalData.receiveAddress, network),
+                script: initializeWallet_1.default.output,
             },
-            tapInternalKey: (0, buffer_1.toXOnly)(Buffer.from(sendingOrdinalData.publicKey, 'hex')),
+            tapInternalKey: Buffer.from(initializeWallet_1.default.publicKey, "hex").subarray(1, 33),
         });
     }
     if (sendingOrdinalData.reinscriptionId) {
+        reinscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.reinscriptionId, network_config_1.default.networkType);
         psbt.addInput({
-            hash: reInscriptionUTXO.txid,
-            index: reInscriptionUTXO.vout,
+            hash: reinscriptionUTXO.txid,
+            index: reinscriptionUTXO.vout,
             witnessUtxo: {
-                value: reInscriptionUTXO.value,
-                script: Bitcoin.address.toOutputScript(sendingOrdinalData.receiveAddress, network),
+                value: reinscriptionUTXO.value,
+                script: initializeWallet_1.default.output,
             },
-            tapInternalKey: (0, buffer_1.toXOnly)(Buffer.from(sendingOrdinalData.publicKey, 'hex')),
+            tapInternalKey: Buffer.from(initializeWallet_1.default.publicKey, "hex").subarray(1, 33),
         });
     }
-    selectedUtxos.forEach(utxo => {
+    selectedUtxos.forEach((utxo) => {
         psbt.addInput({
             hash: utxo.txid,
             index: utxo.vout,
             witnessUtxo: {
                 value: utxo.value,
-                script: Bitcoin.address.toOutputScript(sendingOrdinalData.receiveAddress, network),
+                script: initializeWallet_1.default.output,
             },
-            tapInternalKey: (0, buffer_1.toXOnly)(Buffer.from(sendingOrdinalData.publicKey, 'hex')),
+            tapInternalKey: Buffer.from(initializeWallet_1.default.publicKey, "hex").subarray(1, 33),
         });
     });
     if (sendingOrdinalData.parentId) {
         psbt.addOutput({
             address: initializeWallet_1.default.address,
-            value: parentInscriptionUTXO.value
+            value: parentInscriptionUTXO.value,
         });
     }
     if (sendingOrdinalData.reinscriptionId) {
         psbt.addOutput({
             address: initializeWallet_1.default.address,
-            value: reInscriptionUTXO.value
+            value: reinscriptionUTXO.value,
         });
     }
     psbt.addOutput({
         address: initializeWallet_1.default.address,
-        value: sendingOrdinalData.btcAmount
+        value: sendingOrdinalData.btcAmount,
     });
     psbt.addOutput({
         address: initializeWallet_1.default.address,
+        value: inputUtxoSumValue - redeemFee - sendingOrdinalData.btcAmount,
+    });
+    return psbt;
+});
+exports.RedeemOrdinalsUtxoSendPsbt = RedeemOrdinalsUtxoSendPsbt;
+const OrdinalsUtxoSendPsbt = (selectedUtxos, networkType, sendingOrdinalData, redeemFee) => __awaiter(void 0, void 0, void 0, function* () {
+    const psbt = new Bitcoin.Psbt({
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
+    });
+    const network = networkType == network_config_1.TESTNET
+        ? Bitcoin.networks.testnet
+        : Bitcoin.networks.bitcoin;
+    let inputUtxoSumValue = selectedUtxos.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
+    let parentInscriptionUTXO = {
+        txid: "",
+        vout: 0,
+        value: 0,
+    };
+    let reInscriptionUTXO = {
+        txid: "",
+        vout: 0,
+        value: 0,
+    };
+    if (sendingOrdinalData.parentId) {
+        parentInscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.parentId, network_config_1.default.networkType);
+        psbt.addInput({
+            hash: parentInscriptionUTXO.txid,
+            index: parentInscriptionUTXO.vout,
+            witnessUtxo: {
+                value: parentInscriptionUTXO.value,
+                script: Bitcoin.address.toOutputScript(sendingOrdinalData.ordinalsAddress, network),
+            },
+            tapInternalKey: Buffer.from(sendingOrdinalData.ordinalsPublicKey, "hex"),
+        });
+    }
+    if (sendingOrdinalData.reinscriptionId) {
+        reInscriptionUTXO = yield (0, unisat_api_1.getInscriptionInfo)(sendingOrdinalData.reinscriptionId, network_config_1.default.networkType);
+        psbt.addInput({
+            hash: reInscriptionUTXO.txid,
+            index: reInscriptionUTXO.vout,
+            witnessUtxo: {
+                value: reInscriptionUTXO.value,
+                script: Bitcoin.address.toOutputScript(sendingOrdinalData.ordinalsAddress, network),
+            },
+            tapInternalKey: Buffer.from(sendingOrdinalData.ordinalsPublicKey, "hex"),
+        });
+    }
+    if (sendingOrdinalData.ordinalsAddress == sendingOrdinalData.paymentAddress) {
+        selectedUtxos.forEach((utxo) => {
+            psbt.addInput({
+                hash: utxo.txid,
+                index: utxo.vout,
+                witnessUtxo: {
+                    value: utxo.value,
+                    script: Bitcoin.address.toOutputScript(sendingOrdinalData.paymentAddress, network),
+                },
+                tapInternalKey: Buffer.from(sendingOrdinalData.paymentPublicKey, "hex"),
+            });
+        });
+    }
+    else {
+        // Create a Pay-to-Public-Key-Hash (P2PKH) script
+        const p2pkhScript = Bitcoin.script.compile([
+            Bitcoin.opcodes.OP_0, // OP_0 indicates a P2PKH script
+            Bitcoin.crypto.hash160(Buffer.from(sendingOrdinalData.paymentPublicKey, "hex")), // Hash160 of the public key
+        ]);
+        for (let i = 0; i < selectedUtxos.length; i++) {
+            const txHex = yield (0, mempool_1.getTxHex)(selectedUtxos[i].txid, networkType);
+            psbt.addInput({
+                hash: selectedUtxos[i].txid,
+                index: selectedUtxos[i].vout,
+                nonWitnessUtxo: Buffer.from(txHex, "hex"),
+                redeemScript: p2pkhScript,
+            });
+        }
+    }
+    if (sendingOrdinalData.parentId) {
+        psbt.addOutput({
+            address: initializeWallet_1.default.address,
+            value: parentInscriptionUTXO.value,
+        });
+    }
+    if (sendingOrdinalData.reinscriptionId) {
+        psbt.addOutput({
+            address: initializeWallet_1.default.address,
+            value: reInscriptionUTXO.value,
+        });
+    }
+    psbt.addOutput({
+        address: initializeWallet_1.default.address,
+        value: sendingOrdinalData.btcAmount,
+    });
+    psbt.addOutput({
+        address: sendingOrdinalData.paymentAddress,
         value: inputUtxoSumValue - redeemFee - sendingOrdinalData.btcAmount,
     });
     return psbt;

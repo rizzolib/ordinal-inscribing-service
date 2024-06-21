@@ -90,15 +90,15 @@ const inscriptionPsbt = (contentType, inscriptionData, tapScript, sentUtxo) => _
     });
     if (inscriptionData.parentId) {
         psbt.addOutput({
-            address: inscriptionData.receiveAddress,
-            value: inscriptionData.padding
+            address: inscriptionData.ordinalsAddress,
+            value: inscriptionData.padding,
         });
     }
     if (contentType == network_config_1.TEXT_CONTENT) {
         inscriptionData.contents.forEach((content) => {
             psbt.addOutput({
                 address: inscriptionData.receiveAddress,
-                value: inscriptionData.padding
+                value: inscriptionData.padding,
             });
         });
     }
@@ -106,7 +106,7 @@ const inscriptionPsbt = (contentType, inscriptionData, tapScript, sentUtxo) => _
         inscriptionData.files.forEach((content) => {
             psbt.addOutput({
                 address: inscriptionData.receiveAddress,
-                value: inscriptionData.padding
+                value: inscriptionData.padding,
             });
         });
     }
@@ -114,7 +114,7 @@ const inscriptionPsbt = (contentType, inscriptionData, tapScript, sentUtxo) => _
         inscriptionData.delegateIds.forEach((content) => {
             psbt.addOutput({
                 address: inscriptionData.receiveAddress,
-                value: inscriptionData.padding
+                value: inscriptionData.padding,
             });
         });
     }
@@ -135,14 +135,14 @@ exports.inscriptionPsbt = inscriptionPsbt;
 function tweakSigner(signer, opts = {}) {
     let privateKey = signer.privateKey;
     if (!privateKey) {
-        throw new Error('Private key is required for tweaking signer!');
+        throw new Error("Private key is required for tweaking signer!");
     }
     if (signer.publicKey[0] === 3) {
         privateKey = ecc.privateNegate(privateKey);
     }
     const tweakedPrivateKey = ecc.privateAdd(privateKey, tapTweakHash((0, buffer_1.toXOnly)(signer.publicKey), opts.tweakHash));
     if (!tweakedPrivateKey) {
-        throw new Error('Invalid tweaked private key!');
+        throw new Error("Invalid tweaked private key!");
     }
     return ECPair.fromPrivateKey(Buffer.from(tweakedPrivateKey), {
         network: opts.network,

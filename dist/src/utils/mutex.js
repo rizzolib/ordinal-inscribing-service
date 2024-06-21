@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.waitUtxoFlag = exports.setUtxoFlag = void 0;
+exports.setApiIterator = exports.waitUtxoFlag = exports.setUtxoFlag = void 0;
 const __1 = require("../..");
 const __2 = require("../..");
 const setUtxoFlag = (value) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,8 +39,19 @@ function waitUtxoFlag() {
                     clearInterval(intervalId);
                 }
             });
-            intervalId = setInterval(checkForUtxo, 1000);
+            intervalId = setInterval(checkForUtxo, 200);
         });
     });
 }
 exports.waitUtxoFlag = waitUtxoFlag;
+const setApiIterator = (value) => __awaiter(void 0, void 0, void 0, function* () {
+    const release = yield __1.iterator.acquire();
+    try {
+        // Perform actions with the flag variable
+        __2.app.locals.iterator = value;
+    }
+    finally {
+        release();
+    }
+});
+exports.setApiIterator = setApiIterator;

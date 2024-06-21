@@ -28,11 +28,12 @@ const Bitcoin = __importStar(require("bitcoinjs-lib"));
 const ecc = __importStar(require("tiny-secp256k1"));
 const network_config_1 = require("../../config/network.config");
 Bitcoin.initEccLib(ecc);
-const redeemReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, amount, reinscriptionUTXO, fee) => {
+const redeemReinscribeAndUtxoSendPsbt = (wallet, userUtxo, networkType, amount, reinscriptionUTXO, fee, holderStatus) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
-    let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
     psbt.addInput({
         hash: reinscriptionUTXO.txid,
         index: reinscriptionUTXO.vout,
@@ -42,33 +43,34 @@ const redeemReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, am
         },
         tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
-    inputUtxoArray.forEach(utxo => {
-        psbt.addInput({
-            hash: utxo.txid,
-            index: utxo.vout,
-            witnessUtxo: {
-                value: utxo.value,
-                script: wallet.output,
-            },
-            tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-        });
+    psbt.addInput({
+        hash: userUtxo.txid,
+        index: userUtxo.vout,
+        witnessUtxo: {
+            value: userUtxo.value,
+            script: wallet.output,
+        },
+        tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
     psbt.addOutput({
         address: wallet.address,
         value: amount,
     });
-    psbt.addOutput({
-        address: wallet.address,
-        value: inputUtxoSumValue + reinscriptionUTXO.value - fee - amount,
-    });
+    if (!holderStatus) {
+        psbt.addOutput({
+            address: wallet.address,
+            value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
+        });
+    }
     return psbt;
 };
 exports.redeemReinscribeAndUtxoSendPsbt = redeemReinscribeAndUtxoSendPsbt;
-const ReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, fee, address, amount, reinscriptionUTXO) => {
+const ReinscribeAndUtxoSendPsbt = (wallet, userUtxo, networkType, fee, address, amount, reinscriptionUTXO, holderStatus) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
-    let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
     psbt.addInput({
         hash: reinscriptionUTXO.txid,
         index: reinscriptionUTXO.vout,
@@ -78,25 +80,25 @@ const ReinscribeAndUtxoSendPsbt = (wallet, inputUtxoArray, networkType, fee, add
         },
         tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
-    inputUtxoArray.forEach(utxo => {
-        psbt.addInput({
-            hash: utxo.txid,
-            index: utxo.vout,
-            witnessUtxo: {
-                value: utxo.value,
-                script: wallet.output,
-            },
-            tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-        });
+    psbt.addInput({
+        hash: userUtxo.txid,
+        index: userUtxo.vout,
+        witnessUtxo: {
+            value: userUtxo.value,
+            script: wallet.output,
+        },
+        tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
     psbt.addOutput({
         address: address,
         value: amount,
     });
-    psbt.addOutput({
-        address: wallet.address,
-        value: inputUtxoSumValue + reinscriptionUTXO.value - fee - amount,
-    });
+    if (!holderStatus) {
+        psbt.addOutput({
+            address: wallet.address,
+            value: userUtxo.value + reinscriptionUTXO.value - fee - amount,
+        });
+    }
     return psbt;
 };
 exports.ReinscribeAndUtxoSendPsbt = ReinscribeAndUtxoSendPsbt;

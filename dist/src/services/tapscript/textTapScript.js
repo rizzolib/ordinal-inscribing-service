@@ -22,10 +22,7 @@ const buffer_1 = require("../../utils/buffer");
 const buffer_2 = require("../../utils/buffer");
 const keyPair = initializeWallet_1.default.ecPair;
 const textTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, function* () {
-    let tapScript = [
-        (0, buffer_2.toXOnly)(keyPair.publicKey),
-        bitcoinjs_lib_1.opcodes.OP_CHECKSIG
-    ];
+    let tapScript = [(0, buffer_2.toXOnly)(keyPair.publicKey), bitcoinjs_lib_1.opcodes.OP_CHECKSIG];
     let pointers = [];
     inscriptionData.contents.forEach((item, index) => {
         pointers.push(index * inscriptionData.padding);
@@ -38,16 +35,19 @@ const textTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, fun
     }
     let pointerBuffer = [];
     pointerBuffer = pointers.map((pointer, index) => {
-        return Buffer.from(pointer.toString(16).padStart(4, '0'), 'hex').reverse();
+        return Buffer.from(pointer.toString(16).padStart(4, "0"), "hex").reverse();
     });
-    const parts = inscriptionData.parentId.split('i');
+    const parts = inscriptionData.parentId.split("i");
     const parentInscriptionTransactionID = parts[0];
-    const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, 'hex').reverse();
+    const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, "hex").reverse();
     let parentInscriptionBuffer;
     const index = parts[1];
     if (parseInt(index, 10) != 0) {
-        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
-        parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, "0"), "hex").reverse();
+        parentInscriptionBuffer = Buffer.concat([
+            inscriptionTransactionBuffer,
+            indexBuffer,
+        ]);
     }
     else {
         parentInscriptionBuffer = inscriptionTransactionBuffer;
@@ -56,9 +56,11 @@ const textTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, fun
         const contentBuffer = Buffer.from(inscriptionData.contents[i]);
         const contentBufferArray = (0, buffer_1.splitBuffer)(contentBuffer, 450);
         let subScript = [];
-        subScript.push(bitcoinjs_lib_1.opcodes.OP_FALSE, bitcoinjs_lib_1.opcodes.OP_IF, Buffer.from("ord", "utf8"), 1, 1, Buffer.from('text/plain', "utf8"));
+        subScript.push(bitcoinjs_lib_1.opcodes.OP_FALSE, bitcoinjs_lib_1.opcodes.OP_IF, Buffer.from("ord", "utf8"), 1, 1, Buffer.from("text/plain", "utf8"));
         subScript.push(1, 2, pointerBuffer[i]);
-        subScript.push(1, 3, parentInscriptionBuffer);
+        if (inscriptionData.parentId) {
+            subScript.push(1, 3, parentInscriptionBuffer);
+        }
         if (inscriptionData.metadata) {
             subScript.push(1, 5, cbor_1.default.encode(JSON.parse(inscriptionData.metadata)));
         }

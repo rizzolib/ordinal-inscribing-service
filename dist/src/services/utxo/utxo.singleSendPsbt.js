@@ -28,57 +28,59 @@ const Bitcoin = __importStar(require("bitcoinjs-lib"));
 const ecc = __importStar(require("tiny-secp256k1"));
 const network_config_1 = require("../../config/network.config");
 Bitcoin.initEccLib(ecc);
-const redeemSingleSendUTXOPsbt = (wallet, inputUtxoArray, networkType, amount, fee) => {
+const redeemSingleSendUTXOPsbt = (wallet, userUtxo, networkType, amount, fee, holderStatus) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
-    let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
-    inputUtxoArray.forEach(utxo => {
-        psbt.addInput({
-            hash: utxo.txid,
-            index: utxo.vout,
-            witnessUtxo: {
-                value: utxo.value,
-                script: wallet.output,
-            },
-            tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-        });
+    psbt.addInput({
+        hash: userUtxo.txid,
+        index: userUtxo.vout,
+        witnessUtxo: {
+            value: userUtxo.value,
+            script: wallet.output,
+        },
+        tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
     psbt.addOutput({
         address: wallet.address,
         value: amount,
     });
-    psbt.addOutput({
-        address: wallet.address,
-        value: inputUtxoSumValue - fee - amount,
-    });
+    if (!holderStatus) {
+        psbt.addOutput({
+            address: wallet.address,
+            value: userUtxo.value - fee - amount,
+        });
+    }
     return psbt;
 };
 exports.redeemSingleSendUTXOPsbt = redeemSingleSendUTXOPsbt;
-const singleSendUTXOPsbt = (wallet, inputUtxoArray, networkType, fee, address, amount) => {
+const singleSendUTXOPsbt = (wallet, userUtxo, networkType, fee, address, amount, holderStatus) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
-    let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
-    inputUtxoArray.forEach(utxo => {
-        psbt.addInput({
-            hash: utxo.txid,
-            index: utxo.vout,
-            witnessUtxo: {
-                value: utxo.value,
-                script: wallet.output,
-            },
-            tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
-        });
+    psbt.addInput({
+        hash: userUtxo.txid,
+        index: userUtxo.vout,
+        witnessUtxo: {
+            value: userUtxo.value,
+            script: wallet.output,
+        },
+        tapInternalKey: Buffer.from(wallet.publicKey, "hex").subarray(1, 33),
     });
     psbt.addOutput({
         address: address,
         value: amount,
     });
-    psbt.addOutput({
-        address: wallet.address,
-        value: inputUtxoSumValue - fee - amount,
-    });
+    if (!holderStatus) {
+        psbt.addOutput({
+            address: wallet.address,
+            value: userUtxo.value - fee - amount,
+        });
+    }
     return psbt;
 };
 exports.singleSendUTXOPsbt = singleSendUTXOPsbt;

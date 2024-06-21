@@ -21,10 +21,7 @@ const cbor_1 = __importDefault(require("cbor"));
 const buffer_1 = require("../../utils/buffer");
 const keyPair = initializeWallet_1.default.ecPair;
 const delegateTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0, function* () {
-    let tapScript = [
-        (0, buffer_1.toXOnly)(keyPair.publicKey),
-        bitcoinjs_lib_1.opcodes.OP_CHECKSIG
-    ];
+    let tapScript = [(0, buffer_1.toXOnly)(keyPair.publicKey), bitcoinjs_lib_1.opcodes.OP_CHECKSIG];
     let pointers = [];
     inscriptionData.delegateIds.forEach((item, index) => {
         pointers.push(index * inscriptionData.padding);
@@ -37,28 +34,34 @@ const delegateTapScript = (inscriptionData) => __awaiter(void 0, void 0, void 0,
     }
     let pointerBuffer = [];
     pointerBuffer = pointers.map((pointer, index) => {
-        return Buffer.from(pointer.toString(16).padStart(4, '0'), 'hex').reverse();
+        return Buffer.from(pointer.toString(16).padStart(4, "0"), "hex").reverse();
     });
-    const parts = inscriptionData.parentId.split('i');
+    const parts = inscriptionData.parentId.split("i");
     const parentInscriptionTransactionID = parts[0];
-    const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, 'hex').reverse();
+    const inscriptionTransactionBuffer = Buffer.from(parentInscriptionTransactionID, "hex").reverse();
     let parentInscriptionBuffer;
     const index = parts[1];
     if (parseInt(index, 10) != 0) {
-        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, '0'), 'hex').reverse();
-        parentInscriptionBuffer = Buffer.concat([inscriptionTransactionBuffer, indexBuffer]);
+        const indexBuffer = Buffer.from(parseInt(index, 10).toString(16).padStart(2, "0"), "hex").reverse();
+        parentInscriptionBuffer = Buffer.concat([
+            inscriptionTransactionBuffer,
+            indexBuffer,
+        ]);
     }
     else {
         parentInscriptionBuffer = inscriptionTransactionBuffer;
     }
-    const DelegateIDparts = inscriptionData.delegateIds[0].split('i');
+    const DelegateIDparts = inscriptionData.delegateIds[0].split("i");
     const delegateInscriptionTransactionID = DelegateIDparts[0];
-    const DelegateinscriptionTransactionBuffer = Buffer.from(delegateInscriptionTransactionID, 'hex').reverse();
+    const DelegateinscriptionTransactionBuffer = Buffer.from(delegateInscriptionTransactionID, "hex").reverse();
     let DelegateInscriptionBuffer;
     const DelegateIndex = DelegateIDparts[1];
     if (parseInt(DelegateIndex, 10) != 0) {
-        const DelegateIndexBuffer = Buffer.from(parseInt(DelegateIndex, 10).toString(16).padStart(2, '0'), 'hex').reverse();
-        DelegateInscriptionBuffer = Buffer.concat([DelegateinscriptionTransactionBuffer, DelegateIndexBuffer]);
+        const DelegateIndexBuffer = Buffer.from(parseInt(DelegateIndex, 10).toString(16).padStart(2, "0"), "hex").reverse();
+        DelegateInscriptionBuffer = Buffer.concat([
+            DelegateinscriptionTransactionBuffer,
+            DelegateIndexBuffer,
+        ]);
     }
     else {
         DelegateInscriptionBuffer = DelegateinscriptionTransactionBuffer;

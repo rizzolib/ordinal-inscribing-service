@@ -46,7 +46,7 @@ const utxo_singleSend_1 = require("../utxo/utxo.singleSend");
 (0, bitcoinjs_lib_1.initEccLib)(ecc);
 const network = network_config_1.default.networkType == network_config_1.TESTNET ? bitcoinjs_lib_1.networks.testnet : bitcoinjs_lib_1.networks.bitcoin;
 const keyPair = initializeWallet_1.default.ecPair;
-const tapleafPsbt = (contentType, inscriptionData, tapScript, sendUTXOSize) => __awaiter(void 0, void 0, void 0, function* () {
+const tapleafPsbt = (contentType, inscriptionData, tapScript, userUtxo, amount) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const ordinal_script = bitcoinjs_lib_1.script.compile(tapScript);
     const scriptTree = {
@@ -72,10 +72,10 @@ const tapleafPsbt = (contentType, inscriptionData, tapScript, sendUTXOSize) => _
     if (contentType == network_config_1.DELEGATE_CONTENT)
         inscriptionAmount = inscriptionData.delegateIds.length;
     if (inscriptionData.reinscriptionId && inscriptionAmount == 1) {
-        res = yield (0, utxo_reinscribe_singleSend_1.reinscriptionAndUTXOSend)(inscriptionData.reinscriptionId, address, inscriptionData.feeRate, sendUTXOSize);
+        res = yield (0, utxo_reinscribe_singleSend_1.reinscriptionAndUTXOSend)(inscriptionData.reinscriptionId, address, inscriptionData.feeRate, userUtxo, amount, inscriptionData.holderStatus);
     }
     else {
-        res = yield (0, utxo_singleSend_1.singleSendUTXO)(address, inscriptionData.feeRate, sendUTXOSize);
+        res = yield (0, utxo_singleSend_1.singleSendUTXO)(address, inscriptionData.feeRate, userUtxo, amount, inscriptionData.holderStatus);
     }
     if (!res.isSuccess) {
         console.log(res.data);

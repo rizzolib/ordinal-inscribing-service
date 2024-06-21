@@ -31,11 +31,13 @@ const network_config_2 = require("../../config/network.config");
 Bitcoin.initEccLib(ecc);
 const redeemUtxoSplitPsbt = (wallet, inputUtxoArray, networkType) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
     let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
     let outputSize = Math.floor(inputUtxoSumValue / network_config_2.SEND_UTXO_FEE_LIMIT) - 1;
-    inputUtxoArray.forEach(utxo => {
+    inputUtxoArray.forEach((utxo) => {
         psbt.addInput({
             hash: utxo.txid,
             index: utxo.vout,
@@ -61,11 +63,13 @@ const redeemUtxoSplitPsbt = (wallet, inputUtxoArray, networkType) => {
 exports.redeemUtxoSplitPsbt = redeemUtxoSplitPsbt;
 const utxoSplitPsbt = (wallet, inputUtxoArray, networkType, redeemFee) => {
     const psbt = new Bitcoin.Psbt({
-        network: networkType == network_config_1.TESTNET ? Bitcoin.networks.testnet : Bitcoin.networks.bitcoin
+        network: networkType == network_config_1.TESTNET
+            ? Bitcoin.networks.testnet
+            : Bitcoin.networks.bitcoin,
     });
     let inputUtxoSumValue = inputUtxoArray.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
     let outputSize = Math.floor((inputUtxoSumValue - redeemFee) / network_config_2.SEND_UTXO_FEE_LIMIT);
-    inputUtxoArray.forEach(utxo => {
+    inputUtxoArray.forEach((utxo) => {
         psbt.addInput({
             hash: utxo.txid,
             index: utxo.vout,

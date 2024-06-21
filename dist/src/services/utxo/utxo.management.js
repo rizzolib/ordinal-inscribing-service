@@ -5,7 +5,7 @@ const getSendBTCUTXOArray = (utxoArray, amount) => {
     let utxoSum = 0;
     let iterator = 0;
     let newUtxoArray = [];
-    let filteredUtxoArray = utxoArray.filter(utxo => utxo.value > 1000);
+    let filteredUtxoArray = utxoArray.filter((utxo) => utxo.value > 1000);
     let filteredSum = filteredUtxoArray.reduce((accum, utxo) => accum + utxo.value, 0);
     if (filteredSum < amount) {
         return { isSuccess: false, data: newUtxoArray };
