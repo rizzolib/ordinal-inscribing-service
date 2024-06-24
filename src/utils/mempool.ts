@@ -71,8 +71,7 @@ const postData = async (
 
 export const getPrice = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/api/v1/prices`;
-    const res: any = await axios.get(url);
+    const res: any = await axios.get("https://mempool.space/api/v1/prices");
     return res.data;
   } catch (error: any) {
     console.log("Get Price Error!");
