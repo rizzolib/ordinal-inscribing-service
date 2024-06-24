@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 servers:
+  - url: "https://bitmap-backend-production.up.railway.app/api"
   - url: "http://localhost:8081/api"
-  - url: "https://file-inscription-backend.onrender.com/api"
 
 tags:
   - name: Status
