@@ -80,9 +80,7 @@ export const getPrice = async (networkType: string) => {
 
 export const getBlockHeight = async (networkType: string) => {
   try {
-    const url = `https://mempool.space/${
-      networkType == TESTNET ? "testnet/" : ""
-    }/api/blocks/tip/height`;
+    const url = `https://mempool.space/api/blocks/tip/height`;
     const res = await axios.get(url);
     return res.data;
   } catch (error: any) {
