@@ -93,9 +93,7 @@ export const getBlockHeight = async (networkType: string) => {
 export const getFeeRate = async (networkType: string, response: Response) => {
   try {
     const height = await getBlockHeight(networkType);
-    const url = `https://mempool.space/${
-      networkType == TESTNET ? "testnet/" : ""
-    }api/v1/blocks/${height}`;
+    const url = `https://mempool.space/api/v1/blocks/${height}`;
     const blockData: any = await axios.get(url);
     const feeRateData = blockData.data.map((item: any) => {
       return { timestamp: item.timestamp, avgFeeRate: item.extras.avgFeeRate };
