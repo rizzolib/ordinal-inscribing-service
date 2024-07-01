@@ -1,8 +1,8 @@
 openapi: 3.0.1
 
 info:
-  title: Bitmap
-  description: "Bitmap Inscription Service"
+  title: Luminex
+  description: "Luminex Inscription Service"
   version: 0.0.1
 
 servers:
@@ -263,7 +263,7 @@ components:
           type: array
           items:
             type: string
-            example: 350.364807.bitmap
+            example: 350.364807.luminex
         feeRate:
           type: number
           example: 30
@@ -278,7 +278,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 9566bc0e79ca905bf01db55bf154acb3a04e00e8bb2e9d4903639c5badf66d42i0
@@ -312,7 +312,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 9566bc0e79ca905bf01db55bf154acb3a04e00e8bb2e9d4903639c5badf66d42i0
@@ -346,7 +346,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 9566bc0e79ca905bf01db55bf154acb3a04e00e8bb2e9d4903639c5badf66d42i0

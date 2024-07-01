@@ -1,12 +1,12 @@
 openapi: 3.0.1
 
 info:
-  title: Bitmap
-  description: "Bitmap Inscription Service"
+  title: luminex
+  description: "luminex Inscription Service"
   version: 0.0.1
 
 servers:
-  - url: "https://bitmap-backend-production.up.railway.app/api"
+  - url: "https://luminex-backend-production.up.railway.app/api"
   - url: "http://localhost:8081/api"
 
 tags:
@@ -263,7 +263,7 @@ components:
           type: array
           items:
             type: string
-            example: 350.364807.bitmap
+            example: 350.364807.luminex
         feeRate:
           type: number
           example: 130
@@ -278,7 +278,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 77b603ea0671c2430ee86e59defa1bc05dee7808bd21334f0c6d3451b8614cd8i0
@@ -312,7 +312,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 77b603ea0671c2430ee86e59defa1bc05dee7808bd21334f0c6d3451b8614cd8i0
@@ -346,7 +346,7 @@ components:
           example: '{"type":"dog","size":"medium"}'
         metaprotocol:
           type: string
-          example: bitmap.community
+          example: luminex
         reinscriptionId:
           type: string
           example: 77b603ea0671c2430ee86e59defa1bc05dee7808bd21334f0c6d3451b8614cd8i0
