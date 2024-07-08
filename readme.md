@@ -1,169 +1,150 @@
-# Luminex Ordinal/Iscription Express Backend
+# Unisat-forking Ordinal/Iscription Express Backend README Restructuring Guide
 
-Luminex Ordinal/Iscription Express Backend is a robust and feature-rich backend service designed to facilitate operations related to ordinal/inscription management within the bitcoin ecosystem. This project includes functionalities such as parent/child provenance inscription minting, reinscription, delegate inscription, and options for metadata/metaprotocol integration.
+The goal of restructuring the README file for the Luminex Ordinal/Iscription Express Backend is to enhance readability, organization, and accessibility for users and contributors. Here's a proposed structure that aligns with common README standards and best practices:
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+  - [Overview](#overview)
+  - [Base URLs](#base-urls)
+  - [Available Endpoints](#available-endpoints)
+    - [Status](#status)
+      - [Get Current Bitcoin Price](#get-current-bitcoin-price)
+      - [Last 15 Blocks Average Fee Rate](#last-15-blocks-average-fee-rate)
+      - [Recommended Block Fee Rate](#recommended-block-fee-rate)
+      - [Split Large UTXO of Admin Wallet](#split-large-utxo-of-admin-wallet)
+    - [Inscribe](#inscribe)
+      - [Create New Text Inscription](#create-new-text-inscription)
+      - [Create New File Inscription](#create-new-file-inscription)
+      - [Create New Delegate Inscription](#create-new-delegate-inscription)
+      - [Get New Sending Ordinals PSBT](#get-new-sending-ordinals-psbt)
+    - [Estimate](#estimate)
+      - [Estimate Text Inscription](#estimate-text-inscription)
+      - [Estimate File Inscription](#estimate-file-inscription)
+      - [Estimate Delegate Inscription](#estimate-delegate-inscription)
+- [Schema Definitions](#schema-definitions)
+- [Error Handling](#error-handling)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Introduction
+
+A brief introduction to the Luminex Ordinal/Iscription Express Backend, highlighting its purpose and significance within the bitcoin ecosystem.
 
 ## Features
 
-- **Parent/Child Provenance Inscription Minting**: Enables the creation of inscriptions that can be traced through generations, ensuring traceability and authenticity.
-- **Reinscription**: Allows for the updating or reissuing of inscriptions, accommodating changes or corrections as needed.
-- **Delegate Inscription**: Facilitates the delegation of inscription rights to another entity, enhancing flexibility and collaboration.
-- **Metadata/Metaprotocol Integration**: Offers options for integrating metadata and metaprotocols, enabling richer data handling and interoperability.
+A section detailing the core features of the backend service, including parent/child provenance inscription minting, reinscription, delegate inscription, and metadata/metaprotocol integration.
 
 ## Getting Started
 
-To get started with the Luminex Ordinal/Iscription Express Backend, follow these steps:
+Instructions on how to get started with the project, including installation, configuration, and running the application.
 
 ### Installation
 
-Clone the repository to your local machine:
-
-```bash
-git clone https://github.com/atst4/luminex-inscription-service-backend.git
-```
-
-Navigate to the project directory:
-
-```bash
-cd luminex-inscription-service-backend
-```
-
-Install the dependencies:
-
-```bash
-yarn install
-```
+Steps to clone the repository and install dependencies.
 
 ### Configuration
 
-Before running the application, ensure you have set up your environment variables correctly. The `.env` file should contain the necessary configurations, including the network type (`NETWORKTYPE`) and the port number (`PORT`). For development purposes, you can use the default values provided in the `.env.example` file.
+Guidelines on setting up environment variables and configuring the application for both development and production environments.
 
 ### Running the Application
 
-Start the application by running:
-
-```bash
-yarn start
-```
-
-This command will start the server, and you should see a message indicating that the server is running at `http://localhost:<port>`.
+Commands to start the application and access the server.
 
 ## API Documentation
 
-The project uses Swagger UI for API documentation. Once the server is running, navigate to `/api-docs` in your web browser to access the interactive API documentation.
+An overview of the API documentation, including base URLs and available endpoints categorized by functionality.
 
-# Luminex Inscription Service API Documentation
+### Overview
 
-Welcome to the Luminex Inscription Service API documentation. This document outlines the available endpoints, request/response formats, and other essential information for interacting with our service.
+A high-level description of what the API does and who it's for.
 
-## Overview
+### Base URLs
 
-The Luminex Inscription Service is designed to manage various aspects of inscriptions within the blockchain ecosystem. It supports operations like fetching current Bitcoin prices, estimating fees, managing wallet UTXOs, creating text and file inscriptions, delegating inscriptions, and generating sending ordinals PSBTs.
+Information on the base URLs for accessing the API in different environments.
 
-## Base URLs
+### Available Endpoints
 
-The base URL for the production environment is `https://luminex-backend-production.up.railway.app/api`, while the development environment runs locally at `http://localhost:8081/api`.
+Detailed descriptions of each endpoint, including method, endpoint path, description, request body (if applicable), and expected response.
 
-## Available Endpoints
+#### Status
 
-### Status
+Endpoints related to fetching status information about the system, such as Bitcoin prices and fee rates.
 
-- **Get Current Bitcoin Price**
+##### Get Current Bitcoin Price
 
-  - Method: `GET`
-  - Endpoint: `/status/price`
-  - Description: Retrieves the current Bitcoin price.
-  - Response: A JSON object containing the current Bitcoin price.
+Details on the endpoint for retrieving the current Bitcoin price.
 
-- **Last 15 Blocks Average Fee Rate**
+##### Last 15 Blocks Average Fee Rate
 
-  - Method: `GET`
-  - Endpoint: `/status/avgFeeRate`
-  - Description: Fetches the average fee rate of the last 15 blocks.
-  - Response: A JSON object with the average fee rate.
+Details on the endpoint for fetching the average fee rate of the last 15 blocks.
 
-- **Recommended Block Fee Rate**
+##### Recommended Block Fee Rate
 
-  - Method: `GET`
-  - Endpoint: `/status/recommendFeeRate`
-  - Description: Provides a recommendation for the optimal block fee rate.
-  - Response: A JSON object with the recommended fee rate.
+Details on the endpoint for getting a recommendation for the optimal block fee rate.
 
-- **Split Large UTXO of Admin Wallet**
-  - Method: `GET`
-  - Endpoint: `/wallet/utxo-split`
-  - Description: Splits a large UTXO from the admin wallet.
-  - Response: A JSON object indicating success or failure of the operation.
+##### Split Large UTXO of Admin Wallet
 
-### Inscribe
+Details on the endpoint for splitting a large UTXO from the admin wallet.
 
-- **Create New Text Inscription**
+#### Inscribe
 
-  - Method: `POST`
-  - Endpoint: `/inscribe/text`
-  - Description: Creates a new text inscription.
-  - Request Body: A multipart form-data payload containing the inscription details.
-  - Response: A JSON object indicating the success or failure of the inscription creation.
+Endpoints for creating new inscriptions, including text, file, and delegate inscriptions, and generating sending ordinals PSBTs.
 
-- **Create New File Inscription**
+##### Create New Text Inscription
 
-  - Method: `POST`
-  - Endpoint: `/inscribe/file`
-  - Description: Creates a new file inscription.
-  - Request Body: A multipart form-data payload containing the file and inscription details.
-  - Response: A JSON object indicating the success or failure of the inscription creation.
+Details on the endpoint for creating a new text inscription.
 
-- **Create New Delegate Inscription**
+##### Create New File Inscription
 
-  - Method: `POST`
-  - Endpoint: `/inscribe/delegate`
-  - Description: Creates a new delegate inscription.
-  - Request Body: A multipart form-data payload containing the delegate details.
-  - Response: A JSON object indicating the success or failure of the inscription creation.
+Details on the endpoint for creating a new file inscription.
 
-- **Get New Sending Ordinals PSBT**
-  - Method: `POST`
-  - Endpoint: `/sendOrdinal/getSendingOrdinalBtcPsbt`
-  - Description: Generates a new Bitcoin transaction PSBT for sending ordinals.
-  - Request Body: A multipart form-data payload containing the transaction details.
-  - Response: A JSON object indicating the success or failure of the PSBT generation.
+##### Create New Delegate Inscription
 
-### Estimate
+Details on the endpoint for creating a new delegate inscription.
 
-- **Estimate Text Inscription**
+##### Get New Sending Ordinals PSBT
 
-  - Method: `POST`
-  - Endpoint: `/estimate/text`
-  - Description: Estimates the cost of creating a text inscription.
-  - Request Body: A multipart form-data payload containing the inscription details.
-  - Response: A JSON object indicating the estimated cost.
+Details on the endpoint for generating a new Bitcoin transaction PSBT for sending ordinals.
 
-- **Estimate File Inscription**
+#### Estimate
 
-  - Method: `POST`
-  - Endpoint: `/estimate/file`
-  - Description: Estimates the cost of creating a file inscription.
-  - Request Body: A multipart form-data payload containing the file and inscription details.
-  - Response: A JSON object indicating the estimated cost.
+Endpoints for estimating the costs associated with creating inscriptions.
 
-- **Estimate Delegate Inscription**
-  - Method: `POST`
-  - Endpoint: `/estimate/delegate`
-  - Description: Estimates the cost of creating a delegate inscription.
-  - Request Body: A multipart form-data payload containing the delegate details.
-  - Response: A JSON object indicating the estimated cost.
+##### Estimate Text Inscription
+
+Details on the endpoint for estimating the cost of creating a text inscription.
+
+##### Estimate File Inscription
+
+Details on the endpoint for estimating the cost of creating a file inscription.
+
+##### Estimate Delegate Inscription
+
+Details on the endpoint for estimating the cost of creating a delegate inscription.
 
 ## Schema Definitions
 
-The API uses several schemas to define the structure of the request and response bodies. These schemas are defined under the `components/schemas` section of the OpenAPI specification. They include `TextInscription`, `FileInscription`, `DelegateInscription`, and `SendingOrdialBtcPsbt`.
+Descriptions of the schemas used in the API, including `TextInscription`, `FileInscription`, `DelegateInscription`, and `SendingOrdialBtcPsbt`.
 
 ## Error Handling
 
-All API calls return a JSON object with a status code and a message. Successful operations typically return a `200 OK` status, while errors return appropriate HTTP error codes (e.g., `400 Bad Request`).
+Information on how the API handles errors, including the structure of error responses.
 
 ## Contributing
 
-Contributions are welcome Please feel free to submit a pull request or open an issue if you encounter any problems or have suggestions for improvements.
+Guidelines for contributing to the project, including how to submit pull requests and report issues.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+Details on the license under which the project is released, including a link to the full license text.
+
+This structured approach ensures that readers can easily find the information they need, whether they're looking for a quick overview, detailed instructions on getting started, or specifics about the API documentation and schema definitions.
+
+Citations:
