@@ -39,7 +39,7 @@ A brief introduction to the Luminex Ordinal/Iscription Express Backend, highligh
 
 ## Features
 
-A section detailing the core features of the backend service, including parent/child provenance inscription minting, reinscription, delegate inscription, and metadata/metaprotocol integration.
+A section detailing the core features of the backend service, including parent/child provenance inscription minting, reinscription, delegate inscription, and metadata/metaprotocol integration Batch Inscription (Bulk text inscribing).
 
 ## Getting Started
 
