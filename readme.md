@@ -17,7 +17,7 @@ The goal of restructuring the README file for the Luminex Ordinal/Iscription Exp
     - [Status](#status)
       - [Get Current Bitcoin Price](#get-current-bitcoin-price)
       - [Last 15 Blocks Average Fee Rate](#last-15-blocks-average-fee-rate)
-      - [Recommended Block Fee Rate](#recommended-block-fee-rate)
+      - [Recommended Block Fee Rate](#recommended-block-fee-rate) 
       - [Split Large UTXO of Admin Wallet](#split-large-utxo-of-admin-wallet)
     - [Inscribe](#inscribe)
       - [Create New Text Inscription](#create-new-text-inscription)
