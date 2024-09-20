@@ -130,19 +130,3 @@ Details on the endpoint for estimating the cost of creating a delegate inscripti
 ## Schema Definitions
 
 Descriptions of the schemas used in the API, including `TextInscription`, `FileInscription`, `DelegateInscription`, and `SendingOrdialBtcPsbt`.
-
-## Error Handling
-
-Information on how the API handles errors, including the structure of error responses.
-
-## Contributing
-
-Guidelines for contributing to the project, including how to submit pull requests and report issues.
-
-## License
-
-Details on the license under which the project is released, including a link to the full license text.
-
-This structured approach ensures that readers can easily find the information they need, whether they're looking for a quick overview, detailed instructions on getting started, or specifics about the API documentation and schema definitions.
-
-Citations:
