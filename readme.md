@@ -1,6 +1,4 @@
-# Unisat-forking Ordinal/Iscription Express Backend README Restructuring Guide
-
-The goal of restructuring the README file for the Luminex Ordinal/Iscription Express Backend is to enhance readability, organization, and accessibility for users and contributors. Here's a proposed structure that aligns with common README standards and best practices:
+# Ordinal Inscribing service
 
 ## Table of Contents
 
