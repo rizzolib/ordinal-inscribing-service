@@ -130,3 +130,12 @@ Details on the endpoint for estimating the cost of creating a delegate inscripti
 ## Schema Definitions
 
 Descriptions of the schemas used in the API, including `TextInscription`, `FileInscription`, `DelegateInscription`, and `SendingOrdialBtcPsbt`.
+
+
+
+## Contact Info
+I have provided the project structure and rune token deploy, mint, tranfer code part in the README to keep security and the NDA sign. For further technical support and development inquiries, please contact me here.  
+
+
+- **Twiter:**  https://x.com/rez_cats/
+- **Discord:** https://discord.com/users/190208149569929217/ (@rezzecup89)
