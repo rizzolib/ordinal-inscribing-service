@@ -13,7 +13,7 @@
   - [Base URLs](#base-urls)
   - [Available Endpoints](#available-endpoints) 
     - [Status](#status)
-      - [Get Current Bitcoin Price](#get-current-bitcoin-price)
+      - [Get Current Bitcoin Price](#get-current-bitcoin-price) 
       - [Last 15 Blocks Average Fee Rate](#last-15-blocks-average-fee-rate)
       - [Recommended Block Fee Rate](#recommended-block-fee-rate) 
       - [Split Large UTXO of Admin Wallet](#split-large-utxo-of-admin-wallet)
