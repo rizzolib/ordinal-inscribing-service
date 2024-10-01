@@ -11,7 +11,7 @@
 - [API Documentation](#api-documentation)
   - [Overview](#overview)
   - [Base URLs](#base-urls)
-  - [Available Endpoints](#available-endpoints)
+  - [Available Endpoints](#available-endpoints) 
     - [Status](#status)
       - [Get Current Bitcoin Price](#get-current-bitcoin-price)
       - [Last 15 Blocks Average Fee Rate](#last-15-blocks-average-fee-rate)
