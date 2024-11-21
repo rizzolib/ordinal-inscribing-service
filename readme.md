@@ -137,5 +137,5 @@ Descriptions of the schemas used in the API, including `TextInscription`, `FileI
 I have provided the project structure and rune token deploy, mint, tranfer code part in the README to keep security and the NDA sign. For further technical support and development inquiries, please contact me here.  
 
 
-- **Telegram:** @rizz_cat
-- **Discord:** @rezzecup89
+- **X:** @james980114
+- **Discord:** @jamesybarra98114
